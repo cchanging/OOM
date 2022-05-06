@@ -572,7 +572,7 @@ fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, s
 }
 
 fn read_file(fname: &str)->Option<Vec<Box<ExprAST>>>{
-    let text_try = fs::read_to_string("...path of memory cost expression file");
+    let text_try = fs::read_to_string("...path of memory cost file");
     if !(text_try.is_ok()){
         return None;
     }
