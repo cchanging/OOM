@@ -1,5 +1,5 @@
 # OOM
-An OOM handling mechanism for Rust Programs. We provide an usage case in usage_example. To compile the demo programs we should first specify the path of cost expression file in macro/macro_crate/lib.rs.
+An OOM handling mechanism for Rust Programs. We provide an usage case in usage directory. To compile the demo programs we should first specify the path of cost expression file in macro/macro_crate/lib.rs.
 
 For the demo program, we have a memory cost expression file, result, in cost_analysis directory. You can directly `cargo run` the demo program after specify the  cost expression path.
 
