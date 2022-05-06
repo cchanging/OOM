@@ -1,0 +1,8 @@
+/home/cj/OOM/cost_analysis/CMakeFiles/rebuild_cache.dir
+/home/cj/OOM/cost_analysis/CMakeFiles/acc_gen.dir
+/home/cj/OOM/cost_analysis/CMakeFiles/edit_cache.dir
+/home/cj/OOM/cost_analysis/CMakeFiles/omp_gen.dir
+/home/cj/OOM/cost_analysis/CMakeFiles/intrinsics_gen.dir
+/home/cj/OOM/cost_analysis/src/CMakeFiles/rebuild_cache.dir
+/home/cj/OOM/cost_analysis/src/CMakeFiles/edit_cache.dir
+/home/cj/OOM/cost_analysis/src/CMakeFiles/svf-ex.dir

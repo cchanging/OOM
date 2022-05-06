@@ -1,0 +1,354 @@
+
+*********CallGraph Stats***************
+################ (program : home/cj/OOM/usage_example/demo/target/debug/deps/main-ea178f5bb1be4b8d)###############
+-------------------------------------------------------
+CalRetPairInCycle   0
+MaxNodeInCycle      0
+NodeInCycle         0
+TotalEdge           707
+TotalCycle          0
+TotalNode           254
+#######################################################
+
+*********General Stats***************
+################ (program : home/cj/OOM/usage_example/demo/target/debug/deps/main-ea178f5bb1be4b8d)###############
+BBWith3Succ         41
+BBWith2Succ         283
+StoresNum           833
+FSObjNum            655
+AddrsNum            726
+TotalFieldObjects   240
+GepsNum             987
+LocalVarInRecur     0
+FIObjNum            15
+LoadsNum            714
+MaxStructSize       10
+TotalSVFStmts       6825
+TotalPointers       7426
+ReturnsNum          274
+VarArrayObj         7
+CopysNum            1181
+ConstArrayObj       0
+CallsNum            756
+TotalObjects        671
+FunctionObjs        254
+TotalPTASVFStmts    3472
+GlobalObjs          90
+HeapObjs            2
+StackObjs           323
+ConstStructObj      87
+BitCastNumber       473
+VarStructObj        198
+TotalCallSite       709
+NonPtrObj           442
+IndCallSites        2
+-------------------------------------------------------
+#######################################################
+
+*********Constraint Graph Stats***************
+################ (program : home/cj/OOM/usage_example/demo/target/debug/deps/main-ea178f5bb1be4b8d)###############
+-------------------------------------------------------
+AvgIn/OutEdge       1.07631
+AvgIn/OutAddrEdge   0.189373
+AvgIn/OutLoadEdge   0.0723573
+AvgIn/OutCopyEdge   0.722159
+MaxInAddrEdge       1
+MaxOutStoreEdge     75
+NumOfCGNode         8641
+TotalValidNode      3538
+AvgIn/OutStoreEdge  0
+TotalValidObjNode   673
+NumOfGeps           985
+NumOfCGEdge         3138
+NumOfAddrs          670
+MaxOutAddrEdge      20
+NumOfLoads          256
+NumOfStores         327
+MaxOutLoadEdge      10
+NumOfCopys          1570
+MaxOutCopyEdge      83
+MaxInStoreEdge      4
+MaxInLoadEdge       14
+MaxInCopyEdge       20
+#######################################################
+
+*********Andersen Pointer Analysis Stats***************
+################ (program : home/cj/OOM/usage_example/demo/target/debug/deps/main-ea178f5bb1be4b8d)###############
+-------------------------------------------------------
+AvgTopLvlPtsSize    1.09504
+AvgPtsSetSize       0.383841
+LoadStoreTime       0
+CollapseTime        0
+UpdateCGTime        0
+CopyGepTime         0
+SCCMergeTime        0
+SCCDetectTime       0
+TotalTime           0.015
+NullPointer         28
+NumOfSCCDetect      3
+IndCallSites        2
+MaxPtsSetSize       20
+PointsToBlkPtr      0
+DYFieldObjs         240
+PointsToConstPtr    4
+MemObjects          671
+Pointers            7314
+NumOfFieldExpand    0
+DYFieldPtrs         112
+NumOfSFRs           0
+TotalCycleNum       3
+IndEdgeSolved       0
+GepProcessed        966
+MaxNodesInSCC       78
+LoadProcessed       237
+CopyProcessed       1120
+NodesInCycles       89
+Iterations          3
+StoreProcessed      307
+AddrProcessed       689
+TotalObjects        911
+TotalPWCCycleNum    2
+TotalPointers       7426
+#######################################################
+****Persistent Points-To Cache Statistics: bv-finalize****
+UniquePointsToSets       980
+TotalUnions              3090
+PropertyUnions           2779
+UniqueUnions             91
+LookupUnions             44
+PreemptiveUnions         176
+TotalComplements         25837
+PropertyComplements      25774
+UniqueComplements        12
+LookupComplements        39
+PreemptiveComplements    12
+TotalIntersections       774
+PropertyIntersections    750
+UniqueIntersections      0
+LookupIntersections      0
+PreemptiveIntersections  24
+
+****Memory SSA Statistics****
+
+************************
+################ (program : home/cj/OOM/usage_example/demo/target/debug/deps/main-ea178f5bb1be4b8d)###############
+-------------------------------------------------------
+AverageRegSize      1.53976
+SSARenameTime       0.002
+InsertPHITime       0.001
+GenMUCHITime        0.007
+GenRegionTime       0.009
+TotalMSSATime       0.025
+BBHasMSSAPhi        137
+StoreHasChi         741
+MaxRegSize          26
+MemRegions          591
+FunHasRetMu         226
+FunEntryChi         742
+StoreChiNode        727
+LoadMuNode          701
+MSSAPhi             933
+LoadHasMu           714
+CSChiNode           161
+CSMuNode            359
+CSHasChi            96
+FunRetMu            742
+FunHasEntryChi      164
+CSHasMu             220
+#######################################################
+
+****SVFG Statistics****
+
+************************
+################ (program : home/cj/OOM/usage_example/demo/target/debug/deps/main-ea178f5bb1be4b8d)###############
+-------------------------------------------------------
+AvgWeight           1.44108
+OptTime             0
+ATNodeTime          0.002
+TLNodeTime          0
+ConnIndEdgeTime     0.002
+ConnDirEdgeTime     0
+TotalTime           0.004
+MaxIndOutDeg        26
+Gep                 987
+Addr                726
+IndirectEdgeLabels  7557
+ActualRet           416
+ActualParam         1405
+FormalRet           128
+IndCallEdge         482
+ActualIn            359
+AvgIndOutDeg        1
+Store               833
+FormalParam         416
+Copy                1181
+DirectEdge          6990
+AvgIndInDeg         1
+MaxIndInDeg         29
+ActualOut           161
+TotalNode           11098
+Load                714
+MaxOutDegree        550
+PHI                 154
+TotalEdge           12234
+DirectRetEdge       274
+FormalOut           742
+MSSAPhi             933
+IndirectEdge        5244
+IndRetEdge          235
+DirectCallEdge      756
+AvgInDegree         1
+AvgOutDegree        1
+FormalIn            742
+MaxInDegree         29
+#######################################################
+__rust_alloc-------------------------:
+__rust_alloc:
+(c:0)
+
+__rust_realloc-------------------------:
+__rust_realloc:
+(c:0)
+
+_ZN5alloc5alloc5alloc17h77d7c386fee812cfE-------------------------:
+alloc::alloc::alloc::h77d7c386fee812cf:
+(v:*-0-arg_0-0-64)
+
+_ZN5alloc5alloc7realloc17h73e882ee4a3c9c31E-------------------------:
+alloc::alloc::realloc::h73e882ee4a3c9c31:
+(v:*-0-arg_3-0-64)
+
+_ZN5alloc5alloc6Global10alloc_impl17hdbea0c36bf1b1d89E-------------------------:
+alloc::alloc::Global::alloc_impl::hdbea0c36bf1b1d89:
+(v:*-0-arg_1-0-64)
+
+_ZN5alloc5alloc6Global9grow_impl17h35f14813bca72459E-------------------------:
+alloc::alloc::Global::grow_impl::h35f14813bca72459:
+(v:*-0-arg_4-0-64)
+
+_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$15allocate_zeroed17h0538783b82e01b52E-------------------------:
+_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate_zeroed::h0538783b82e01b52:
+(v:*-0-arg_1-0-64)
+
+_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$8allocate17h6ed94e6a286ce1efE-------------------------:
+_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate::h6ed94e6a286ce1ef:
+(v:*-0-arg_1-0-64)
+
+_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$4grow17hd9bd598550a5bb12E-------------------------:
+_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::grow::hd9bd598550a5bb12:
+(v:*-0-arg_4-0-64)
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17h39cf4f0eea55f539E-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::allocate_in::h39cf4f0eea55f539:
+(((c:4)*(v:*-0-arg_0-0-64))+((((((c:4)*(v:*-0-arg_0-0-64))+(c:4))-(c:1))&(c:-4))-((c:4)*(v:*-0-arg_0-0-64))))
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17hacbeadf68697f3ccE-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::allocate_in::hacbeadf68697f3cc:
+((v:*-0-arg_0-0-64)+((((v:*-0-arg_0-0-64)+(c:1))-(c:1))-(v:*-0-arg_0-0-64)))
+
+_ZN5alloc7raw_vec11finish_grow17h6374c7994b166ef2E-------------------------:
+alloc::raw_vec::finish_grow::h6374c7994b166ef2:
+(v:*-0-arg_1-0-64)
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$16with_capacity_in17hebaf4678d7bfc4ecE-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::with_capacity_in::hebaf4678d7bfc4ec:
+(((c:4)*(v:*-0-arg_0-0-64))+((((((c:4)*(v:*-0-arg_0-0-64))+(c:4))-(c:1))&(c:-4))-((c:4)*(v:*-0-arg_0-0-64))))
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$16with_capacity_in17h20e3c8377aa5295fE-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::with_capacity_in::h20e3c8377aa5295f:
+((v:*-0-arg_0-0-64)+((((v:*-0-arg_0-0-64)+(c:1))-(c:1))-(v:*-0-arg_0-0-64)))
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$14grow_amortized17h37b892db5a0909dbE-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::grow_amortized::h37b892db5a0909db:
+(((c:4)*(p:(p:((v:*-0-arg_2-0-64)+(v:*-0-arg_3-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))+((((((c:4)*(p:(p:((v:*-0-arg_2-0-64)+(v:*-0-arg_3-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:((v:*-0-arg_2-0-64)+(v:*-0-arg_3-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))))
+
+_ZN5alloc3vec16Vec$LT$T$C$A$GT$16with_capacity_in17h2ce2d8f7de87cf93E-------------------------:
+alloc::vec::Vec$LT$T$C$A$GT$::with_capacity_in::h2ce2d8f7de87cf93:
+(((c:4)*(v:*-0-arg_1-0-64))+((((((c:4)*(v:*-0-arg_1-0-64))+(c:4))-(c:1))&(c:-4))-((c:4)*(v:*-0-arg_1-0-64))))
+
+_ZN5alloc3vec16Vec$LT$T$C$A$GT$16with_capacity_in17hf8fd87d3e4491ec1E-------------------------:
+alloc::vec::Vec$LT$T$C$A$GT$::with_capacity_in::hf8fd87d3e4491ec1:
+((v:*-0-arg_1-0-64)+((((v:*-0-arg_1-0-64)+(c:1))-(c:1))-(v:*-0-arg_1-0-64)))
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11try_reserve17hfc8aa66b2d7524e5E-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::try_reserve::hfc8aa66b2d7524e5:
+(((c:4)*(p:(p:((v:*-0-arg_2-0-64)+(v:*-0-arg_3-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))+((((((c:4)*(p:(p:((v:*-0-arg_2-0-64)+(v:*-0-arg_3-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:((v:*-0-arg_2-0-64)+(v:*-0-arg_3-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))))
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$7reserve21do_reserve_and_handle17hd8bcdec3bbc12bc6E-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::do_reserve_and_handle::hd8bcdec3bbc12bc6:
+(((c:4)*(p:(p:((v:*-0-arg_1-0-64)+(v:*-0-arg_2-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))+((((((c:4)*(p:(p:((v:*-0-arg_1-0-64)+(v:*-0-arg_2-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:((v:*-0-arg_1-0-64)+(v:*-0-arg_2-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))))
+
+_ZN5alloc3vec12Vec$LT$T$GT$13with_capacity17h3fe093cafd72c815E-------------------------:
+alloc::vec::Vec$LT$T$GT$::with_capacity::h3fe093cafd72c815:
+(((c:4)*(v:*-0-arg_1-0-64))+((((((c:4)*(v:*-0-arg_1-0-64))+(c:4))-(c:1))&(c:-4))-((c:4)*(v:*-0-arg_1-0-64))))
+
+_ZN52_$LT$T$u20$as$u20$alloc..slice..hack..ConvertVec$GT$6to_vec17h6146173f482fbd6aE-------------------------:
+_$LT$T$u20$as$u20$alloc..slice..hack..ConvertVec$GT$::to_vec::h6146173f482fbd6a:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN5alloc3vec12Vec$LT$T$GT$13with_capacity17h33f5e63bc2760581E-------------------------:
+alloc::vec::Vec$LT$T$GT$::with_capacity::h33f5e63bc2760581:
+((v:*-0-arg_1-0-64)+((((v:*-0-arg_1-0-64)+(c:1))-(c:1))-(v:*-0-arg_1-0-64)))
+
+_ZN5alloc3vec16Vec$LT$T$C$A$GT$11try_reserve17h3883667c7edbf154E-------------------------:
+alloc::vec::Vec$LT$T$C$A$GT$::try_reserve::h3883667c7edbf154:
+(((c:4)*(p:(p:((f:*-1-arg_1-128-64-*0)+(v:*-0-arg_2-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))+((((((c:4)*(p:(p:((f:*-1-arg_1-128-64-*0)+(v:*-0-arg_2-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:((f:*-1-arg_1-128-64-*0)+(v:*-0-arg_2-0-64))((f:*-1-arg_1-64-64-*0)*(c:2)))(c:4)))))
+
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$7reserve17h8bf11a126f4ad1e7E-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h8bf11a126f4ad1e7:
+(((c:4)*(p:(p:((v:*-0-arg_1-0-64)+(v:*-0-arg_2-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))+((((((c:4)*(p:(p:((v:*-0-arg_1-0-64)+(v:*-0-arg_2-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:((v:*-0-arg_1-0-64)+(v:*-0-arg_2-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))))
+
+_ZN5alloc5slice4hack6to_vec17haf2ffa9855ea33a7E-------------------------:
+alloc::slice::hack::to_vec::haf2ffa9855ea33a7:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN5alloc6string6String13with_capacity17h4df16c87c27cc5f2E-------------------------:
+alloc::string::String::with_capacity::h4df16c87c27cc5f2:
+((v:*-0-arg_1-0-64)+((((v:*-0-arg_1-0-64)+(c:1))-(c:1))-(v:*-0-arg_1-0-64)))
+
+_ZN5alloc3vec16Vec$LT$T$C$A$GT$7reserve17hae5d00674a35ab68E-------------------------:
+alloc::vec::Vec$LT$T$C$A$GT$::reserve::hae5d00674a35ab68:
+(((c:4)*(p:(p:((f:*-1-arg_0-128-64-*0)+(v:*-0-arg_1-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))+((((((c:4)*(p:(p:((f:*-1-arg_0-128-64-*0)+(v:*-0-arg_1-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:((f:*-1-arg_0-128-64-*0)+(v:*-0-arg_1-0-64))((f:*-1-arg_0-64-64-*0)*(c:2)))(c:4)))))
+
+_ZN5alloc5slice29_$LT$impl$u20$$u5b$T$u5d$$GT$9to_vec_in17h43dddfa6267168e5E-------------------------:
+alloc::slice::_$LT$impl$u20$$u5b$T$u5d$$GT$::to_vec_in::h43dddfa6267168e5:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN5alloc5slice29_$LT$impl$u20$$u5b$T$u5d$$GT$6to_vec17h8e38a72664e3e087E-------------------------:
+alloc::slice::_$LT$impl$u20$$u5b$T$u5d$$GT$::to_vec::h8e38a72664e3e087:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN5alloc5slice64_$LT$impl$u20$alloc..borrow..ToOwned$u20$for$u20$$u5b$T$u5d$$GT$8to_owned17h43d9d595e32845beE-------------------------:
+alloc::slice::_$LT$impl$u20$alloc..borrow..ToOwned$u20$for$u20$$u5b$T$u5d$$GT$::to_owned::h43d9d595e32845be:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN5alloc3str56_$LT$impl$u20$alloc..borrow..ToOwned$u20$for$u20$str$GT$8to_owned17h05e80b1c097ea63eE-------------------------:
+alloc::str::_$LT$impl$u20$alloc..borrow..ToOwned$u20$for$u20$str$GT$::to_owned::h05e80b1c097ea63e:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN76_$LT$alloc..string..String$u20$as$u20$core..convert..From$LT$$RF$str$GT$$GT$4from17hf81b2087fbbd29c5E-------------------------:
+_$LT$alloc..string..String$u20$as$u20$core..convert..From$LT$$RF$str$GT$$GT$::from::hf81b2087fbbd29c5:
+((v:*-0-arg_2-0-64)+((((v:*-0-arg_2-0-64)+(c:1))-(c:1))-(v:*-0-arg_2-0-64)))
+
+_ZN96_$LT$main..myError$u20$as$u20$core..convert..From$LT$alloc..collections..TryReserveError$GT$$GT$4from17h67d0e9bf89e1abeaE-------------------------:
+_$LT$main..myError$u20$as$u20$core..convert..From$LT$alloc..collections..TryReserveError$GT$$GT$::from::h67d0e9bf89e1abea:
+(c:45)
+
+_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17hd649715b1766e9a0E-------------------------:
+_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$::from_residual::hd649715b1766e9a0:
+(c:45)
+
+_ZN4main12try_test_oom17h1b86e1f38b1b126fE-------------------------:
+main::try_test_oom::h1b86e1f38b1b126f:
+(CFG_PHI:size:2;(((c:100)#(c:50))#(((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4)))+((((((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4))))));((((c:100)#(c:50))#(((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4)))+((((((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4))))))#(c:45));)
+
+_ZN4main8test_oom17hde52fd377e7d01d5E-------------------------:
+main::test_oom::hde52fd377e7d01d5:
+(CFG_PHI:size:2;(c:45);(((c:100)#(c:50))#(((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4)))+((((((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:(f:*-1-arg_1-128-32-*0)(c:0))(c:4))))));)
+
+_ZN4main4main17h12fe131d7002c1b4E-------------------------:
+ERROR: f1 CIRCLE FIND
+main::main::h12fe131d7002c1b4:
+(CFG_PHI:size:2;(CFG_PHI:size:2;(((c:100)#(c:50))#(c:2000));((((c:100)#(c:50))#(c:2000))#(c:45)););(CFG_PHI:size:2;(((c:100)#(c:50))#(c:2000));((((c:100)#(c:50))#(c:2000))#(c:45)););)
+
+OOM_Function_ZN4main8test_oom17hde52fd377e7d01d5E~(c:45)|(c:100)|(c:50)|(((c:4)*(p:(p:(f:*-1-arg_0-128-32-*0)(c:0))(c:4)))+((((((c:4)*(p:(p:(f:*-1-arg_0-128-32-*0)(c:0))(c:4)))+(c:4))-(c:1))&(c:-4))-((c:4)*(p:(p:(f:*-1-arg_0-128-32-*0)(c:0))(c:4)))))|
