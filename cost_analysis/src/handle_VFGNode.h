@@ -299,7 +299,8 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
         case SVF::VFGNode::VFGNodeK::FParm: 
         {
 			if(avfg->paramlist.find(node) != avfg->paramlist.end()){
-				avfg->paramlist[node] = true;
+				if(depth >= 0)
+					avfg->paramlist[node] = true;
 				if(debug_flag)
 					std::cout << "We got param" << endl;
 				if(extract_index->empty()){
@@ -1067,10 +1068,13 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 }
 
 std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int depth, bool *error_flag){
+	if(debug_flag){
+		std::cout << "find:" << node->toString() << endl;
+	}
 	for (auto it = node->OutEdgeBegin(), eit = node->OutEdgeEnd(); it != eit; ++it) {
 		auto a_edge = *it;
 		auto succ_node = a_edge->getDstNode();
-		if(succ_node->hasOutgoingEdge() && SVF::GepVFGNode::classof(succ_node)|| SVF::ActualParmVFGNode::classof(succ_node) || SVF::FormalParmVFGNode::classof(succ_node)){
+		if(succ_node->hasOutgoingEdge() && SVF::GepVFGNode::classof(succ_node)){
 			
 			bool push_flag = false;
 
@@ -1089,13 +1093,11 @@ std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVF
 			
 			if(push_flag)
 				call_stack->pop();
-			if(result->getKind() == ExprTypes::expr_none){
-				continue;
-			}
-			else{
+			if(result->getKind() != ExprTypes::expr_none){
 				return result;
 			}
 		}
+
 		if (SVF::StoreVFGNode::classof(succ_node)){
 			auto result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
 			if(result->getKind() == ExprTypes::expr_none)
@@ -1104,6 +1106,31 @@ std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVF
 				return result;
 		}
 	}
+	// for (auto it = node->OutEdgeBegin(), eit = node->OutEdgeEnd(); it != eit; ++it) {
+	// 	auto a_edge = *it;
+	// 	auto succ_node = a_edge->getDstNode();
+	// 	if (SVF::ActualParmVFGNode::classof(succ_node) || SVF::FormalParmVFGNode::classof(succ_node)){
+	// 		bool push_flag = false;
+	// 		if(SVF::CallDirSVFGEdge::classof(a_edge)){
+	// 			const CallDirSVFGEdge *ret_edge = static_cast<const CallDirSVFGEdge*>(a_edge);
+	// 			call_stack->push(ret_edge->getCallSiteId());
+	// 			push_flag = true;
+	// 		}
+	// 		if(SVF::CallIndSVFGEdge::classof(a_edge)){
+	// 			const CallIndSVFGEdge *ret_edge = static_cast<const CallIndSVFGEdge*>(a_edge);
+	// 			call_stack->push(ret_edge->getCallSiteId());
+	// 			push_flag = true;
+	// 		}
+
+	// 		auto result = findAndParse(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+
+	// 		if(push_flag)
+	// 			call_stack->pop();
+	// 		if(result->getKind() != ExprTypes::expr_none){
+	// 			return result;
+	// 		}
+	// 	}
+	// }
 	return make_shared<NoneVFG>();
 }
 

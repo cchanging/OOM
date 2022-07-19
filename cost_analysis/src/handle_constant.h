@@ -76,7 +76,6 @@ long parseConstant(const Value* value, bool field_flag, int pre_size, int size){
         unsigned index = 0;
         return parseConstant(seq->getAggregateElement(index), field_flag, pre_size, size);
     }
-    value->dump();
     return 0;
 }
 

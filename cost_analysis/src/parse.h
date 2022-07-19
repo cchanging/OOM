@@ -265,6 +265,7 @@ public:
 
 ///variable
 class VariableVFG : public ExprVFG {
+public:
   int def;
   int index;
   const VFGNode* val;
@@ -319,6 +320,11 @@ public:
     std::cout << "(v:*-"<< def_num<<"-arg_" <<  output_index <<"-" << offset << "-" << current_size << ")";
   }
   
+  int getNo(){
+    const Argument* argument = SVFUtil::dyn_cast<Argument>(val->getValue());
+    return argument->getArgNo();
+  }
+
   std::shared_ptr<ExprVFG> simplify(){
     return std::make_shared<VariableVFG>(val, offset, actual_size);
   }

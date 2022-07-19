@@ -59,6 +59,8 @@ static llvm::cl::opt<std::string> InputFilename(cl::Positional,
 
 std::map<const std::string, const SVFFunction*> func_map;
 std::map<const SVFFunction*, FuncExpr> funcs_expr;
+std::map<const std::string, std::set<std::vector<const SVFFunction*>>> trait_map;
+std::map<const std::string, std::string> trait_name_map;
 const SVFFunction* rust_alloc_function;
 const SVFFunction* rust_realloc_function;
 const SVFFunction* umul_function;
@@ -80,6 +82,18 @@ std::map<const SVFFunction*, std::map<int, FieldTransform>> param_transforms;
    return MangledName.size() >= 2 && MangledName[0] == '_' &&
           MangledName[1] == 'D';
  }
+
+std::vector<std::string> stringSplit(const std::string& str, char delim) {
+    std::stringstream ss(str);
+    std::string item;
+    std::vector<std::string> elems;
+    while (std::getline(ss, item, delim)) {
+        if (!item.empty()) {
+            elems.push_back(item);
+        }
+    }
+    return elems;
+}
 
 std::string printPts(PointerAnalysis* pta, Value* val)
 {
@@ -344,6 +358,8 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 	const ICFGNode* exit_node;
 	bool oom_safe_flag = false;
 	int count_index = 0;
+	std::vector<std::string> trait_name_vector;
+	std::vector<int> trait_num_vector;
 	while (!worklist.empty()) {
 		const ICFGNode* i_node = worklist.pop();
 		if(CallICFGNode::classof(i_node)){
@@ -353,6 +369,8 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 			const CallICFGNode* call_node = static_cast<const CallICFGNode*>(i_node);
 			auto temp_call_site = call_node->getCallSite();
 			const CallBase* call_base = static_cast<const CallBase*>(temp_call_site);
+
+			
 			if(llvm::Function::classof(call_base->getCalledOperand())){
 				const SVFFunction* succ_func = SVF::SVFUtil::getFunction(call_base->getCalledOperand()->getName());
 				if(func_map.find(succ_func->getValue()) != func_map.end())
@@ -362,6 +380,41 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 					oom_safe_function.insert(avfg->getFunction());
 					oom_safe_flag = true;
 				}
+				// if(function_name.find("get_trait_name") != string::npos){
+				// 	const ICFGNode* call_site = i_node;
+				// 	auto vfg_nodes = call_site->getVFGNodes(); 
+				// 	unsigned record = 0;
+				// 	for(auto iter : vfg_nodes){
+				// 		if(record == 1){
+				// 			record++;
+				// 			continue;
+				// 		}
+				// 		if(record == 2){
+				// 			FILOWorkList<CallSiteID> call_stack;
+				// 			std::stack<FieldIndex> extract_index;
+				// 			bool error_flag = false;
+ 				// 			std::shared_ptr<ExprVFG> arg = parseVFGNode(iter, svfg, avfg, &extract_index, &call_stack, -5000, &error_flag);
+				// 			if (arg->getKind() == ExprTypes::expr_variable){
+				// 				std::shared_ptr<VariableVFG> v_arg = std::static_pointer_cast<VariableVFG>(arg);
+				// 				trait_num_vector.push_back(v_arg->getNo() + 1);
+				// 			}
+				// 			break;
+				// 		}
+				// 		if(SVF::ActualParmVFGNode::classof(iter)){
+				// 			const VFGEdge *t_edge = *(iter->InEdgeBegin());
+				// 			auto next_node = t_edge->getSrcNode();
+				// 			t_edge = *(next_node->InEdgeBegin());
+				// 			next_node = t_edge->getSrcNode();
+				// 			const GlobalVariable* gv = static_cast<const GlobalVariable*>(next_node->getValue());
+				// 			auto temp = gv->getInitializer();
+				// 			unsigned index = 0;
+				// 			auto field = temp->getAggregateElement(index);
+				// 			auto trait_name = field->getNameOrAsOperand();
+				// 			trait_name_vector.push_back(trait_name.substr(2,trait_name.size()-3));
+				// 			record++;
+				// 		}
+				// 	}
+				// }
 			
 			//if(succ_node->getNodeKind() == SVF::ICFGNode::ICFGNodeK::FunEntryBlock){
 			//auto succ_func = succ_node->getFun();
@@ -382,7 +435,44 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 					avfg->cfg_phi_depend[i_node] = move(make_shared<std::set<const ICFGNode*>>(depends));
 				}
 			}
-			//}
+			else{
+				if(call_base->hasMetadata("dbg")){
+					auto meta = call_base->getMetadata("dbg");
+					if(DILocation::classof(meta)){
+						const DILocation* location = static_cast<const DILocation*>(meta);
+						cout << "Line" << location->getLine() << endl;
+						cout << "Column" << location->getColumn() << endl;
+						auto file = location->getScope()->getFile()->getFilename();
+						std::vector<string> file_name = stringSplit(file.str(), '.');
+						string filename = file_name[0];
+						string key = filename + '_' + to_string(location->getLine()) + '_' + to_string(location->getColumn());
+						std::cout << trait_name_map[key] << endl;
+					}
+				}
+				auto called = call_base->getCalledOperand();
+				if(llvm::Instruction::classof(called)){
+					FILOWorkList<CallSiteID> call_stack;
+					std::stack<FieldIndex> extract_index;
+					bool error_flag = false;
+					const PAGNode *pag_node = pag->getGNode(pag->getValueNode(called));
+					auto param_node = svfg->getDefSVFGNode(pag_node);
+					std::shared_ptr<ExprVFG> arg = parseVFGNode(param_node, svfg, avfg, &extract_index, &call_stack, -5000, &error_flag);
+					int target_index = 0;
+					std::shared_ptr<VariableVFG> v_arg = std::static_pointer_cast<VariableVFG>(arg);
+					for(int i = 0; i < trait_num_vector.size(); i++){
+						if(trait_num_vector[i] == v_arg->getNo()){
+							std::cout << trait_name_vector[i] << endl;
+							std::set<std::vector<const SVFFunction*>>& trait_set_ref = trait_map[trait_name_vector[i]];
+							for(auto iter1 : trait_set_ref){
+								for(auto iter2: iter1){
+									std::cout << iter2->getValue() << endl;
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
 		}
 		for (ICFGNode::const_iterator it = i_node->OutEdgeBegin(), eit = i_node->OutEdgeEnd(); it != eit; ++it) {
 			ICFGEdge* edge = *it;
@@ -503,6 +593,13 @@ std::shared_ptr<ExprVFG> get_result(int depth, const ICFGNode* node,  AVFG* avfg
 void analysisAVFG(const SVFFunction* F, SVFG *svfg, SVFIR *pag, ICFG *icfg, std::set<const SVFFunction*> *target_func){
 	AVFG avfg(F);
 	std::cout << F->getValue() << "-------------------------:" << endl;
+	// if (F->getValue() == "_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17hab29dcdbf93897d1E" ||
+	// F->getValue() == "_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17h6fa4af459a0f3e88E"){
+	// 	debug_flag = true;
+	// }
+	// else{
+	// 	debug_flag = false;
+	// }
 	if (pag->hasFunArgsList(F)){
 		auto arg_nodes = pag->getFunArgsList(F);
 		for(auto iter : arg_nodes){
@@ -511,10 +608,7 @@ void analysisAVFG(const SVFFunction* F, SVFG *svfg, SVFIR *pag, ICFG *icfg, std:
 			avfg.param_vector.push_back(arg_node); 
 		}
 	}
-
 	auto func_begin_node = icfg->getFunEntryICFGNode(F);
-
-	
 	FILOWorkList<const ICFGNode*> depend_stack;
 	const ICFGNode* exit_node = parseFunctionCFG(pag, svfg, func_begin_node, icfg, &avfg, target_func);
 	bool error_flag = false;
@@ -600,9 +694,10 @@ void traverseOnCallGraph(PTACallGraph *callgraph, SVFG *svfg, SVFIR *pag, ICFG *
 	PTACallGraphNode* record_node = 0;
 	while (!worklist.empty()) {
 		PTACallGraphNode* f_node = worklist.pop();
+		//std::cout << "to:" << f_node->toString() << endl;
 		if(f_node->hasOutgoingEdge()){
 			if(f_node == record_node && flag == false){
-				std::cout << "recursion!" << endl;
+				std::cout << "recursion!" << f_node->toString() << endl;
 				analysisAVFG(f_node->getFunction(), svfg, pag, icfg, &visited);
 				for (auto it = f_node->InEdgeBegin(), eit = f_node->InEdgeEnd(); it != eit; ++it) {
 					auto edge = *it;
@@ -620,6 +715,7 @@ void traverseOnCallGraph(PTACallGraph *callgraph, SVFG *svfg, SVFIR *pag, ICFG *
 			}
 			continue;
 		}
+		//std::cout << "analysis" << endl;
 		flag = true;
 		if(f_node != init_node_alloc || f_node != init_node_realloc){ //跳过__rust_alloc
 			func_map[f_node->getFunction()->getValue()] = f_node->getFunction();
@@ -779,7 +875,23 @@ int main(int argc, char ** argv) {
     SVFG* svfg = svfBuilder.buildFullSVFG(ander);
 	init_llvm_func();
 	debug_flag = false;
-	traverseOnCallGraph(callgraph, svfg, pag, icfg);
+
+	ifstream file;
+    file.open("trait_name", ios_base::in);
+    if (!file.is_open()){
+        cout << "failed to open the file";
+    }
+	string s;
+    while (getline(file, s)){
+		std::vector<std::string> info = stringSplit(s, ' ');
+		string trait_name = info[1];
+		string func_name = info[2];
+		string loc = info[0];
+		trait_name_map[loc] = trait_name;
+		//std::cout << loc << ";" << trait_name << ";" << func_name << endl;
+    }
+    file.close();
+
 
 	for(auto iter : oom_safe_function){
 		handle_parameter(iter, callgraph, icfg, svfg);
@@ -795,6 +907,85 @@ int main(int argc, char ** argv) {
 		std::cout << endl;
 	}
 
+
+	auto global_vnode = svfg->getGlobalVFGNodes();	
+	std::set<std::string> vtable_set;
+	vtable_set.insert("vtable.0");
+	for(auto iter : global_vnode){
+		auto val = iter->getValue();
+		if(val && llvm::Constant::classof(val) && llvm::GlobalVariable::classof(val)){
+			const GlobalVariable* gv = static_cast<const GlobalVariable*>(val);
+			std::string vtable_num = val->getName().str();
+			if(vtable_num.substr(0,6) == "vtable" && vtable_set.find(vtable_num) == vtable_set.end()){
+				vtable_set.insert(vtable_num);
+				auto temp = gv->getInitializer();
+				if(temp && llvm::ConstantStruct::classof(temp)){
+					unsigned index = 1;
+					auto struct_type = temp->getType();
+					//std::set<const SVFFunction*> trait_set;
+					std::vector<const SVFFunction*> vtable_func;
+					std::string trait_name = "";
+					bool trait_flag = false;
+					for(Type::subtype_iterator ib = struct_type->subtype_begin(), ie = struct_type->subtype_end();
+					ib != ie; ib++){
+						if(ib == struct_type->subtype_begin()){
+							continue;
+						}
+						auto field = temp->getAggregateElement(index);
+						if(llvm::ConstantExpr::classof(field)){
+							const ConstantExpr* expr = static_cast<const ConstantExpr*>(field);
+							auto inst = expr->getAsInstruction();
+							if(llvm::BitCastInst::classof(inst)){
+								const llvm::BitCastInst *b_inst = SVFUtil::dyn_cast<llvm::BitCastInst>(inst);
+								auto src = b_inst->getSrcTy();
+								// while(src->isPointerTy()){
+								// 	src = src->getPointerElementType();
+								// }
+								// if(src->isFunctionTy()){
+								// 	auto return_type = src->getFunctionParamType(0)->getPointerElementType();
+								// 	if(return_type->isStructTy()){
+								// 		std::cout << return_type->getStructName().str() <<endl;
+								// 		trait_name = return_type->getStructName().str();
+								// 	}
+								// }
+								auto func = b_inst->getOperand(0); //get function name
+								std::string delimiter1 = "$GT$";
+								std::string delimiter2 = "..";
+								std::string delimiter3 = "$GT$::";
+								std::cout << llvm::demangle(func->getName().str()) << endl;
+								std::string trait_demangle = llvm::demangle(func->getName().str());
+								std::string trait_demangle2 = llvm::demangle(func->getName().str());
+								trait_demangle = trait_demangle.substr(0, trait_demangle.find(delimiter1));
+								trait_demangle2 = trait_demangle2.erase(0, trait_demangle2.find(delimiter3) + delimiter3.length());
+								trait_demangle2 = trait_demangle2.substr(0,trait_demangle2.find("::"));
+								while(trait_demangle.find(delimiter2) != std::string::npos){
+									trait_demangle.erase(0, trait_demangle.find(delimiter2) + delimiter2.length());
+								}
+								std::cout << "trait_name:::" << trait_demangle << endl;
+								std::cout << "func_name:::" << trait_demangle2 << endl;
+								trait_name = trait_demangle;
+								trait_flag = true;
+								vtable_func.push_back(SVF::SVFUtil::getFunction(func->getName()));
+								//std::cout << llvm::demangle(func->getName().str()) << endl;
+							}
+						}
+						index++;
+					}
+					if(trait_map.find(trait_name) == trait_map.end()){
+						std::set<std::vector<const SVFFunction*>> trait_set;
+						trait_set.insert(vtable_func);
+						trait_map[trait_name] = trait_set;
+					}
+					else{
+						std::set<std::vector<const SVFFunction*>>& trait_set_ref = trait_map[trait_name];
+						trait_set_ref.insert(vtable_func);
+					}
+				}	
+			}
+		}
+		//std::cout << iter->toString() << endl;
+	}
+	traverseOnCallGraph(callgraph, svfg, pag, icfg);
 	//callgraph->dump("cfg");
 	//pag->dump("pag");
 	//icfg->dump("icfg");
