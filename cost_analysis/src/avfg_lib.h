@@ -68,7 +68,7 @@ public:
 
 
 extern std::map<const std::string, const SVFFunction*> func_map;
-extern std::map<const std::string, std::set<std::vector<const SVFFunction*>>> trait_map;
+extern std::map<const std::string, std::set<const SVFFunction*>> trait_map;
 extern std::map<const SVFFunction*, FuncExpr> funcs_expr;
 extern std::set<const SVFFunction*> oom_safe_function;
 extern const SVFFunction* rust_alloc_function;

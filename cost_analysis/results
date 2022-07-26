@@ -1,266 +1,261 @@
 
 *********CallGraph Stats***************
-################ (program : home/cj/test_file/t7)###############
+################ (program : home/cj/test_file/oom_demo/target/debug/deps/main-c5c8ff6de47c6d22)###############
 -------------------------------------------------------
 CalRetPairInCycle   0
 MaxNodeInCycle      0
 NodeInCycle         0
-TotalEdge           182
+TotalEdge           309
 TotalCycle          0
-TotalNode           134
+TotalNode           147
 #######################################################
 
 *********General Stats***************
-################ (program : home/cj/test_file/t7)###############
-BBWith3Succ         13
-BBWith2Succ         53
-StoresNum           399
-FSObjNum            409
-AddrsNum            470
-TotalFieldObjects   98
-GepsNum             313
+################ (program : home/cj/test_file/oom_demo/target/debug/deps/main-c5c8ff6de47c6d22)###############
+BBWith3Succ         12
+BBWith2Succ         116
+StoresNum           560
+FSObjNum            542
+AddrsNum            623
+TotalFieldObjects   110
+GepsNum             394
 LocalVarInRecur     0
 FIObjNum            30
-LoadsNum            190
-MaxStructSize       6
-TotalSVFStmts       2555
-TotalPointers       3029
-ReturnsNum          123
-VarArrayObj         0
-CopysNum            395
+LoadsNum            293
+MaxStructSize       9
+TotalSVFStmts       3414
+TotalPointers       4130
+ReturnsNum          140
+VarArrayObj         1
+CopysNum            442
 ConstArrayObj       0
-CallsNum            239
-TotalObjects        440
-FunctionObjs        134
-TotalPTASVFStmts    1493
-GlobalObjs          8
-HeapObjs            0
-StackObjs           296
-ConstStructObj      8
-BitCastNumber       150
-VarStructObj        123
-TotalCallSite       186
-NonPtrObj           275
-IndCallSites        5
+CallsNum            307
+TotalObjects        573
+FunctionObjs        147
+TotalPTASVFStmts    1874
+GlobalObjs          44
+HeapObjs            4
+StackObjs           376
+ConstStructObj      42
+BitCastNumber       147
+VarStructObj        118
+TotalCallSite       311
+NonPtrObj           335
+IndCallSites        4
 -------------------------------------------------------
 #######################################################
 
 *********Constraint Graph Stats***************
-################ (program : home/cj/test_file/t7)###############
+################ (program : home/cj/test_file/oom_demo/target/debug/deps/main-c5c8ff6de47c6d22)###############
 -------------------------------------------------------
-AvgIn/OutEdge       1.00919
-AvgIn/OutAddrEdge   0.267606
-AvgIn/OutLoadEdge   0.0508267
-AvgIn/OutCopyEdge   0.569504
+AvgIn/OutEdge       1.0703
+AvgIn/OutAddrEdge   0.279292
+AvgIn/OutLoadEdge   0.0636059
+AvgIn/OutCopyEdge   0.594452
 MaxInAddrEdge       1
-MaxOutStoreEdge     31
-NumOfCGNode         3636
-TotalValidNode      1633
+MaxOutStoreEdge     32
+NumOfCGNode         4961
+TotalValidNode      2091
 AvgIn/OutStoreEdge  0
-TotalValidObjNode   449
-NumOfGeps           313
-NumOfCGEdge         1211
-NumOfAddrs          437
-MaxOutAddrEdge      12
-NumOfLoads          83
-NumOfStores         198
-MaxOutLoadEdge      1
-NumOfCopys          617
-MaxOutCopyEdge      53
-MaxInStoreEdge      2
-MaxInLoadEdge       14
-MaxInCopyEdge       6
+TotalValidObjNode   579
+NumOfGeps           393
+NumOfCGEdge         1654
+NumOfAddrs          584
+MaxOutAddrEdge      17
+NumOfLoads          133
+NumOfStores         278
+MaxOutLoadEdge      12
+NumOfCopys          850
+MaxOutCopyEdge      40
+MaxInStoreEdge      4
+MaxInLoadEdge       7
+MaxInCopyEdge       13
 #######################################################
 
 *********Andersen Pointer Analysis Stats***************
-################ (program : home/cj/test_file/t7)###############
+################ (program : home/cj/test_file/oom_demo/target/debug/deps/main-c5c8ff6de47c6d22)###############
 -------------------------------------------------------
-AvgTopLvlPtsSize    0.787319
-AvgPtsSetSize       0.284946
+AvgTopLvlPtsSize    1.07204
+AvgPtsSetSize       0.378166
 LoadStoreTime       0
 CollapseTime        0
 UpdateCGTime        0
 CopyGepTime         0
 SCCMergeTime        0
 SCCDetectTime       0
-TotalTime           0.008
-NullPointer         13
+TotalTime           0.01
+NullPointer         3
 NumOfSCCDetect      4
-IndCallSites        5
-MaxPtsSetSize       6
+IndCallSites        4
+MaxPtsSetSize       12
 PointsToBlkPtr      0
-DYFieldObjs         98
+DYFieldObjs         110
 PointsToConstPtr    1
-MemObjects          440
-Pointers            3016
+MemObjects          573
+Pointers            4086
 NumOfFieldExpand    0
-DYFieldPtrs         13
+DYFieldPtrs         44
 NumOfSFRs           0
-TotalCycleNum       1
-IndEdgeSolved       1
-GepProcessed        314
-MaxNodesInSCC       85
-LoadProcessed       75
-CopyProcessed       299
-NodesInCycles       85
+TotalCycleNum       0
+IndEdgeSolved       2
+GepProcessed        398
+MaxNodesInSCC       0
+LoadProcessed       148
+CopyProcessed       635
+NodesInCycles       0
 Iterations          4
-StoreProcessed      191
-AddrProcessed       450
-TotalObjects        538
+StoreProcessed      287
+AddrProcessed       588
+TotalObjects        683
 TotalPWCCycleNum    0
-TotalPointers       3029
+TotalPointers       4130
 #######################################################
 ****Persistent Points-To Cache Statistics: bv-finalize****
-UniquePointsToSets       548
-TotalUnions              1170
-PropertyUnions           1131
-UniqueUnions             12
-LookupUnions             4
-PreemptiveUnions         23
-TotalComplements         14530
-PropertyComplements      14530
-UniqueComplements        0
-LookupComplements        0
-PreemptiveComplements    0
-TotalIntersections       435
-PropertyIntersections    435
+UniquePointsToSets       710
+TotalUnions              1718
+PropertyUnions           1607
+UniqueUnions             27
+LookupUnions             32
+PreemptiveUnions         52
+TotalComplements         19795
+PropertyComplements      19747
+UniqueComplements        9
+LookupComplements        30
+PreemptiveComplements    9
+TotalIntersections       489
+PropertyIntersections    471
 UniqueIntersections      0
 LookupIntersections      0
-PreemptiveIntersections  0
+PreemptiveIntersections  18
 
 ****Memory SSA Statistics****
 
 ************************
-################ (program : home/cj/test_file/t7)###############
+################ (program : home/cj/test_file/oom_demo/target/debug/deps/main-c5c8ff6de47c6d22)###############
 -------------------------------------------------------
-AverageRegSize      1.08152
-SSARenameTime       0.001
-InsertPHITime       0
-GenMUCHITime        0.003
-GenRegionTime       0.003
-TotalMSSATime       0.008
-BBHasMSSAPhi        30
-StoreHasChi         387
-MaxRegSize          6
-MemRegions          368
-FunHasRetMu         119
-FunEntryChi         402
-StoreChiNode        385
-LoadMuNode          179
-MSSAPhi             131
-LoadHasMu           190
-CSChiNode           8
-CSMuNode            56
-CSHasChi            6
-FunRetMu            402
-FunHasEntryChi      114
-CSHasMu             44
+AverageRegSize      1.16052
+SSARenameTime       0.002
+InsertPHITime       0.001
+GenMUCHITime        0.004
+GenRegionTime       0.005
+TotalMSSATime       0.013
+BBHasMSSAPhi        58
+StoreHasChi         512
+MaxRegSize          15
+MemRegions          461
+FunHasRetMu         111
+FunEntryChi         501
+StoreChiNode        511
+LoadMuNode          291
+MSSAPhi             415
+LoadHasMu           293
+CSChiNode           30
+CSMuNode            100
+CSHasChi            27
+FunRetMu            501
+FunHasEntryChi      106
+CSHasMu             86
 #######################################################
 
 ****SVFG Statistics****
 
 ************************
-################ (program : home/cj/test_file/t7)###############
+################ (program : home/cj/test_file/oom_demo/target/debug/deps/main-c5c8ff6de47c6d22)###############
 -------------------------------------------------------
-AvgWeight           1.1008
+AvgWeight           1.22594
 OptTime             0
 ATNodeTime          0.001
 TLNodeTime          0
-ConnIndEdgeTime     0
+ConnIndEdgeTime     0.001
 ConnDirEdgeTime     0
-TotalTime           0.001
-MaxIndOutDeg        8
-Gep                 313
-Addr                470
-IndirectEdgeLabels  1518
-ActualRet           129
-ActualParam         296
-FormalRet           86
-IndCallEdge         71
-ActualIn            56
+TotalTime           0.002
+MaxIndOutDeg        16
+Gep                 394
+Addr                623
+IndirectEdgeLabels  3006
+ActualRet           207
+ActualParam         590
+FormalRet           81
+IndCallEdge         132
+ActualIn            100
 AvgIndOutDeg        1
-Store               399
-FormalParam         172
-Copy                395
-DirectEdge          2514
+Store               560
+FormalParam         193
+Copy                442
+DirectEdge          3389
 AvgIndInDeg         1
-MaxIndInDeg         6
-ActualOut           8
-TotalNode           3876
-MaxOutDegree        205
-Load                190
-PHI                 96
-TotalEdge           3893
-DirectRetEdge       123
-FormalOut           402
-MSSAPhi             131
-IndirectEdge        1379
-IndRetEdge          15
-DirectCallEdge      239
-AvgInDegree         1
+MaxIndInDeg         27
+ActualOut           30
+TotalNode           5586
+MaxOutDegree        219
+Load                293
 AvgOutDegree        1
-FormalIn            402
-MaxInDegree         6
+PHI                 88
+TotalEdge           5841
+DirectRetEdge       140
+FormalOut           501
+MSSAPhi             415
+IndirectEdge        2452
+IndRetEdge          40
+DirectCallEdge      307
+AvgInDegree         1
+FormalIn            501
+MaxInDegree         27
 #######################################################
-_$LT$t7..Dog$u20$as$u20$t7..Animal$GT$::talk::he530580937df8ddf
-trait_name:::Animal
-func_name:::talk
+_$LT$main..Dog$u20$as$u20$main..Animal$GT$::talk::heb8f62f6fc233a4f
+_$LT$main..Dog$u20$as$u20$main..Animal$GT$::get::h89deeef805fe5c33
+_$LT$core..alloc..layout..LayoutError$u20$as$u20$core..fmt..Debug$GT$::fmt::h904faa326d3b1c4f
+core::ops::function::FnOnce::call_once$u7b$$u7b$vtable.shim$u7d$$u7d$::h278c6ae94374a707
+std::rt::lang_start::_$u7b$$u7b$closure$u7d$$u7d$::h478ccb80f772ec07
+std::rt::lang_start::_$u7b$$u7b$closure$u7d$$u7d$::h478ccb80f772ec07
 __rust_alloc-------------------------:
 __rust_alloc:
 (c:0)
 
-_ZN5alloc5alloc5alloc17h0ead72da15b30858E-------------------------:
-alloc::alloc::alloc::h0ead72da15b30858:
+_ZN5alloc5alloc5alloc17h18e8cc47e4487d56E-------------------------:
+alloc::alloc::alloc::h18e8cc47e4487d56:
 (v:*-0-arg_0-0-64)
 
-_ZN5alloc5alloc6Global10alloc_impl17hb23bd07e4da1a215E-------------------------:
-alloc::alloc::Global::alloc_impl::hb23bd07e4da1a215:
+_ZN5alloc5alloc6Global10alloc_impl17h7066310bbc883a05E-------------------------:
+alloc::alloc::Global::alloc_impl::h7066310bbc883a05:
 (v:*-0-arg_1-0-64)
 
-_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$15allocate_zeroed17h0ade56acd04319bbE-------------------------:
-_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate_zeroed::h0ade56acd04319bb:
+_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$15allocate_zeroed17h0296b3a27d836534E-------------------------:
+_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate_zeroed::h0296b3a27d836534:
 (v:*-0-arg_1-0-64)
 
-_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$8allocate17heaa423270f02d6c3E-------------------------:
-_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate::heaa423270f02d6c3:
+_ZN63_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$8allocate17hbd0ed74b7cc45c81E-------------------------:
+_$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate::hbd0ed74b7cc45c81:
 (v:*-0-arg_1-0-64)
 
-_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17hefc2a5b513282497E-------------------------:
-alloc::raw_vec::RawVec$LT$T$C$A$GT$::allocate_in::hefc2a5b513282497:
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17h3a0f773846f50d96E-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::allocate_in::h3a0f773846f50d96:
 ((c:4)*(v:*-0-arg_0-0-64))
 
-_ZN5alloc5alloc15exchange_malloc17h32577160fdb9f708E-------------------------:
-alloc::alloc::exchange_malloc::h32577160fdb9f708:
-(v:*-0-arg_0-0-64)
-
-_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$16with_capacity_in17hfc0f0bf19a5cd673E-------------------------:
-alloc::raw_vec::RawVec$LT$T$C$A$GT$::with_capacity_in::hfc0f0bf19a5cd673:
+_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$16with_capacity_in17hd177fa3b60eb895eE-------------------------:
+alloc::raw_vec::RawVec$LT$T$C$A$GT$::with_capacity_in::hd177fa3b60eb895e:
 ((c:4)*(v:*-0-arg_0-0-64))
 
-_ZN5alloc4sync12Arc$LT$T$GT$3new17h079847ea245611f5E-------------------------:
-alloc::sync::Arc$LT$T$GT$::new::h079847ea245611f5:
-(c:16)
-
-_ZN5alloc3vec16Vec$LT$T$C$A$GT$16with_capacity_in17he284317ad76bbdcfE-------------------------:
-alloc::vec::Vec$LT$T$C$A$GT$::with_capacity_in::he284317ad76bbdcf:
+_ZN5alloc3vec16Vec$LT$T$C$A$GT$16with_capacity_in17h5662874a7ea34b88E-------------------------:
+alloc::vec::Vec$LT$T$C$A$GT$::with_capacity_in::h5662874a7ea34b88:
 ((c:4)*(v:*-0-arg_1-0-64))
 
-_ZN5alloc3vec12Vec$LT$T$GT$13with_capacity17hacfedf0e23ca37efE-------------------------:
-alloc::vec::Vec$LT$T$GT$::with_capacity::hacfedf0e23ca37ef:
+_ZN5alloc3vec12Vec$LT$T$GT$13with_capacity17h568b40b9e0ff8e02E-------------------------:
+alloc::vec::Vec$LT$T$GT$::with_capacity::h568b40b9e0ff8e02:
 ((c:4)*(v:*-0-arg_1-0-64))
 
-_ZN38_$LT$t7..Dog$u20$as$u20$t7..Animal$GT$4talk17he530580937df8ddfE-------------------------:
-_$LT$t7..Dog$u20$as$u20$t7..Animal$GT$::talk::he530580937df8ddf:
-(c:160)
+_ZN4main11animal_talk17h9886231edb8c82b4E-------------------------:
+entering warning
+main::animal_talk::h9886231edb8c82b4:
+(c:0)
 
-_ZN2t711animal_talk17h95d9be05b1504596E-------------------------:
-Line37
-Column5
-Animal
-t7::animal_talk::h95d9be05b1504596:
-((c:16)#(c:400))
+_ZN4main4main17h7f4b3719733d020fE-------------------------:
+main::main::h7f4b3719733d020f:
+((((c:2.65e+06)#(c:120000))#(c:11200))#(c:1200))
 
-_ZN2t74main17he23e1d5d814e2ec7E-------------------------:
-t7::main::he23e1d5d814e2ec7:
-((c:16)#(c:400))
-
+name:with_capacity<i32>
+filename:/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/alloc/src/vec/mod.rs
+line:469
+callsite_name:animal_talk
+callsite_filename:src/bin/main.rs
+callsite_line:80

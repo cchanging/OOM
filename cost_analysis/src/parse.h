@@ -192,6 +192,7 @@ public:
   };
 
   virtual std::shared_ptr<ExprVFG> simplify();
+  virtual bool exist_none();
   virtual std::shared_ptr<ExprVFG> clone();
   virtual std::shared_ptr<ExprVFG> replace(std::shared_ptr<ExprVFG> dst, std::shared_ptr<ExprVFG> src);
   virtual void foldExpr(std::vector<std::shared_ptr<ExprVFG>> *fold_expr);
@@ -213,6 +214,7 @@ public:
   
   void transform(std::map<int, FieldTransform>* param_transform) override{}
   bool isZero(){return true;}
+  bool exist_none(){return true;}
 
   std::shared_ptr<ExprVFG> simplify(){
     return std::make_shared<NoneVFG>();
@@ -242,6 +244,7 @@ public:
     type = expr_constant;
   }
   bool isZero(){return val == 0;}
+  bool exist_none(){return false;}
   long getVal() override{
     return val;
   }
@@ -282,6 +285,7 @@ public:
     offset = 0;
   }
   bool isZero(){return val == 0;}
+  bool exist_none(){return false;}
   VariableVFG(const VFGNode* val) : val(val){
     def = -1;
     index = -1;
@@ -376,7 +380,7 @@ public:
     type = expr_var_field;
   }
   bool isZero(){return param == 0;}
-  
+  bool exist_none(){return false;}
   const VFGNode* getVFG() {
     return val;
   }
@@ -549,6 +553,7 @@ public:
   long getVal() override{
     return LHS->getVal() + op*op + RHS->getVal();
   }
+  bool exist_none(){return LHS->exist_none() || RHS->exist_none();}
   void output() override{
     std::cout << "(";
     LHS->output();
@@ -724,7 +729,15 @@ public:
     std::cout << ")";
   }
   bool isZero(){return false;}
-  
+  bool exist_none(){
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->exist_none()){
+        return true;
+      }
+    }
+    return false;
+  }
 
   std::shared_ptr<ExprVFG> replace(std::shared_ptr<ExprVFG> dst, std::shared_ptr<ExprVFG> src){
     int count = exprs->size(); 
@@ -811,6 +824,15 @@ public:
     type = expr_cfg_phi;
   }
 
+  bool exist_none(){
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->exist_none()){
+        return true;
+      }
+    }
+    return false;
+  }
   void output() override{
     std::cout << "(CFG_PHI:" << "size:" << exprs->size() <<";";
     for(int i = 0; i < exprs->size(); i++){

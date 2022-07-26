@@ -6,6 +6,7 @@ src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: src/handle_VFGNode.h
 src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: src/handle_constant.h
 src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: src/parse.h
 src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: src/svf-ex.cpp
+src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: src/warning.h
 src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: /home/cj/SVF/include/FastCluster/fastcluster.h
 src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: /home/cj/SVF/include/Graphs/ConsG.h
 src/CMakeFiles/svf-ex.dir/svf-ex.cpp.o: /home/cj/SVF/include/Graphs/ConsGEdge.h

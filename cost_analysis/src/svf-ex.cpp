@@ -38,6 +38,7 @@
 #include "handle_constant.h"
 #include "handle_VFGNode.h"
 #include "avfg_lib.h"
+#include "warning.h"
 #include <stack>
 #include <string>
 
@@ -59,8 +60,14 @@ static llvm::cl::opt<std::string> InputFilename(cl::Positional,
 
 std::map<const std::string, const SVFFunction*> func_map;
 std::map<const SVFFunction*, FuncExpr> funcs_expr;
-std::map<const std::string, std::set<std::vector<const SVFFunction*>>> trait_map;
+std::map<const std::string, std::set<const SVFFunction*>> trait_map;
 std::map<const std::string, std::string> trait_name_map;
+std::map<const std::string, std::string> traitfunc_name_map;
+std::map<const SVFFunction*, std::set<Warning>> warning_sets;
+std::map<const SVFFunction*, bool> warning_flags;
+std::map<const SVFFunction*, std::vector<const SVFFunction*>> CG_Out;
+
+
 const SVFFunction* rust_alloc_function;
 const SVFFunction* rust_realloc_function;
 const SVFFunction* umul_function;
@@ -118,6 +125,7 @@ std::string printPts(PointerAnalysis* pta, Value* val)
 
 }
 
+
 /*
 	Analysis for callsite. Gain expressions for parameters and performing replacement.  
 */
@@ -143,6 +151,12 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 		FuncExpr& func_expr = funcs_expr[call_function];
 		int param_size = alloc_call->paramlist.size();
 		std::shared_ptr<ExprVFG> f_expr = func_expr.expr->clone();
+
+		// warning mechanism
+		// if(f_expr->exist_none()){
+		// 	Warning_analysis(call_function);
+		// }
+		bool warning_flag = false;
 		if (pag->hasFunArgsList(call_function)){ 
 			auto arg_nodes = pag->getFunArgsList(call_function);
 			std::vector<const VFGNode*> temp_vector;
@@ -165,6 +179,15 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 					}
 					std::shared_ptr<ExprVFG> temp = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, 0, &error_flag);
 					
+					//warning message
+					if(temp->exist_none() && warning_flag == false){
+						warning(call_function, call_site);
+						//std::cout << "function need mark" << endl;
+						warning_flag = true;
+						break;
+					}
+
+
 					if(error_flag)
 						break;
 					//----------------debug output------------------------
@@ -316,7 +339,12 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 			if(temp->getKind() == expr_binary){
 				temp = move(temp->simplify());
 			}
-
+			if(temp->exist_none() && warning_flag == false){
+				warning(call_function, call_site);
+				//std::cout << "function need mark" << endl;
+				warning_flag = true;
+				break;
+			}
 			//----------------debug output------------------------
 			if(debug_flag){
 				std::cout << "field dest before replace：";
@@ -341,6 +369,9 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 		}
 		if(error_flag){
 			return make_shared<NoneVFG>();
+		}
+		if(warning_flag){
+			return make_shared<ConstantVFG>(0);
 		}
 		return f_expr;
 	}
@@ -376,51 +407,14 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 				if(func_map.find(succ_func->getValue()) != func_map.end())
 					succ_func = func_map[succ_func->getValue()];
 				auto function_name = llvm::demangle(succ_func->getName());
-				if(oom_safe_flag == false && function_name.substr(0,17) == "OOMGuardAllocator"){
+				if(oom_safe_flag == false && function_name.substr(0,12) == "my_allocator"){
 					oom_safe_function.insert(avfg->getFunction());
 					oom_safe_flag = true;
 				}
-				// if(function_name.find("get_trait_name") != string::npos){
-				// 	const ICFGNode* call_site = i_node;
-				// 	auto vfg_nodes = call_site->getVFGNodes(); 
-				// 	unsigned record = 0;
-				// 	for(auto iter : vfg_nodes){
-				// 		if(record == 1){
-				// 			record++;
-				// 			continue;
-				// 		}
-				// 		if(record == 2){
-				// 			FILOWorkList<CallSiteID> call_stack;
-				// 			std::stack<FieldIndex> extract_index;
-				// 			bool error_flag = false;
- 				// 			std::shared_ptr<ExprVFG> arg = parseVFGNode(iter, svfg, avfg, &extract_index, &call_stack, -5000, &error_flag);
-				// 			if (arg->getKind() == ExprTypes::expr_variable){
-				// 				std::shared_ptr<VariableVFG> v_arg = std::static_pointer_cast<VariableVFG>(arg);
-				// 				trait_num_vector.push_back(v_arg->getNo() + 1);
-				// 			}
-				// 			break;
-				// 		}
-				// 		if(SVF::ActualParmVFGNode::classof(iter)){
-				// 			const VFGEdge *t_edge = *(iter->InEdgeBegin());
-				// 			auto next_node = t_edge->getSrcNode();
-				// 			t_edge = *(next_node->InEdgeBegin());
-				// 			next_node = t_edge->getSrcNode();
-				// 			const GlobalVariable* gv = static_cast<const GlobalVariable*>(next_node->getValue());
-				// 			auto temp = gv->getInitializer();
-				// 			unsigned index = 0;
-				// 			auto field = temp->getAggregateElement(index);
-				// 			auto trait_name = field->getNameOrAsOperand();
-				// 			trait_name_vector.push_back(trait_name.substr(2,trait_name.size()-3));
-				// 			record++;
-				// 		}
-				// 	}
-				// }
-			
-			//if(succ_node->getNodeKind() == SVF::ICFGNode::ICFGNodeK::FunEntryBlock){
-			//auto succ_func = succ_node->getFun();
 				if((target_func->find(succ_func) != target_func->end()) && (funcs_expr.find(succ_func) != funcs_expr.end())
 				&& oom_safe_function.find(succ_func) == oom_safe_function.end()){
 					const ICFGNode* call_site = i_node;
+					warning_flags[avfg->getFunction()] = warning_flags[succ_func] || warning_flags[avfg->getFunction()];
 					auto vfg_nodes = call_site->getVFGNodes(); 
 					AllocCall alloc_call(succ_func, call_site);
 					for(auto iter : vfg_nodes){
@@ -435,43 +429,23 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 					avfg->cfg_phi_depend[i_node] = move(make_shared<std::set<const ICFGNode*>>(depends));
 				}
 			}
-			else{
+			else{ //trait function call
 				if(call_base->hasMetadata("dbg")){
 					auto meta = call_base->getMetadata("dbg");
 					if(DILocation::classof(meta)){
 						const DILocation* location = static_cast<const DILocation*>(meta);
-						cout << "Line" << location->getLine() << endl;
-						cout << "Column" << location->getColumn() << endl;
+						//cout << "Line" << location->getLine() << endl;
+						//cout << "Column" << location->getColumn() << endl;
 						auto file = location->getScope()->getFile()->getFilename();
 						std::vector<string> file_name = stringSplit(file.str(), '.');
 						string filename = file_name[0];
 						string key = filename + '_' + to_string(location->getLine()) + '_' + to_string(location->getColumn());
-						std::cout << trait_name_map[key] << endl;
+						//std::cout << trait_name_map[key] << endl;
+						//std::cout << traitfunc_name_map[key] << endl;
 					}
 				}
 				auto called = call_base->getCalledOperand();
-				if(llvm::Instruction::classof(called)){
-					FILOWorkList<CallSiteID> call_stack;
-					std::stack<FieldIndex> extract_index;
-					bool error_flag = false;
-					const PAGNode *pag_node = pag->getGNode(pag->getValueNode(called));
-					auto param_node = svfg->getDefSVFGNode(pag_node);
-					std::shared_ptr<ExprVFG> arg = parseVFGNode(param_node, svfg, avfg, &extract_index, &call_stack, -5000, &error_flag);
-					int target_index = 0;
-					std::shared_ptr<VariableVFG> v_arg = std::static_pointer_cast<VariableVFG>(arg);
-					for(int i = 0; i < trait_num_vector.size(); i++){
-						if(trait_num_vector[i] == v_arg->getNo()){
-							std::cout << trait_name_vector[i] << endl;
-							std::set<std::vector<const SVFFunction*>>& trait_set_ref = trait_map[trait_name_vector[i]];
-							for(auto iter1 : trait_set_ref){
-								for(auto iter2: iter1){
-									std::cout << iter2->getValue() << endl;
-								}
-							}
-							break;
-						}
-					}
-				}
+				//trait TODO;
 			}
 		}
 		for (ICFGNode::const_iterator it = i_node->OutEdgeBegin(), eit = i_node->OutEdgeEnd(); it != eit; ++it) {
@@ -514,7 +488,6 @@ const ICFGNode* parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const ICFGNode *e
 				if(avfg->cfg_phi_depend[succ_node]->find(d_node) == avfg->cfg_phi_depend[succ_node]->end())
 					avfg->cfg_phi_depend[succ_node]->insert(d_node);
 			}
-			
 		}
 	}
 	return exit_node;
@@ -672,6 +645,13 @@ void traverseOnCallGraph(PTACallGraph *callgraph, SVFG *svfg, SVFIR *pag, ICFG *
 			if (visited.find(succ_node->getFunction()) == visited.end()) {
 				visited.insert(succ_node->getFunction());
 				worklist.push(succ_node);
+				std::vector<const SVFFunction*> Out;
+				Out.push_back(f_node->getFunction());
+				CG_Out[succ_node->getFunction()] = Out;
+			}
+			else{
+				std::vector<const SVFFunction*>& Out = CG_Out[succ_node->getFunction()];;
+				Out.push_back(f_node->getFunction());
 			}
 		}
 	}
@@ -855,7 +835,21 @@ void handle_parameter(const SVFFunction* oom_function, PTACallGraph *callgraph, 
 
 
 
-
+void output_warning(const SVFFunction* call_function){
+    if(warning_sets.find(call_function) != warning_sets.end()){
+		auto &warning_temp = warning_sets[call_function];
+		for(auto iter:warning_temp){
+			iter.output();
+		}
+	}
+    warning_flags[call_function] = false;
+	auto &out_vector = CG_Out[call_function];
+	for(auto iter:out_vector){
+		if(warning_flags[iter]){
+			output_warning(iter);
+		}
+	}	
+}
 
 int main(int argc, char ** argv) {
     int arg_num = 0;
@@ -888,6 +882,7 @@ int main(int argc, char ** argv) {
 		string func_name = info[2];
 		string loc = info[0];
 		trait_name_map[loc] = trait_name;
+		traitfunc_name_map[loc] = func_name;
 		//std::cout << loc << ";" << trait_name << ";" << func_name << endl;
     }
     file.close();
@@ -922,8 +917,6 @@ int main(int argc, char ** argv) {
 				if(temp && llvm::ConstantStruct::classof(temp)){
 					unsigned index = 1;
 					auto struct_type = temp->getType();
-					//std::set<const SVFFunction*> trait_set;
-					std::vector<const SVFFunction*> vtable_func;
 					std::string trait_name = "";
 					bool trait_flag = false;
 					for(Type::subtype_iterator ib = struct_type->subtype_begin(), ie = struct_type->subtype_end();
@@ -961,31 +954,46 @@ int main(int argc, char ** argv) {
 								while(trait_demangle.find(delimiter2) != std::string::npos){
 									trait_demangle.erase(0, trait_demangle.find(delimiter2) + delimiter2.length());
 								}
-								std::cout << "trait_name:::" << trait_demangle << endl;
-								std::cout << "func_name:::" << trait_demangle2 << endl;
-								trait_name = trait_demangle;
-								trait_flag = true;
-								vtable_func.push_back(SVF::SVFUtil::getFunction(func->getName()));
+								string trait_key = trait_demangle + "_" + trait_demangle2;
+								if(trait_map.find(trait_key) == trait_map.end()){
+									std::set<const SVFFunction*> trait_set;
+									trait_set.insert(SVF::SVFUtil::getFunction(func->getName()));
+									trait_map[trait_key] = trait_set;
+								}
+								else{
+									std::set<const SVFFunction*>& trait_set_ref = trait_map[trait_name];
+									trait_set_ref.insert(SVF::SVFUtil::getFunction(func->getName()));
+								}
+								//trait_flag = true;
+								//vtable_func.push_back(SVF::SVFUtil::getFunction(func->getName()));
 								//std::cout << llvm::demangle(func->getName().str()) << endl;
 							}
 						}
 						index++;
 					}
-					if(trait_map.find(trait_name) == trait_map.end()){
-						std::set<std::vector<const SVFFunction*>> trait_set;
-						trait_set.insert(vtable_func);
-						trait_map[trait_name] = trait_set;
-					}
-					else{
-						std::set<std::vector<const SVFFunction*>>& trait_set_ref = trait_map[trait_name];
-						trait_set_ref.insert(vtable_func);
-					}
+					// if(trait_map.find(trait_name) == trait_map.end()){
+					// 	std::set<std::vector<const SVFFunction*>> trait_set;
+					// 	trait_set.insert(vtable_func);
+					// 	trait_map[trait_name] = trait_set;
+					// }
+					// else{
+					// 	std::set<std::vector<const SVFFunction*>>& trait_set_ref = trait_map[trait_name];
+					// 	trait_set_ref.insert(vtable_func);
+					// }
 				}	
 			}
 		}
 		//std::cout << iter->toString() << endl;
 	}
 	traverseOnCallGraph(callgraph, svfg, pag, icfg);
+
+	//warning
+	for(auto iter : oom_safe_function){
+		if(warning_flags[iter])
+			output_warning(iter);
+	}
+
+
 	//callgraph->dump("cfg");
 	//pag->dump("pag");
 	//icfg->dump("icfg");

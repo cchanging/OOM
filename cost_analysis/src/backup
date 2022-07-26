@@ -1,0 +1,59 @@
+// if(function_name.find("get_trait_name") != string::npos){
+// 	const ICFGNode* call_site = i_node;
+// 	auto vfg_nodes = call_site->getVFGNodes(); 
+// 	unsigned record = 0;
+// 	for(auto iter : vfg_nodes){
+// 		if(record == 1){
+// 			record++;
+// 			continue;
+// 		}
+// 		if(record == 2){
+// 			FILOWorkList<CallSiteID> call_stack;
+// 			std::stack<FieldIndex> extract_index;
+// 			bool error_flag = false;
+// 			std::shared_ptr<ExprVFG> arg = parseVFGNode(iter, svfg, avfg, &extract_index, &call_stack, -5000, &error_flag);
+// 			if (arg->getKind() == ExprTypes::expr_variable){
+// 				std::shared_ptr<VariableVFG> v_arg = std::static_pointer_cast<VariableVFG>(arg);
+// 				trait_num_vector.push_back(v_arg->getNo() + 1);
+// 			}
+// 			break;
+// 		}
+// 		if(SVF::ActualParmVFGNode::classof(iter)){
+// 			const VFGEdge *t_edge = *(iter->InEdgeBegin());
+// 			auto next_node = t_edge->getSrcNode();
+// 			t_edge = *(next_node->InEdgeBegin());
+// 			next_node = t_edge->getSrcNode();
+// 			const GlobalVariable* gv = static_cast<const GlobalVariable*>(next_node->getValue());
+// 			auto temp = gv->getInitializer();
+// 			unsigned index = 0;
+// 			auto field = temp->getAggregateElement(index);
+// 			auto trait_name = field->getNameOrAsOperand();
+// 			trait_name_vector.push_back(trait_name.substr(2,trait_name.size()-3));
+// 			record++;
+// 		}
+// 	}
+// }
+
+
+// if(llvm::Instruction::classof(called)){
+// 	FILOWorkList<CallSiteID> call_stack;
+// 	std::stack<FieldIndex> extract_index;
+// 	bool error_flag = false;
+// 	const PAGNode *pag_node = pag->getGNode(pag->getValueNode(called));
+// 	auto param_node = svfg->getDefSVFGNode(pag_node);
+// 	std::shared_ptr<ExprVFG> arg = parseVFGNode(param_node, svfg, avfg, &extract_index, &call_stack, -5000, &error_flag);
+// 	int target_index = 0;
+// 	std::shared_ptr<VariableVFG> v_arg = std::static_pointer_cast<VariableVFG>(arg);
+// 	for(int i = 0; i < trait_num_vector.size(); i++){
+// 		if(trait_num_vector[i] == v_arg->getNo()){
+// 			std::cout << trait_name_vector[i] << endl;
+// 			std::set<std::vector<const SVFFunction*>>& trait_set_ref = trait_map[trait_name_vector[i]];
+// 			for(auto iter1 : trait_set_ref){
+// 				for(auto iter2: iter1){
+// 					std::cout << iter2->getValue() << endl;
+// 				}
+// 			}
+// 			break;
+// 		}
+// 	}
+//}
