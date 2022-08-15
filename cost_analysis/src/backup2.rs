@@ -70,8 +70,6 @@ std::map<const std::string, std::string> trait_name_map;
 std::map<const std::string, std::string> traitfunc_name_map;
 std::map<const SVFFunction*, std::set<Warning>> warning_sets;
 std::map<const SVFFunction*, bool> warning_flags;
-std::map<const SVFFunction*, int> allocation_count;
-std::set<const SVFFunction*> count_flag;
 std::map<const SVFFunction*, std::vector<const SVFFunction*>> CG_Out;
 std::map<const SVFFunction*, std::vector<std::string>> trait_set_record;
 
@@ -142,24 +140,20 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 	const ICFGNode* call_site = alloc_call->getCallSite();
 	FILOWorkList<CallSiteID> call_stack;
 	std::stack<FieldIndex> extract_index;
-	std::set<VisitedRecord> visited_set;
 	if(call_function == rust_alloc_function){
 		bool error_flag = false;
 		const VFGNode* param = alloc_call->paramlist[0];
-		int depth = 0;
-		std::shared_ptr<ExprVFG> arg0 = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, &depth, &error_flag, &visited_set);
+		std::shared_ptr<ExprVFG> arg0 = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, 0, &error_flag);
 		return arg0;
 	}
 	else if(call_function == rust_realloc_function){
 		bool error_flag = false;
-		int depth = 0;
 		const VFGNode* param = alloc_call->paramlist[3];
-		std::shared_ptr<ExprVFG> arg3 = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, &depth, &error_flag, &visited_set);
+		std::shared_ptr<ExprVFG> arg3 = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, 0, &error_flag);
 		return arg3;
 	}
 	else{
 		bool error_flag = false;
-		int depth = 0;
 		FuncExpr& func_expr = funcs_expr[call_function];
 		int param_size = alloc_call->paramlist.size();
 		std::shared_ptr<ExprVFG> f_expr = func_expr.expr->clone();
@@ -179,7 +173,6 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 				if (func_expr.used[i] && i < param_size){
 					const VFGNode* param = alloc_call->paramlist[i];
 					std::stack<FieldIndex> extract_index;
-					std::set<VisitedRecord> visited_set;
 					if(func_expr.param_field.find(i) != func_expr.param_field.end()){
 						auto field = func_expr.param_field[i];
 						for(vector<FieldIndex>::reverse_iterator iter = field.rbegin(); iter != field.rend(); iter++){
@@ -190,11 +183,11 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 					if(debug_flag){
 						std::cout << "begin param" << " " << i << ": "<< param->toString() << endl;
 					}
-					std::shared_ptr<ExprVFG> temp = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, &depth, &error_flag, &visited_set);
+					std::shared_ptr<ExprVFG> temp = parseVFGNode(param, svfg, avfg, &extract_index, &call_stack, 0, &error_flag);
 					
 					//warning message
 					if(temp->exist_none() && warning_flag == false){
-						warning(call_function, call_site,"");
+						warning(call_function, call_site);
 						//std::cout << "function need mark" << endl;
 						warning_flag = true;
 						break;
@@ -202,7 +195,7 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 
 
 					if(error_flag){
-						warning(call_function, call_site,"");
+						warning(call_function, call_site);
 						warning_flag = true;
 						break;
 					}
@@ -240,7 +233,6 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 			if(error_flag)
 				break;
 			std::stack<FieldIndex> extract_index;
-			std::set<VisitedRecord> visited_set;
 			for(vector<FieldIndex>::reverse_iterator iter = field->getfield()->rbegin(); iter != field->getfield()->rend(); iter++){
 				extract_index.push(*iter);
 			}
@@ -265,14 +257,9 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 			if(debug_flag){
 				std::cout << "begin param_field:" << field->getVFG()->toString() << endl;
 			}
-			// std::cout << "check:" << nextt_node->toString() << endl;
-			// std::cout << "check1:" << edge->getSrcNode()->getFun()->getName() << endl;
-			// std::cout << "check2:" << call_site->getFun()->getName() << endl;
-			// std::cout << (nextt_node->getICFGNode() == call_site) << endl;
-			int depth = 0;
-			std::shared_ptr<ExprVFG> temp = parseVFGNode(next_node, svfg, avfg, &extract_index, &call_stack, &depth, &error_flag, &visited_set);
+			std::shared_ptr<ExprVFG> temp = parseVFGNode(next_node, svfg, avfg, &extract_index, &call_stack, 0, &error_flag);
 			if(error_flag){
-				warning(call_function, call_site,"");
+				warning(call_function, call_site);
 				//std::cout << "function need mark" << endl;
 				warning_flag = true;
 				break;
@@ -322,17 +309,9 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 								}
 							}
 						}
-						if(debug_flag){
-							for (auto it = param_node->InEdgeBegin(), eit = param_node->InEdgeEnd(); it != eit; ++it) {
-								auto edge = *it;
-							}
-						}
 						for (auto it = param_node->InEdgeBegin(), eit = param_node->InEdgeEnd(); it != eit; ++it) {
 							auto edge = *it;
-							auto temp_param_node = edge->getSrcNode();
-							if(temp_param_node->getNodeKind() == SVF::VFGNode::VFGNodeK::Addr)
-								continue;
-							if(!edge->isIndirectVFGEdge() || temp_param_node->getNodeKind() == SVF::VFGNode::VFGNodeK::Store){
+							if(!edge->isIndirectVFGEdge()){
 								param_node = edge->getSrcNode();
 								break;
 							}
@@ -374,7 +353,7 @@ std::shared_ptr<ExprVFG> parseCallSite(SVFIR *pag, AVFG* avfg, const SVFG *svfg,
 				temp = move(temp->simplify());
 			}
 			if(temp->exist_none() && warning_flag == false){
-				warning(call_function, call_site,"");
+				warning(call_function, call_site);
 				//std::cout << "function need mark" << endl;
 				warning_flag = true;
 				break;
@@ -422,10 +401,7 @@ void tarjan(const ICFGNode* current_node,
 	std::map<const ICFGNode*, std::set<const ICFGNode*>> *nodeIn,
 	AVFG* avfg,
 	std::set<const ICFGNode*> *loop_expr_node,
-	std::set<const ICFGNode*> *temp_node_record,
-	std::map<int, const ICFGNode*> *dfn_record,
-	std::map<int, int> *value_record
-	){
+	std::set<const ICFGNode*> *temp_node_record){
 	(*dfn)[current_node] = tot;
 	(*low)[current_node] = tot++;
 	worklist->push(current_node);
@@ -443,77 +419,78 @@ void tarjan(const ICFGNode* current_node,
 	if(loop_map.find(current_node) != loop_map.end()){
 		loop_expr_node->insert(current_node);
 	}
+
+
 	if(nodeOut->find(current_node) != nodeOut->end()){
 		int size = (*nodeOut)[current_node].size();
+		int index = 0;
 		for(auto iter: (*nodeOut)[current_node]){
 			const ICFGNode* succ_node = iter;
+			index++;
 			bool change_flag = false;
 			if(dfn->find(succ_node) == dfn->end()){
-				tarjan(succ_node, dfn, low, worklist, visited, nodeOut, nodeIn, avfg, loop_expr_node, temp_node_record, dfn_record, value_record);
-				(*low)[current_node] = min((*low)[current_node], (*low)[succ_node]);
+				tarjan(succ_node, dfn, low, worklist, visited, nodeOut, nodeIn, avfg, loop_expr_node, temp_node_record);
+				if((*low)[succ_node] < (*low)[current_node]){
+					(*low)[current_node] = (*low)[succ_node];
+					change_flag = true;
+				}
+				//std::cout << endl << current_node->toString() << endl << succ_node->toString() <<endl;
+				
+				//addition
+				//(*low)[succ_node] >= (*low)[current_node]
+				
+				
 			}
 			else{
 				if(visited->find(succ_node) != visited->end()){
-					(*dfn_record)[(*dfn)[succ_node]] = succ_node;
 					(*low)[current_node] = min((*low)[current_node], (*dfn)[succ_node]);
 				}
 			}
-		}
-		for(auto iter: (*nodeOut)[current_node]){
-			const ICFGNode* succ_node = iter;
-			if((*low)[succ_node] > (*dfn)[current_node] && visited->find(succ_node) != visited->end()){
-				auto temp_node = (*dfn_record)[(*low)[succ_node]];
-				for(auto iter_node: (*temp_node_record)){
-					if((*low)[iter_node] == (*low)[succ_node]){
-						(*low)[iter_node] = (*low)[temp_node];
+			if((index < size || !change_flag) && visited->find(succ_node) != visited->end()){// && current_node->getNodeKind() != SVF::ICFGNode::ICFGNodeK::FunExitBlock){
+				std::shared_ptr<ExprVFG> result_expr = make_shared<ConstantVFG>(0);
+				std::shared_ptr<ExprVFG> loop_expr = 0;
+				for(auto iter_loop:(*loop_expr_node)){
+					if((*low)[iter_loop] == (*low)[succ_node]){ //corresponding 
+						loop_expr = loop_map[iter_loop];
+						loop_expr_node->erase(iter_loop);
+						break;
 					}
 				}
-			}
-			if((*low)[succ_node] <= (*dfn)[current_node] && (*low)[succ_node] > (*low)[current_node] && visited->find(succ_node) != visited->end()){
-				(*value_record)[(*low)[succ_node]] = (*low)[current_node];
-				(*low)[current_node] = (*low)[succ_node];
+				bool find_flag = false;
+				for(auto iter_node = temp_node_record->begin(); iter_node != temp_node_record->end();){
+					if((*low)[*iter_node] == (*low)[succ_node]){
+						find_flag = true;
+						if(loop_expr == 0){
+							result_expr = parseBinaryOp(avfg->cfg_expr[*iter_node], result_expr, '#');
+						}
+						else{
+							std::shared_ptr<ExprVFG> temps = parseBinaryOp(avfg->cfg_expr[*iter_node], loop_expr, '*');
+							result_expr = parseBinaryOp(temps, result_expr, '#');
+						}
+						avfg->cfg_expr.erase(*iter_node);
+						temp_node_record->erase(iter_node++);
+					}
+					else{
+						++iter_node;
+					}
+				}
+				if(find_flag){
+					if(avfg->cfg_expr.find(current_node) == avfg->cfg_expr.end())
+						avfg->cfg_expr[current_node] = result_expr;
+					else
+						avfg->cfg_expr[current_node] = parseBinaryOp(result_expr, avfg->cfg_expr[current_node], '#');
+					temp_node_record->insert(current_node);
+				}
+				// else{
+				// 	for(auto iter_node:(*temp_node_record)){
+				// 		if((*low)[iter_node] == (*low)[succ_node]){
+				// 			avfg->cfg_expr[iter_node] = make_shared<NoneVFG>();
+				// 		}
+				// 	}
+				// }
 			}
 		}
 	}
-	while((*low)[current_node] == (*dfn)[current_node] && value_record->find((*low)[current_node]) != value_record->end()){
-		std::shared_ptr<ExprVFG> result_expr = make_shared<ConstantVFG>(0);
-		std::shared_ptr<ExprVFG> loop_expr = 0;
-		for(auto iter_loop:(*loop_expr_node)){
-			if((*low)[iter_loop] == (*low)[current_node]){ //corresponding 
-				loop_expr = loop_map[iter_loop];
-				loop_expr_node->erase(iter_loop);
-				break;
-			}
-		}
-		bool find_flag = false;
-		for(auto iter_node = temp_node_record->begin(); iter_node != temp_node_record->end();){
-			if((*low)[*iter_node] == (*low)[current_node]){
-				if(loop_expr == 0){
-					avfg->cfg_expr[*iter_node] = make_shared<NoneVFG>();
-				}
-				else{
-					find_flag = true;
-					std::shared_ptr<ExprVFG> temps = parseBinaryOp(avfg->cfg_expr[*iter_node], loop_expr, 'x');
-					result_expr = parseBinaryOp(temps, result_expr, '#');
-				}
-				temp_node_record->erase(iter_node++);
-			}
-			else{
-				++iter_node;
-			}
-		}
-		if(find_flag){
-			result_expr->simplify();
-			if(avfg->cfg_expr.find(current_node) == avfg->cfg_expr.end())
-				avfg->cfg_expr[current_node] = result_expr;
-			else
-				avfg->cfg_expr[current_node] = parseBinaryOp(result_expr, avfg->cfg_expr[current_node], '#');
-			temp_node_record->insert(current_node);
-		}
-		(*low)[current_node] = (*value_record)[(*low)[current_node]];
-		value_record->erase((*low)[current_node]);
-	}
-
 	if((*low)[current_node] == (*dfn)[current_node]){
 		const ICFGNode* temp_node = worklist->pop();
 		const ICFGNode* father_node = current_node;
@@ -525,7 +502,7 @@ void tarjan(const ICFGNode* current_node,
 				const SVFFunction* succ_func = SVF::SVFUtil::getFunction(call_base->getCalledOperand()->getName());
 				auto cur_expr = avfg->cfg_expr[father_node];
 				if(cur_expr->getKind() == expr_none){
-					warning(succ_func, temp_node,":in_loop");
+					warning(succ_func, temp_node);
 				}	
 			}
 		}
@@ -538,41 +515,6 @@ void tarjan(const ICFGNode* current_node,
 		}
 		avfg->cfg_depend[temp_node] = father_node;
 		if(temp_node != current_node && !worklist->empty()){
-			std::shared_ptr<ExprVFG> result_expr = make_shared<ConstantVFG>(0);
-			std::shared_ptr<ExprVFG> loop_expr = 0;
-			for(auto iter_loop:(*loop_expr_node)){
-				if((*low)[iter_loop] == (*low)[current_node]){ //corresponding 
-					loop_expr = loop_map[iter_loop];
-					loop_expr_node->erase(iter_loop);
-					break;
-				}
-			}
-			bool find_flag = false;
-			for(auto iter_node = temp_node_record->begin(); iter_node != temp_node_record->end();){
-				if((*low)[*iter_node] == (*low)[current_node]){
-					if(loop_expr == 0){
-						avfg->cfg_expr[*iter_node] = make_shared<NoneVFG>();
-					}
-					else{
-						find_flag = true;
-						std::shared_ptr<ExprVFG> temps = parseBinaryOp(avfg->cfg_expr[*iter_node], loop_expr, 'x');
-						result_expr = parseBinaryOp(temps, result_expr, '#');
-					}
-					temp_node_record->erase(iter_node++);
-				}
-				else{
-					++iter_node;
-				}
-			}
-			if(find_flag){
-				result_expr->simplify();
-				if(avfg->cfg_expr.find(current_node) == avfg->cfg_expr.end())
-					avfg->cfg_expr[current_node] = result_expr;
-				else
-					avfg->cfg_expr[current_node] = parseBinaryOp(result_expr, avfg->cfg_expr[current_node], '#');
-				temp_node_record->insert(current_node);
-			}
-
 			while(true){
 				auto& out_temp = (*nodeOut)[temp_node];
 				auto& out_father = (*nodeOut)[father_node];
@@ -614,7 +556,7 @@ void tarjan(const ICFGNode* current_node,
 						const SVFFunction* succ_func = SVF::SVFUtil::getFunction(call_base->getCalledOperand()->getName());
 						auto cur_expr = avfg->cfg_expr[temp_node];
 						if(cur_expr->getKind() == expr_none){
-							warning(succ_func, temp_node, ":in_loop");
+							warning(succ_func, temp_node);
 						}
 					}
 				}
@@ -652,7 +594,6 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 	bool oom_safe_flag = false;
 	worklist.push(entry);
 	const ICFGNode* exit_node;
-	allocation_count[avfg->getFunction()] = 0;
 	while (!worklist.empty()) {
 		const ICFGNode* i_node = worklist.pop();
 		avfg->cfg_depend[i_node] = i_node;
@@ -670,32 +611,21 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 				if(func_map.find(succ_func->getValue()) != func_map.end())
 					succ_func = func_map[succ_func->getValue()];
 				auto function_name = llvm::demangle(succ_func->getName());
-				if(function_name.find("try_insert") != function_name.npos){
-					continue;
-				}
-				if(oom_safe_flag == false && function_name.find("my_allocator::my") != function_name.npos){
-					//std::cout << "insert:" << avfg->getFunction()->getValue() << endl;
+				if(oom_safe_flag == false && function_name.substr(0,12) == "my_allocator"){
 					oom_safe_function.insert(avfg->getFunction());
 					oom_safe_flag = true;
 				}
-				if(function_name.find("my_allocator::loop_wrap") != function_name.npos){
+				if(function_name.substr(0,23) == "my_allocator::loop_wrap"){
 					auto vfg_nodes = call_node->getVFGNodes();
 					auto iter = (*vfg_nodes.begin());
 					FILOWorkList<CallSiteID> call_stack;
 					std::stack<FieldIndex> extract_index;
-					std::set<VisitedRecord> visited_set;
 					bool error_flag = false;
-					int depth = 0;
-					std::shared_ptr<ExprVFG> arg = parseVFGNode(iter, svfg, avfg, &extract_index, &call_stack, &depth, &error_flag, &visited_set);
+					std::shared_ptr<ExprVFG> arg = parseVFGNode(iter, svfg, avfg, &extract_index, &call_stack, 0, &error_flag);
 					loop_map[i_node] = arg;
 				}
 				if((target_func->find(succ_func) != target_func->end()) && (funcs_expr.find(succ_func) != funcs_expr.end())
 				&& oom_safe_function.find(succ_func) == oom_safe_function.end()){
-					allocation_count[avfg->getFunction()] += 1;
-					if(allocation_count.find(succ_func) != allocation_count.end() && count_flag.find(succ_func) == count_flag.end()){
-						allocation_count[avfg->getFunction()] += allocation_count[succ_func] + 1;
-						count_flag.insert(succ_func);
-					}
 					const ICFGNode* call_site = i_node;
 					warning_flags[avfg->getFunction()] = warning_flags[succ_func] || warning_flags[avfg->getFunction()];
 					auto vfg_nodes = call_site->getVFGNodes(); 
@@ -721,7 +651,7 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 						std::vector<string> file_name = stringSplit(file.str(), '.');
 						string filename = file_name[0];
 						string key = filename + '_' + to_string(location->getLine()) + '_' + to_string(location->getColumn());
-						std::cout << "key:" << key << endl;
+						// std::cout << "key:" << key << endl;
 						// std::cout << trait_name_map[key] << endl;
 						// std::cout << traitfunc_name_map[key] << endl;
 						auto key_temp = trait_name_map[key] + "_" + traitfunc_name_map[key];
@@ -795,75 +725,42 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 	FILOWorkList<const ICFGNode*> tarjan_worklist;
 	std::set<const ICFGNode*> loop_expr_node;
 	std::set<const ICFGNode*> temp_node_record;
-	std::map<int, const ICFGNode*> dfn_record;
-	std::map<int, int> value_record;
 	visited.clear();
-	tot = 0;
-	tarjan(entry, &dfn, &low, &tarjan_worklist, &visited, &nodeOut, &nodeIn, avfg, &loop_expr_node, &temp_node_record, &dfn_record, &value_record);
+	tarjan(entry, &dfn, &low, &tarjan_worklist, &visited, &nodeOut, &nodeIn, avfg, &loop_expr_node, &temp_node_record);
 	worklist.clear();
 	visited.clear();
 	worklist.push(entry);
-	
 	while (!worklist.empty()) {
 		const ICFGNode* i_node = worklist.pop();
 		const ICFGNode* depend_node = avfg->cfg_depend[i_node];
 		std::set<const ICFGNode*>& outSet_ref = nodeOut[i_node];
-		if(avfg->cfg_expr.find(depend_node) != avfg->cfg_expr.end()){
-			if(avfg->expr_depend.find(depend_node) == avfg->expr_depend.end()){
-				std::vector<std::shared_ptr<ExprVFG>> exprs_ts;
-				exprs_ts.push_back(avfg->cfg_expr[depend_node]);
-				avfg->expr_depend[depend_node] = exprs_ts;
-			}
-		}
 		for (auto iter : outSet_ref) {
 			const ICFGNode* succ_node = avfg->cfg_depend[iter];
 			if(avfg->cfg_depend[succ_node] == i_node)
 				continue;
 			std::set<const ICFGNode*>& inSet_ref = nodeIn[succ_node];
 			inSet_ref.erase(i_node);
-			
-			if(avfg->expr_depend.find(depend_node) != avfg->expr_depend.end()){
-				if(avfg->expr_depend.find(succ_node) == avfg->expr_depend.end() && inSet_ref.size() == 0){
-					if(avfg->cfg_expr.find(succ_node) != avfg->cfg_expr.end()){ //#
-						std::vector<std::shared_ptr<ExprVFG>> exprs;
-						for(auto iter:avfg->expr_depend[depend_node]) 
-							exprs.push_back(iter);
-						exprs.push_back(avfg->cfg_expr[succ_node]);
-						avfg->expr_depend[succ_node] = exprs;
-					}
-					else{
+			if(avfg->cfg_expr.find(depend_node) != avfg->cfg_expr.end()){
+				if(avfg->cfg_expr.find(succ_node) == avfg->cfg_expr.end()){
+					if(inSet_ref.size() == 0){
 						avfg->cfg_depend[succ_node] = depend_node;
+					}
+					else{ //PHINode
+						std::vector<std::shared_ptr<ExprVFG>> exprs;
+						exprs.push_back(avfg->cfg_expr[depend_node]);
+						std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> phi_exprs = make_shared<std::vector<std::shared_ptr<ExprVFG>>>(exprs);
+						avfg->cfg_expr[succ_node] = std::make_shared<CFG_PHIVFG>(std::move(phi_exprs));
 					}
 				}
 				else{
-					//PHI
-					if(avfg->expr_depend.find(succ_node) == avfg->expr_depend.end()){
-						std::vector<std::shared_ptr<ExprVFG>> exprs;
-						for(auto iter:avfg->expr_depend[depend_node]) 
-							exprs.push_back(iter);
-						avfg->expr_depend[succ_node] = exprs;
+					auto expr_temp = avfg->cfg_expr[succ_node];
+					if(expr_temp->getKind() == expr_cfg_phi){
+						std::shared_ptr<CFG_PHIVFG> cfg_phi = std::static_pointer_cast<CFG_PHIVFG>(expr_temp);
+						cfg_phi->add_expr(avfg->cfg_expr[depend_node]);
 					}
 					else{
-						std::vector<std::shared_ptr<ExprVFG>>& expr_self = avfg->expr_depend[depend_node];
-						std::vector<std::shared_ptr<ExprVFG>>& expr_ref = avfg->expr_depend[succ_node];
-						std::vector<std::shared_ptr<ExprVFG>> exprs;
-						for(auto iter:avfg->expr_depend[succ_node]) 
-							exprs.push_back(iter);
-						for(int iter = 0; iter < expr_self.size(); iter++){
-							bool unfit_flag = true;
-							for(int iter2 = 0; iter2 < exprs.size(); iter2++){
-								if(equal_field(expr_self[iter], exprs[iter2])){
-									exprs[iter2] = make_shared<NoneVFG>();
-									unfit_flag = false;
-									break;
-								}
-								if(unfit_flag){
-									expr_ref.push_back(expr_self[iter]);
-								}
-							}
-						}
+						avfg->cfg_expr[succ_node] = parseBinaryOp(avfg->cfg_expr[succ_node], avfg->cfg_expr[depend_node], '#');
 					}
-					
 				}
 			}
 			if(visited.find(succ_node) == visited.end() && inSet_ref.size() == 0){
@@ -873,19 +770,194 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 		}
 	}
 	exit_node = avfg->cfg_depend[exit_node];
-	std::shared_ptr<ExprVFG> exit_expr = make_shared<ConstantVFG>(0);
-	if(avfg->expr_depend.find(exit_node) == avfg->expr_depend.end()){
+	if(avfg->cfg_expr.find(exit_node) == avfg->cfg_expr.end()){
 		return std::make_shared<ConstantVFG>(0);
 	}
 	else{
-		std::vector<std::shared_ptr<ExprVFG>>& expr_self = avfg->expr_depend[exit_node];
-		for(auto iter: expr_self){
-			exit_expr = parseBinaryOp(exit_expr, iter, '#');
-		}
+		return avfg->cfg_expr[exit_node];
 	}
-	return exit_expr;
 }
 
+/*
+	Analysis for cfg.
+*/
+const ICFGNode* parseFunctionCFG_temp(SVFIR *pag, const SVFG *svfg, const ICFGNode *entry, ICFG *icfg, AVFG* avfg, std::set<const SVFFunction*> *target_func){
+	FIFOWorkList<const ICFGNode*> worklist;
+	std::set<const ICFGNode*> visited;
+	avfg->cfg_depend[entry] = entry;
+	worklist.push(entry);
+	//std::shared_ptr<ExprVFG> result = std::make_shared<ConstantVFG>(0);
+	const ICFGNode* exit_node;
+	bool oom_safe_flag = false;
+	int count_index = 0;
+	std::vector<std::string> trait_name_vector;
+	std::vector<int> trait_num_vector;
+	while (!worklist.empty()) {
+		const ICFGNode* i_node = worklist.pop();
+		if(CallICFGNode::classof(i_node)){
+			ICFGNode::const_iterator it = i_node->OutEdgeBegin();
+			const ICFGEdge* edge = *(it);
+			const ICFGNode* succ_node = edge->getDstNode();
+			const CallICFGNode* call_node = static_cast<const CallICFGNode*>(i_node);
+			auto temp_call_site = call_node->getCallSite();
+			const CallBase* call_base = static_cast<const CallBase*>(temp_call_site);
+
+			
+			if(llvm::Function::classof(call_base->getCalledOperand())){
+				const SVFFunction* succ_func = SVF::SVFUtil::getFunction(call_base->getCalledOperand()->getName());
+				if(func_map.find(succ_func->getValue()) != func_map.end())
+					succ_func = func_map[succ_func->getValue()];
+				auto function_name = llvm::demangle(succ_func->getName());
+				if(oom_safe_flag == false && function_name.substr(0,12) == "my_allocator"){
+					oom_safe_function.insert(avfg->getFunction());
+					oom_safe_flag = true;
+				}
+				if((target_func->find(succ_func) != target_func->end()) && (funcs_expr.find(succ_func) != funcs_expr.end())
+				&& oom_safe_function.find(succ_func) == oom_safe_function.end()){
+					const ICFGNode* call_site = i_node;
+					warning_flags[avfg->getFunction()] = warning_flags[succ_func] || warning_flags[avfg->getFunction()];
+					auto vfg_nodes = call_site->getVFGNodes(); 
+					AllocCall alloc_call(succ_func, call_site);
+					for(auto iter : vfg_nodes){
+						if(SVF::ActualParmVFGNode::classof(iter)) 
+							alloc_call.paramlist.push_back(iter);
+					}
+					std::shared_ptr<ExprVFG> call_cost = parseCallSite(pag, avfg, svfg, &alloc_call);
+					std::set<const ICFGNode*> depends;
+					depends.insert(avfg->cfg_depend[i_node]);
+					avfg->cfg_expr[i_node] = std::move(call_cost);
+					avfg->cfg_depend[i_node] = i_node;
+					avfg->cfg_phi_depend[i_node] = move(make_shared<std::set<const ICFGNode*>>(depends));
+				}
+			}
+			else{ //trait function call
+				if(call_base->hasMetadata("dbg")){
+					auto meta = call_base->getMetadata("dbg");
+					if(DILocation::classof(meta)){
+						const DILocation* location = static_cast<const DILocation*>(meta);
+						//cout << "Line" << location->getLine() << endl;
+						//cout << "Column" << location->getColumn() << endl;
+						auto file = location->getScope()->getFile()->getFilename();
+						std::vector<string> file_name = stringSplit(file.str(), '.');
+						string filename = file_name[0];
+						string key = filename + '_' + to_string(location->getLine()) + '_' + to_string(location->getColumn());
+					}
+				}
+				auto called = call_base->getCalledOperand();
+				//trait TODO;
+			}
+		}
+		for (ICFGNode::const_iterator it = i_node->OutEdgeBegin(), eit = i_node->OutEdgeEnd(); it != eit; ++it) {
+			ICFGEdge* edge = *it;
+			const ICFGNode* succ_node = edge->getDstNode();
+			if(succ_node == i_node)
+				continue;
+			if(!CallICFGNode::classof(i_node) && succ_node->getNodeKind() == SVF::ICFGNode::ICFGNodeK::FunExitBlock){
+				exit_node = succ_node;
+				avfg->cfg_depend[succ_node] = i_node;
+				continue;
+			}
+			if(CallICFGNode::classof(i_node)){
+				const CallICFGNode* call_node = static_cast<const CallICFGNode*>(i_node);
+				succ_node = call_node->getRetICFGNode();
+			}
+			if (visited.find(succ_node) == visited.end()) {
+				int in_size = 0;
+				for (ICFGNode::const_iterator phi_it = succ_node->InEdgeBegin(), phi_eit = succ_node->InEdgeEnd(); phi_it != phi_eit; ++phi_it){
+					ICFGEdge* phi_edge = *phi_it;
+					ICFGNode* phi_succ_node = phi_edge->getSrcNode();
+					if(!FunExitICFGNode::classof(phi_succ_node) && phi_succ_node != succ_node){
+						in_size++;
+					}
+				}
+				if(in_size > 1){
+					std::set<const ICFGNode*> depends;
+					depends.insert(avfg->cfg_depend[i_node]);
+					avfg->cfg_depend[succ_node] = succ_node;
+					avfg->cfg_phi_depend[succ_node] = move(make_shared<std::set<const ICFGNode*>>(depends));
+				}
+				else{
+					avfg->cfg_depend[succ_node] = avfg->cfg_depend[i_node];
+				}
+				visited.insert(succ_node);
+				worklist.push(succ_node);
+			}
+			else{
+				auto d_node = avfg->cfg_depend[i_node];
+				if(avfg->cfg_phi_depend[succ_node]->find(d_node) == avfg->cfg_phi_depend[succ_node]->end())
+					avfg->cfg_phi_depend[succ_node]->insert(d_node);
+			}
+		}
+	}
+	return exit_node;
+}
+
+std::shared_ptr<ExprVFG> get_result(int depth, const ICFGNode* node,  AVFG* avfg, FILOWorkList<const ICFGNode*> *depend_stack, bool *error_flag, bool *log_flag){
+	if(*error_flag)
+		return make_shared<NoneVFG>();
+	if(depth > 5000){
+		std::cout << "ERROR: get result over depth" << endl;
+		*error_flag = true;
+		return std::make_shared<NoneVFG>();
+	}
+
+	if(depend_stack->find(node)){  
+		if(*log_flag == false)
+			std::cout << "ERROR: f1 CIRCLE FIND" << endl;
+		*log_flag = true;
+		return std::make_shared<ConstantVFG>(0);
+	}
+	depend_stack->push(node);
+
+	if(avfg->cfg_expr.find(node) != avfg->cfg_expr.end()){
+		const ICFGNode* succ_node = *(avfg->cfg_phi_depend[node]->begin());
+		auto result = get_result(depth+1, succ_node, avfg, depend_stack, error_flag, log_flag);
+		depend_stack->pop();
+		return parseBinaryOp(result, avfg->cfg_expr[node], '#');
+	}
+	if (avfg->cfg_phi_depend.find(node) != avfg->cfg_phi_depend.end()){
+		std::vector<std::shared_ptr<ExprVFG>> exprs;
+		std::vector<const ICFGNode*> temp_record;
+		for (auto iter : *(avfg->cfg_phi_depend[node])){
+			temp_record.push_back(iter);
+		}
+		for(auto iter : temp_record){
+			if(avfg->cfg_phi_depend[node]->find(iter) == avfg->cfg_phi_depend[node]->end()){
+				continue;
+			}
+			if(depend_stack->find(iter)){  
+				if(*log_flag == false)
+					std::cout << "ERROR: f2 CIRCLE FIND" << endl;
+				avfg->cfg_phi_depend[node]->erase(iter);
+				exprs.push_back(std::make_shared<ConstantVFG>(0));
+				*log_flag = true;
+			}
+
+			std::shared_ptr<ExprVFG> result = get_result(depth+1, iter, avfg, depend_stack, error_flag, log_flag);
+			if(!(result->getKind() == expr_constant && result->getVal() == 0)){
+				exprs.push_back(std::move(result));
+			}
+		}
+		if(exprs.size() > 0){
+			std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> phi_exprs = make_shared<std::vector<std::shared_ptr<ExprVFG>>>(exprs);
+			depend_stack->pop();
+			return std::make_shared<CFG_PHIVFG>(std::move(phi_exprs));
+		}
+		else{
+			depend_stack->pop();
+			return std::make_shared<ConstantVFG>(0);
+		}
+	}
+
+	auto target = avfg->cfg_depend[node];
+	if (target != node){
+		auto result = get_result(depth+1, target, avfg, depend_stack, error_flag, log_flag);
+		depend_stack->pop();
+		return result;
+	}
+	depend_stack->pop();
+	return std::make_shared<ConstantVFG>(0);
+}
 
 /*
 	Analysis for a function.
@@ -893,14 +965,13 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 void analysisAVFG(const SVFFunction* F, SVFG *svfg, SVFIR *pag, ICFG *icfg, std::set<const SVFFunction*> *target_func){
 	AVFG avfg(F);
 	std::cout << F->getValue() << "-------------------------:" << endl;
-	
-	//_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17h5aa1e3f9d07ce993E
-	if (F->getValue() == "_ssZN2os2mm10memory_set9MemorySet4push17h210237ae6b5f0252E"){
-		debug_flag = true;
-	}
-	else{
-		debug_flag = false;
-	}
+	// if (F->getValue() == "_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17hab29dcdbf93897d1E" ||
+	// F->getValue() == "_ZN5alloc7raw_vec19RawVec$LT$T$C$A$GT$11allocate_in17h6fa4af459a0f3e88E"){
+	// 	debug_flag = true;
+	// }
+	// else{
+	// 	debug_flag = false;
+	// }
 	if (pag->hasFunArgsList(F)){
 		auto arg_nodes = pag->getFunArgsList(F);
 		for(auto iter : arg_nodes){
@@ -971,9 +1042,6 @@ void traverseOnCallGraph(PTACallGraph *callgraph, SVFG *svfg, SVFIR *pag, ICFG *
 		for (auto it = f_node->InEdgeBegin(), eit = f_node->InEdgeEnd(); it != eit; ++it) {
 			auto edge = *it;
 			auto succ_node = edge->getSrcNode();
-			auto func_name = succ_node->getFunction()->getName();
-			if(func_name.find("drop") != func_name.npos)
-				continue;
 			if (visited.find(succ_node->getFunction()) == visited.end()) {
 				visited.insert(succ_node->getFunction());
 				worklist.push(succ_node);
@@ -1132,11 +1200,7 @@ void handle_parameter(const SVFFunction* oom_function, PTACallGraph *callgraph, 
 			const CallBase* call_base = static_cast<const CallBase*>(temp_call_site);
 			const SVFFunction* succ_func = SVF::SVFUtil::getFunction(call_base->getCalledOperand()->getName());
 			auto function_name = llvm::demangle(succ_func->getValue());
-			//if(function_name.substr(0,26) == "OOMGuardAllocator::my_wrap"){
-			if(function_name.find("my_allocator::my_wrap_end") != function_name.npos){
-				break;
-			}
-			else if(function_name.find("my_allocator::my_wrap") != function_name.npos){
+			if(function_name.substr(0,26) == "OOMGuardAllocator::my_wrap"){
 				//std::vector<FieldIndex> fields;
 				auto vfg_nodes = call_node->getVFGNodes();
 				for(auto iter : vfg_nodes){
@@ -1148,7 +1212,7 @@ void handle_parameter(const SVFFunction* oom_function, PTACallGraph *callgraph, 
 					}
 				}
 				//auto fields_ptr = make_shared<std::vector<FieldIndex>>(fields);
-			}
+			}else if(function_name.substr(0,30) == "OOMGuardAllocator::my_wrap_end") break;
 			call_node = static_cast<const CallICFGNode*>(temp_node);
 			succ_node = call_node->getRetICFGNode();
 		}
@@ -1178,35 +1242,10 @@ void output_warning(const SVFFunction* call_function){
 			iter.output();
 		}
 	}
-	if(trait_set_record.find(call_function) != trait_set_record.end()){
-		std::vector<std::string> &trait_set_ref = trait_set_record[call_function];
-		for(auto trait_iter:trait_set_ref){
-			if(trait_flags.find(trait_iter) != trait_flags.end()){
-				std::set<const SVFFunction*> &trait_set = trait_map[trait_iter];
-				for(auto trait_func:trait_set){
-					if(trait_warning.find(trait_func->getName()) != trait_warning.end()){
-						auto warning_msg = trait_warning[trait_func->getName()];
-						std::cout << endl << "warning for the following trait function:" << endl;
-						std::cout << "name:" << warning_msg.function_name << endl;
-						std::cout << "filename:" << warning_msg.filename << endl;
-						std::cout << "line:" << warning_msg.line << endl;
-						output_warning(trait_func);
-					}
-				}
-			}
-		}
-	}
     warning_flags[call_function] = false;
 	auto &out_vector = CG_Out[call_function];
 	for(auto iter:out_vector){
-		bool flag = false;
-		std::vector<std::string> &trait_set_ref = trait_set_record[iter];
-		for(auto trait_iter:trait_set_ref){
-			if(trait_flags.find(trait_iter) != trait_flags.end()){
-				flag = true;
-			}
-		}
-		if(warning_flags[iter] || flag){
+		if(warning_flags[iter]){
 			output_warning(iter);
 		}
 	}	
@@ -1247,6 +1286,22 @@ int main(int argc, char ** argv) {
 		//std::cout << loc << ";" << trait_name << ";" << func_name << endl;
     }
     file.close();
+
+
+	for(auto iter : oom_safe_function){
+		handle_parameter(iter, callgraph, icfg, svfg);
+		FuncExpr& func_expr = funcs_expr[iter];
+		std::vector<std::shared_ptr<ExprVFG>> fold_expr;
+		func_expr.expr->foldExpr(&fold_expr);
+		std::cout << "OOM_Function" << iter->getValue() << "~";
+		for(int i = 0; i < fold_expr.size(); i++){
+			fold_expr[i]->transform(&param_transforms[iter]);
+			fold_expr[i]->output();
+			std::cout << "|" ;
+		}
+		std::cout << endl;
+	}
+
 
 	auto global_vnode = svfg->getGlobalVFGNodes();	
 	std::set<std::string> vtable_set;
@@ -1333,15 +1388,10 @@ int main(int argc, char ** argv) {
 	}
 	traverseOnCallGraph(callgraph, svfg, pag, icfg);
 
-
 	//warning
-	int count_try = 0;
 	for(auto iter : oom_safe_function){
-		count_try += allocation_count[iter] + 1;
-		if(warning_flags[iter]){
-			std::cout << "---------------------warning" << endl;
+		if(warning_flags[iter])
 			output_warning(iter);
-		}
 		//trait warning output
 		if(trait_set_record.find(iter) != trait_set_record.end()){
 			std::vector<std::string> &trait_set_ref = trait_set_record[iter];
@@ -1361,37 +1411,10 @@ int main(int argc, char ** argv) {
 				}
 			}
 		}
-		auto &out_vector = CG_Out[iter];
-		for(auto iter2:out_vector){
-			bool flag = false;
-			std::vector<std::string> &trait_set_ref = trait_set_record[iter2];
-			for(auto trait_iter:trait_set_ref){
-				if(trait_flags.find(trait_iter) != trait_flags.end()){
-					flag = true;
-				}
-			}
-			if(flag){
-				output_warning(iter2);
-			}
-		}	
+		
 	}
 
-	for(auto iter : oom_safe_function){
-		auto names = iter->getName();
-		handle_parameter(iter, callgraph, icfg, svfg);
-		FuncExpr& func_expr = funcs_expr[iter];
-		std::vector<std::shared_ptr<ExprVFG>> fold_expr;
-		func_expr.expr->foldExpr(&fold_expr);
-		
-		std::cout << "OOM_Function" << names << "~";
-		for(int i = 0; i < fold_expr.size(); i++){
-			fold_expr[i]->transform(&param_transforms[iter]);
-			fold_expr[i]->output();
-			std::cout << "|" ;
-		}
-		std::cout << endl;
-	}
-	std::cout << "sum:" << count_try << endl;
+
 	//callgraph->dump("cfg");
 	//pag->dump("pag");
 	//icfg->dump("icfg");

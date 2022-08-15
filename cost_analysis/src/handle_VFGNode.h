@@ -7,7 +7,7 @@
 using namespace SVF;
 using namespace llvm;
 
-std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int depth, bool *error_flag);
+std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int *depth, bool *error_flag);
 
 
 int getGepIndex(const VFGNode* node){
@@ -89,8 +89,7 @@ int getLoadIndexList(const VFGNode* node, const SVFG *svfg, std::stack<FieldInde
 					while(src_type_index < src->getStructNumElements()-1 && src->getStructElementType(src_type_index) && (calculateSize(src->getStructElementType(src_type_index)) == 0)){
 						src_type_index += 1;
 					}
-					
-					if(src->getStructElementType(src_type_index) == dest){
+					if(calculateSize(src->getStructElementType(src_type_index)) == calculateSize(dest)){
 						int dst_type_size = calculateSize(dest);
 						FieldIndex field_info(src_type_index, 0, dst_type_size);
 						extract_index->push(field_info);
@@ -153,7 +152,7 @@ std::stack<FieldIndex> getStoreIndexList(const VFGNode* node, const SVFG *svfg, 
 				while(src->isStructTy() && src_type_index < src->getStructNumElements()-1 && (src->getStructElementType(src_type_index)) && (calculateSize(src->getStructElementType(src_type_index)) == 0)){
 					src_type_index += 1;
 				}
-				if(src->isStructTy() && src->getStructNumElements() > 0 && src->getStructElementType(src_type_index) == dest){
+				if(src->isStructTy() && src->getStructNumElements() > 0 && calculateSize(src->getStructElementType(src_type_index)) == calculateSize(dest)){
 					int dst_type_size = calculateSize(dest);
 					FieldIndex field_info(src_type_index, 0, dst_type_size);
 					record_index.push(field_info);
@@ -187,30 +186,41 @@ std::stack<FieldIndex> getStoreIndexList(const VFGNode* node, const SVFG *svfg, 
 }
 
 
-std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int depth, bool *error_flag){
+std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int *depth, bool *error_flag, std::set<VisitedRecord> *visited_set){
+	int node_record_value = -1;
+	(*depth) += 1;
 	if(*error_flag)
 		return make_shared<NoneVFG>();
-	if(depth > 5000){
+	if((*depth) > 20000){
 		std::cout << node->toString() << endl;
-		std::cout << "Warning: overdepth" << depth << endl;
+		std::cout << "Warning: overdepth" << (*depth) << endl;
 		*error_flag = true;
 		return make_shared<NoneVFG>();
 	}
+	// while(!call_stack->empty()){
+	// 	auto temp = call_stack->pop();
+	// 	node_record_value += temp;
+	// 	record_index_1.push(temp);
+	// }
+	// while(!record_index_1.empty()){
+	// 	call_stack->push(record_index_1.top());
+	// 	record_index_1.pop();
+	// }
 	if(debug_flag){
-		std::stack<FieldIndex> record_index_0;
 		std::stack<CallSiteID> record_index_1;
-		std::cout << node->toString() << endl;
+		std::stack<FieldIndex> record_index_0;
+		std::cout << node->toString()  << ";" << extract_index->size() << endl;
 		while(!extract_index->empty()){
 			auto temp = extract_index->top();
 			extract_index->pop();
 			record_index_0.push(temp);
 			std::cout << temp.index << ";";
 		}
-		while(!record_index_0.empty()){
+		std::cout << endl;
+		while(!record_index_0.empty()){ 
 			extract_index->push(record_index_0.top());
 			record_index_0.pop();
 		}
-		std::cout << endl;
 		while(!call_stack->empty()){
 			auto temp = call_stack->pop();
 			record_index_1.push(temp);
@@ -222,11 +232,20 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 		}
 		std::cout << endl;
 	}
+	//VisitedRecord node_record(node, node_record_value);
 	int record_number = 0;
 	bool extract_flag = !extract_index->empty();
 	if (node->getNodeKind() == SVF::VFGNode::VFGNodeK::Copy && llvm::ConstantPointerNull::classof(node->getValue())){
 		return std::make_shared<NoneVFG>();
 	}
+	// if(visited_set->find(node_record) != visited_set->end()){
+	// 	if(debug_flag){
+	// 		std::cout << "loop_none!!!!!" << node_record.node->toString() <<":"<< node_record.call_index<< endl;
+	// 	}
+	// 	return std::make_shared<NoneVFG>(node);
+	// }
+
+	//visited_set->insert(node_record);
     switch (node->getNodeKind()) {
         case SVF::VFGNode::VFGNodeK::AParm:
         {	
@@ -242,6 +261,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				long const_value = parseConstant(node->getValue(), field_flag, pre_size, size);
 				if(debug_flag)
 					std::cout << "We got const_value:" << const_value << endl;
+				//visited_set->erase(node_record);
 				return std::make_shared<ConstantVFG>(const_value);
 			}
             break;
@@ -258,6 +278,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				if(umul_function && cb->getCalledOperand() == umul_function->getLLVMFun()){
 					if(extract_index->empty()){
 						std::cout << "Error: umul None!!!!!!!" << endl;
+						//visited_set->erase(node_record);
 						return make_shared<NoneVFG>();
 					}
 					auto temp_record = extract_index->top();
@@ -265,14 +286,16 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					auto pag_vec = ar_node->getActualParms();
 					auto node_l = svfg->getDefSVFGNode(pag_vec[0]);
 					auto node_r = svfg->getDefSVFGNode(pag_vec[1]);
-					auto result_l = parseVFGNode(node_l, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
-					auto result_r = parseVFGNode(node_r, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+					auto result_l = parseVFGNode(node_l, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+					auto result_r = parseVFGNode(node_r, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 					extract_index->push(temp_record);
+					//visited_set->erase(node_record);
 					return parseBinaryOp(result_l, result_r, '*');
 				}
 				if(uadd_function && cb->getCalledOperand() == uadd_function->getLLVMFun()){
 					if(extract_index->empty()){
 						std::cout << "Error: uadd None!!!!!!!" << endl;
+						//visited_set->erase(node_record);
 						return make_shared<NoneVFG>();
 					} 
 					auto temp_record = extract_index->top();
@@ -280,17 +303,19 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					auto pag_vec = ar_node->getActualParms();
 					auto node_l = svfg->getDefSVFGNode(pag_vec[0]);
 					auto node_r = svfg->getDefSVFGNode(pag_vec[1]);
-					auto result_l = parseVFGNode(node_l, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
-					auto result_r = parseVFGNode(node_r, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+					auto result_l = parseVFGNode(node_l, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+					auto result_r = parseVFGNode(node_r, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 					extract_index->push(temp_record);
+					//visited_set->erase(node_record);
 					return parseBinaryOp(result_l, result_r, '+');
 				}
 				if(i64_ctlz_function && cb->getCalledOperand() == i64_ctlz_function->getLLVMFun()){
 					auto pag_vec = ar_node->getActualParms();
 					auto node_l = svfg->getDefSVFGNode(pag_vec[0]);
-					auto result_l = parseVFGNode(node_l, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+					auto result_l = parseVFGNode(node_l, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 					auto result = parseBinaryOp(result_l, std::make_shared<ConstantVFG>(64), 'c');
 					result = result->simplify();
+					//visited_set->erase(node_record);
 					return result;
 				}
 			}
@@ -299,11 +324,12 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
         case SVF::VFGNode::VFGNodeK::FParm: 
         {
 			if(avfg->paramlist.find(node) != avfg->paramlist.end()){
-				if(depth >= 0)
+				if((*depth) >= 0)
 					avfg->paramlist[node] = true;
 				if(debug_flag)
 					std::cout << "We got param" << endl;
 				if(extract_index->empty()){
+					//visited_set->erase(node_record);
 					return std::make_shared<VariableVFG>(node);
 				}
 				else{
@@ -322,6 +348,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					}
 					avfg->param_field[node] = fields;
 					int offset = calculateOffset(&fields);
+					//visited_set->erase(node_record);
 					return std::make_shared<VariableVFG>(node, offset, fields.back().size);
 				}
 			} 
@@ -339,9 +366,10 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					const CallDirSVFGEdge *call_edge = static_cast<const CallDirSVFGEdge*>(edge);
 					if(!empty_flag && call_id == call_edge->getCallSiteId()){
 						auto next_node = call_edge->getSrcNode();
-						auto result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+						auto result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 						if(!empty_flag)
 							call_stack->push(call_id);
+						//visited_set->erase(node_record);
 						return result;
 					}
 				}
@@ -350,6 +378,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				call_stack->push(call_id);
 			if(debug_flag)
 				std::cout << "FParm None!!!!!!" << endl;
+			//visited_set->erase(node_record);
 			return std::make_shared<NoneVFG>();
         }
         case SVF::VFGNode::VFGNodeK::FRet:
@@ -364,8 +393,8 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			auto LHS = svfg->getDefSVFGNode(binary_node->getOpVer(0));
 			auto RHS = svfg->getDefSVFGNode(binary_node->getOpVer(1));
 			const BinaryOperator* binary_inst = SVFUtil::dyn_cast<BinaryOperator>(binary_node->getValue());
-			auto result_l = parseVFGNode(LHS, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
-			auto result_r = parseVFGNode(RHS, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+			auto result_l = parseVFGNode(LHS, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+			auto result_r = parseVFGNode(RHS, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 			std::shared_ptr<ExprVFG> result = std::make_shared<NoneVFG>();
 			switch(binary_inst->getOpcode()){
 				case Instruction::BinaryOps::Add:
@@ -457,6 +486,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			}
 			if(result->getKind() == expr_binary){
 				result = move(result->simplify());
+				//visited_set->erase(node_record);
 				return result;
 			}
 			break;
@@ -488,6 +518,18 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				break;
 			std::stack<FieldIndex> record_index;
 			const ActualINSVFGNode* apin_node = static_cast<const ActualINSVFGNode*>(node);
+			
+			// const CallICFGNode* call_node = static_cast<const CallICFGNode*>(apin_node->getCallSite());
+			// auto temp_call_site = call_node->getCallSite();
+			// const CallBase* call_base = static_cast<const CallBase*>(temp_call_site);
+			// if(llvm::Function::classof(call_base->getCalledOperand())){
+			// 	auto hard_func_name = call_base->getCalledOperand()->getName().str();
+			// 	if((hard_func_name.find("map_one") != hard_func_name.npos) && SVF::IntraMSSAPHISVFGNode ::classof(succ_node)){
+			// 		std::cout << "hard code map" << endl;
+			// 		return make_shared<NoneVFG>();
+			// 	}
+			// }
+
 			const NodeBS& pts = apin_node->getPointsTo();
     		NodeBS::iterator ii = pts.begin();
 			PAGNode* targetObj = svfg->getPAG()->getGNode(*ii);
@@ -592,6 +634,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
         }
         case SVF::VFGNode::VFGNodeK::APOUT: 
         {	
+			
 			std::stack<FieldIndex> record_index;
 			const ActualOUTSVFGNode* apout_node = static_cast<const ActualOUTSVFGNode*>(node);
 			const NodeBS& pts = apout_node->getPointsTo();
@@ -658,7 +701,20 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					const RetIndSVFGEdge *ret_edge = static_cast<const RetIndSVFGEdge*>(edge);
 					call_stack->push(ret_edge->getCallSiteId());
 				}
-				auto result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+				auto result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+				// if(result->exist_none() && result->exist_loop(node)){
+				// 	std::cout << "output None!!!!" << endl;
+				// 	result->output();
+				// 	std::cout << endl;
+				// 	if(result->exist_binary(node)){
+				// 		*error_flag = true;
+				// 		//visited_set->erase(node_record);
+				// 		return make_shared<NoneVFG>();
+				// 	}
+				// 	else{
+				// 		result->simplify();
+				// 	}
+				// }
 				if(SVF::RetIndSVFGEdge::classof(edge)){
 					call_stack->pop();
 				}
@@ -676,20 +732,29 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			if(exprs.size() == 0){
 				if(debug_flag)
 					std::cout << "APOUT None!!!!!!" << endl;
+				//visited_set->erase(node_record);
 				return make_shared<NoneVFG>();
 			} 
 			else if(exprs.size() == 1){
+				//visited_set->erase(node_record);
 				return exprs[0];
 			}
 			else{
 				std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> ptr_exprs = make_shared<std::vector<std::shared_ptr<ExprVFG>>>(exprs);
 				std::shared_ptr<ExprVFG> result = std::make_shared<PHIVFG>(std::move(ptr_exprs));
 				result = result->simplify();
+				//visited_set->erase(node_record);
 				return result;
 			}
         }
         case SVF::VFGNode::VFGNodeK::FPIN:
         {	
+			// auto node_name = node->getFun()->getName();
+			// if(node_name.find("copy_nonoverlapping") != node_name.npos){
+			// 	std::cout << "hard code" << endl;
+			// 	return make_shared<NoneVFG>();
+			// }
+			//_ZN4core10intrinsics19copy_nonoverlapping17h712917cda190ed4aE
 			//--------------------------field-------------------------
 			if(avfg->getFunction() == node->getFun()){
 				if(extract_flag && node->hasIncomingEdge()){
@@ -709,10 +774,13 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					auto fields_ptr = make_shared<std::vector<FieldIndex>>(fields);
 					if(debug_flag)
 						std::cout << "We got a field node" << endl;
+					//visited_set->erase(node_record);
 					return std::make_shared<VarFieldVFG>(node, fields_ptr);
 				}
-				else
+				else{
+					//visited_set->erase(node_record);
 					return std::make_shared<NoneVFG>();
+				}
 			}
 			//--------------------------field-------------------------
 
@@ -731,9 +799,10 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					const CallIndSVFGEdge *call_edge = static_cast<const CallIndSVFGEdge*>(edge);
 					if(!empty_flag && call_id == call_edge->getCallSiteId()){
 						auto next_node = call_edge->getSrcNode();
-						auto result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+						auto result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 						if(!empty_flag)
 							call_stack->push(call_id);
+						//visited_set->erase(node_record);
 						return result;
 					}
 				}
@@ -742,10 +811,19 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				call_stack->push(call_id);
 			if(debug_flag)
 				std::cout << "FPIN None!!!!!!" << endl;
+			//visited_set->erase(node_record);
 			return std::make_shared<NoneVFG>();
         }
         case SVF::VFGNode::VFGNodeK::FPOUT:
-        {
+        {	
+			// auto node_name = node->getFun()->getName();
+			// if(node_name.find("7map_one17") != node_name.npos){
+			// 	std::cout << "hard code" << endl;
+			// 	auto edge = *(node->InEdgeBegin());
+			// 	auto succ_node = edge->getSrcNode();
+			// 	std::cout << "hhh" << succ_node->toString() << endl;
+			// 	return make_shared<NoneVFG>();
+			// }
             break;
         }
         case SVF::VFGNode::VFGNodeK::MIntraPhi:
@@ -754,8 +832,32 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			for (auto it = node->InEdgeBegin(), eit = node->InEdgeEnd(); it != eit; ++it) {
 				auto edge = *it;
 				auto succ_node = edge->getSrcNode();
+				// bool rep_flag = false;
+				// for (auto oit = node->OutEdgeBegin(), oeit = node->OutEdgeEnd(); oit != oeit; ++oit) {
+				// 	auto oedge = *oit;
+				// 	auto out_node = oedge->getDstNode();
+				// 	if(out_node == succ_node && SVF::IntraMSSAPHISVFGNode::classof(succ_node)){
+				// 		rep_flag = true;
+				// 		break;
+				// 	}
+				// }
+				// if(rep_flag)
+				// 	continue;
 				if ((edge->isIndirectVFGEdge()) && (!SVF::MRSVFGNode::classof(succ_node) || SVF::IntraMSSAPHISVFGNode::classof(succ_node) || SVF::ActualOUTSVFGNode::classof(succ_node) || SVF::FormalINSVFGNode::classof(succ_node))){
-					auto temp = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+					if(debug_flag)
+						std::cout <<"inter" << succ_node->toString() << endl << endl;
+
+					auto temp = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+					// if(temp->exist_none() && temp->exist_loop(node)){
+					// 	if(temp->exist_binary(node)){
+					// 		*error_flag = true;
+					// 		//visited_set->erase(node_record);
+					// 		return make_shared<NoneVFG>();
+					// 	}
+					// 	else{
+					// 		temp->simplify();
+					// 	}
+					// }
 					if(temp->getKind() != expr_none)
 						exprs.push_back(std::move(temp));
 					continue;
@@ -764,6 +866,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			if(exprs.size() == 0){
 				if(debug_flag)
 					std::cout << "MIntraPhi None!!!!!!" << endl;
+				//visited_set->erase(node_record);
 				return std::make_shared<NoneVFG>();
 			}
 			if(exprs.size() == 1)
@@ -771,6 +874,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> ptr_exprs = make_shared<std::vector<std::shared_ptr<ExprVFG>>>(exprs);
 			std::shared_ptr<ExprVFG> result = std::make_shared<PHIVFG>(std::move(ptr_exprs));
 			result = result->simplify();
+			//visited_set->erase(node_record);
 			return result;
         }
         case SVF::VFGNode::VFGNodeK::MInterPhi:
@@ -810,14 +914,15 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				long const_value = parseConstant(node->getValue(), field_flag, pre_size, size);
 				if(debug_flag)
 					std::cout << "We got a const_value:" << const_value << endl;
+				//visited_set->erase(node_record);
 				return std::make_shared<ConstantVFG>(const_value);
 			}
-			
 			auto edge = *(node->InEdgeBegin());
 			if (!edge){
-				auto result = findAndParse(node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+				auto result = findAndParse(node, svfg, avfg, extract_index, call_stack, depth, error_flag);
 				if(result->getKind() == ExprTypes::expr_none && debug_flag)
 					std::cout << "Addr None!!!!!" << endl;
+				//visited_set->erase(node_record);
 				return result;
 			}
 			break;
@@ -842,8 +947,10 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					extract_index->push(field_info);
 					auto temp_edge = *(node->InEdgeBegin());
 					auto next_node = temp_edge->getSrcNode();
-					std::shared_ptr<ExprVFG> result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
-					extract_index->pop();
+					std::shared_ptr<ExprVFG> result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+					if(!extract_index->empty())
+						extract_index->pop();
+					//visited_set->erase(node_record);
 					return result;
 				}
 				break;
@@ -860,8 +967,10 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				int pre_size = calculatePreSize(target_type, index);
 				FieldIndex field_info(index, pre_size, size);
 				extract_index->push(field_info);
-				std::shared_ptr<ExprVFG> result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
-				extract_index->pop();
+				std::shared_ptr<ExprVFG> result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+				if(!extract_index->empty())
+					extract_index->pop();
+				//visited_set->erase(node_record);
 				return result;
 			}
 			if(inst && string(inst->getOpcodeName()) == "insertvalue"){
@@ -876,19 +985,21 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				if(extract_index->empty()){
 					if(debug_flag)
 						std::cout << "insertvalue None" << endl;
+					//visited_set->erase(node_record);
 					return make_shared<NoneVFG>();
 				}
 				FieldIndex temp_index = extract_index->top();
 				extract_index->pop();
 				std::shared_ptr<ExprVFG> result;
 				if(temp_index.index == index){
-					result = parseVFGNode(value_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+					result = parseVFGNode(value_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 					extract_index->push(temp_index);
 				}
 				else{
 					extract_index->push(temp_index);
-					result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+					result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 				}
+				//visited_set->erase(node_record);
 				return result;
 			}
             break;
@@ -920,7 +1031,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				const StoreInst* store_inst = static_cast<const StoreInst*>(st_node->getInst());
 				const PAGNode* src_node = st_node->getPAGSrcNode();
 				const VFGNode* src = svfg->getDefSVFGNode(st_node->getPAGSrcNode());
-				result = parseVFGNode(src, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+				result = parseVFGNode(src, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 			}
 			while(!record_index.empty()){
 				extract_index->push(record_index.top());
@@ -931,12 +1042,13 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					auto edge = *it;
 					auto succ_node = edge->getSrcNode();
 					if (succ_node->getNodeKind() == SVF::VFGNode::VFGNodeK::Store){
-						result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+						result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 						if(result->getKind() != expr_none)
 							break;
 					}
 				}
 			}
+			//visited_set->erase(node_record);
 			return result;
 		}
         case SVF::VFGNode::VFGNodeK::Load: 
@@ -946,7 +1058,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 	        const VFGEdge *t_edge = 0;
 			int index_num = 0;
 			std::shared_ptr<ExprVFG> result = make_shared<NoneVFG>();
-            for (auto it = node->InEdgeBegin(), eit = node->InEdgeEnd(); it != eit; ++it) {
+			for (auto it = node->InEdgeBegin(), eit = node->InEdgeEnd(); it != eit; ++it) {
 				auto edge = *it;
 				auto succ_node = edge->getSrcNode();
 				if (succ_node->getNodeKind() == SVF::VFGNode::VFGNodeK::Gep || succ_node->getNodeKind() == SVF::VFGNode::VFGNodeK::Copy){
@@ -965,14 +1077,15 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 						result = std::make_shared<VariableVFG>(succ_node);
 					}
 					else{
-						result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag); 
+						result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set); 
 					}
 					pop_FILO(extract_index, index_num);
+					//visited_set->erase(node_record);
 					return result;
 				}
 			}
 			if(target){
-				result = parseVFGNode(target, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+				result = parseVFGNode(target, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 				if(result->getKind() == ExprTypes::expr_var_field && result->isZero()){
 					const VFGNode *param_node = node;
 					bool param_flag = false;
@@ -1000,6 +1113,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 						std::shared_ptr<VarFieldVFG> temp = std::static_pointer_cast<VarFieldVFG>(result);
 						avfg->fields.push_back(temp); //clone?
 						pop_FILO(extract_index, index_num);
+						//visited_set->erase(node_record);
 						return result;
 					}
 					else{
@@ -1013,15 +1127,30 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 							target = edge->getSrcNode();
 						}
 					}
-					result = parseVFGNode(target, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);	
+					result = parseVFGNode(target, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);	
 				}
 				pop_FILO(extract_index, index_num);
+				//visited_set->erase(node_record);
 				return result;
 			}
-			if(debug_flag)
+			else{
+				for (auto it = node->InEdgeBegin(), eit = node->InEdgeEnd(); it != eit; ++it) {
+					auto edge = *it;
+					auto succ_node = edge->getSrcNode();
+					if(edge != t_edge && SVF::GepVFGNode::classof(succ_node)){
+						target = edge->getSrcNode();
+					}
+				}
+				if(target)
+					result = parseVFGNode(target, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);	
+			}
+			
+				//visited_set->erase(node_record);
+			if(debug_flag && result->getKind() == ExprTypes::expr_none)
 				std::cout << "Load None!!!!!!" << endl;
 			pop_FILO(extract_index, index_num);
-			return std::make_shared<NoneVFG>();
+			return result;
+			//visited_set->erase(node_record);
         }
 
         //UnaryOp
@@ -1039,10 +1168,12 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
     if(!t_edge){
 		if(record_number > 0){
 			for(int i = 0; i < record_number; i++)
-				extract_index->pop();
+				if(!extract_index->empty())
+					extract_index->pop();
 		}
 		if(debug_flag)
         	std::cout << "None!!!!!!" << endl;
+		//visited_set->erase(node_record);
 		return std::make_shared<NoneVFG>();
     }
     bool push_flag = false;
@@ -1057,17 +1188,32 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 		push_flag = true;
 	}
 	auto next_node = t_edge->getSrcNode();
-	auto result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+	auto result = parseVFGNode(next_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
+	// if(result->exist_none() && result->exist_loop(node)){
+	// 	std::cout << "output None!!!!" << endl;
+	// 	result->output();
+	// 	std::cout << endl;
+	// 	if(result->exist_binary(node)){
+	// 		*error_flag = true;
+	// 		//visited_set->erase(node_record);
+	// 		return make_shared<NoneVFG>();
+	// 	}
+	// 	else{
+	// 		result->simplify();
+	// 	}
+	// }
 	if(push_flag)
 		call_stack->pop();
 	if(record_number > 0){
 		for(int i = 0; i < record_number; i++)
-			extract_index->pop();
+			if(!extract_index->empty())
+					extract_index->pop();
 	}
+	//visited_set->erase(node_record);
 	return result;
 }
 
-std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int depth, bool *error_flag){
+std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVFG *avfg, std::stack<FieldIndex> *extract_index, FILOWorkList<CallSiteID> *call_stack, int *depth, bool *error_flag){
 	if(debug_flag){
 		std::cout << "find:" << node->toString() << endl;
 	}
@@ -1089,7 +1235,7 @@ std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVF
 				push_flag = true;
 			}
 
-			auto result = findAndParse(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+			auto result = findAndParse(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag);
 			
 			if(push_flag)
 				call_stack->pop();
@@ -1099,7 +1245,8 @@ std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVF
 		}
 
 		if (SVF::StoreVFGNode::classof(succ_node)){
-			auto result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+			std::set<VisitedRecord> visited_set;
+			auto result = parseVFGNode(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, &visited_set);
 			if(result->getKind() == ExprTypes::expr_none)
 				continue;
 			else
@@ -1122,7 +1269,7 @@ std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVF
 	// 			push_flag = true;
 	// 		}
 
-	// 		auto result = findAndParse(succ_node, svfg, avfg, extract_index, call_stack, depth + 1, error_flag);
+	// 		auto result = findAndParse(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
 
 	// 		if(push_flag)
 	// 			call_stack->pop();

@@ -21,7 +21,6 @@ class FieldIndex{
 
 int calculateSize(Type* ty);
 
-
 class FieldTransform{
 public:
 	int index;
@@ -53,6 +52,7 @@ public:
 			def_num++;
 		}
 		std::cout << "(var_field: *-"<< def_num<<"-arg_" <<  index;
+    std::cout << "size "<< fields->size();
 		if(fields->size() > 0){
 			int temp_def_num = 0;
 			int offset = 0;
@@ -125,7 +125,7 @@ int calculateSize(Type* ty){
               max = temp;
             result += temp;
         }
-        result = ((result+max-1) / max) * max;
+        //result = ((result+max-1) / max) * max;
         type_cost[ty] = result;
         return result;
     }
@@ -171,6 +171,7 @@ enum ExprTypes {
   expr_phi = 5,
   expr_var_field = 6,
   expr_cfg_phi = 7,
+  expr_loop_none = 8,
 };
 
 
@@ -193,43 +194,18 @@ public:
 
   virtual std::shared_ptr<ExprVFG> simplify();
   virtual bool exist_none();
+  virtual bool exist_loop(const VFGNode* node);
+  virtual bool exist_binary(const VFGNode* node);
   virtual std::shared_ptr<ExprVFG> clone();
   virtual std::shared_ptr<ExprVFG> replace(std::shared_ptr<ExprVFG> dst, std::shared_ptr<ExprVFG> src);
   virtual void foldExpr(std::vector<std::shared_ptr<ExprVFG>> *fold_expr);
 };
 
 bool equal_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS);
+bool less_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS);
 
-class NoneVFG : public ExprVFG {
-  double val;
 
-public:
-  NoneVFG(){
-    val = 0;
-    type = expr_none;
-  }
-  void output() override{
-    std::cout << "(None)";
-  }
-  
-  void transform(std::map<int, FieldTransform>* param_transform) override{}
-  bool isZero(){return true;}
-  bool exist_none(){return true;}
 
-  std::shared_ptr<ExprVFG> simplify(){
-    return std::make_shared<NoneVFG>();
-  }
-  std::shared_ptr<ExprVFG> clone(){
-    return std::make_shared<NoneVFG>();
-  }
-  std::shared_ptr<ExprVFG> replace(std::shared_ptr<ExprVFG> dst, std::shared_ptr<ExprVFG> src){
-    return std::make_shared<NoneVFG>();
-  }
-
-  void foldExpr(std::vector<std::shared_ptr<ExprVFG>> *fold_expr){
-    fold_expr->push_back(std::make_shared<NoneVFG>());
-  }
-};
 
 /// constant
 class ConstantVFG : public ExprVFG {
@@ -245,6 +221,8 @@ public:
   }
   bool isZero(){return val == 0;}
   bool exist_none(){return false;}
+  bool exist_binary(const VFGNode* node){return false;}
+  bool exist_loop(const VFGNode* node){return false;}
   long getVal() override{
     return val;
   }
@@ -263,6 +241,70 @@ public:
   }
   void foldExpr(std::vector<std::shared_ptr<ExprVFG>> *fold_expr){
     fold_expr->push_back(std::make_shared<ConstantVFG>(val));
+  }
+};
+
+
+class NoneVFG : public ExprVFG {
+  double val;
+  
+public:
+  const VFGNode* vals;
+  NoneVFG(){
+    val = 0;
+    type = expr_none;
+    vals = 0;
+  }
+
+  NoneVFG(const VFGNode* vals_1){
+    val = 0;
+    vals = vals_1;
+    type = expr_loop_none;
+  }
+
+  void output() override{
+    if(type == expr_loop_none){
+      std::cout << "(LoopNone)";
+      if(vals != 0)
+        std::cout <<vals->toString();
+    }
+    else
+      std::cout << "(None)";
+  }
+  
+  void transform(std::map<int, FieldTransform>* param_transform) override{}
+  bool isZero(){return true;}
+  bool exist_none(){return true;}
+  bool exist_binary(const VFGNode* node){
+    if (node == vals){
+      vals = 0;
+    }
+    return false;
+  }
+  bool exist_loop(const VFGNode* node){
+    if (node == vals){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  std::shared_ptr<ExprVFG> simplify(){
+    if(vals == 0 && type == expr_loop_none){
+      return std::make_shared<ConstantVFG>(0);
+    }
+    return std::make_shared<NoneVFG>();
+  }
+  std::shared_ptr<ExprVFG> clone(){
+    return std::make_shared<NoneVFG>();
+  }
+  std::shared_ptr<ExprVFG> replace(std::shared_ptr<ExprVFG> dst, std::shared_ptr<ExprVFG> src){
+    return std::make_shared<NoneVFG>();
+  }
+
+  void foldExpr(std::vector<std::shared_ptr<ExprVFG>> *fold_expr){
+    fold_expr->push_back(std::make_shared<NoneVFG>());
   }
 };
 
@@ -286,6 +328,8 @@ public:
   }
   bool isZero(){return val == 0;}
   bool exist_none(){return false;}
+  bool exist_binary(const VFGNode* node){return false;}
+  bool exist_loop(const VFGNode* node){return false;}
   VariableVFG(const VFGNode* val) : val(val){
     def = -1;
     index = -1;
@@ -381,6 +425,8 @@ public:
   }
   bool isZero(){return param == 0;}
   bool exist_none(){return false;}
+  bool exist_binary(const VFGNode* node){return false;}
+  bool exist_loop(const VFGNode* node){return false;}
   const VFGNode* getVFG() {
     return val;
   }
@@ -450,7 +496,6 @@ public:
         }
         val_type = val_type->getStructElementType((*iter).index);
         offset += (*iter).pre_size;
-
         while(val_type->isPointerTy()){
           val_type = val_type->getPointerElementType();
           temp_def_num++;
@@ -537,8 +582,9 @@ public:
 
 class BinaryVFG : public ExprVFG {
   std::shared_ptr<ExprVFG> LHS, RHS;
-  char op;
+  
 public:
+  char op;
   BinaryVFG(){
     type = expr_binary;
     op = '+';
@@ -553,7 +599,20 @@ public:
   long getVal() override{
     return LHS->getVal() + op*op + RHS->getVal();
   }
+  char get_op(){
+    return op;
+  }
+  std::shared_ptr<ExprVFG> get_LHS(){
+    return LHS;
+  }
+  std::shared_ptr<ExprVFG> get_RHS(){
+    return RHS;
+  }
   bool exist_none(){return LHS->exist_none() || RHS->exist_none();}
+  bool exist_loop(const VFGNode* node){return LHS->exist_loop(node) || RHS->exist_loop(node);}
+  bool exist_binary(const VFGNode* node){
+    return LHS->exist_loop(node) || RHS->exist_loop(node);
+  }
   void output() override{
     std::cout << "(";
     LHS->output();
@@ -588,11 +647,11 @@ public:
     switch (op)
     {
       case '-':{
-        if(LHS->getKind() == expr_var_field && RHS->getKind() == expr_var_field){
+        //if(LHS->getKind() == expr_var_field && RHS->getKind() == expr_var_field){
           if(equal_field(LHS, RHS)){
             return make_shared<ConstantVFG>(0);
           }
-        }
+        //}
       }
       case '+':
       {
@@ -624,6 +683,30 @@ public:
           return LHS;
         break;
       }
+      case 'x':
+      {
+        if (LHS->getKind() == expr_constant && LHS->isZero()
+        || RHS->getKind() == expr_constant && RHS->isZero())
+          return std::make_shared<ConstantVFG>(0);
+        
+        if (LHS->getKind() == expr_constant && LHS->getVal() == 1){
+          return RHS;
+        }
+        if (RHS->getKind() == expr_constant && RHS->getVal() == 1){
+          return LHS;
+        }
+        if(LHS->getKind() == expr_binary){
+          std::shared_ptr<BinaryVFG> LHS_binary = std::static_pointer_cast<BinaryVFG>(LHS);
+          if(LHS_binary->get_op() == 'x'){
+            auto RHS_new = std::make_shared<BinaryVFG>(LHS_binary->get_RHS(), RHS, '*');
+            auto LHS_new = LHS_binary->get_LHS();
+            RHS_new->simplify();
+            std::shared_ptr<BinaryVFG> result = std::make_shared<BinaryVFG>(LHS_new, RHS_new, 'x');
+            return result;
+          }
+        }
+        break;
+      }
       case '*':
       {
         if (LHS->getKind() == expr_constant && LHS->isZero()
@@ -635,6 +718,16 @@ public:
         }
         if (RHS->getKind() == expr_constant && RHS->getVal() == 1){
           return LHS;
+        }
+        if(LHS->getKind() == expr_binary){
+          std::shared_ptr<BinaryVFG> LHS_binary = std::static_pointer_cast<BinaryVFG>(LHS);
+          if(LHS_binary->get_op() == 'x'){
+            auto RHS_new = std::make_shared<BinaryVFG>(LHS_binary->get_RHS(), RHS, '*');
+            auto LHS_new = LHS_binary->get_LHS();
+            RHS_new->simplify();
+            std::shared_ptr<BinaryVFG> result = std::make_shared<BinaryVFG>(LHS_new, RHS_new, 'x');
+            return result;
+          }
         }
         break;
       }
@@ -707,9 +800,10 @@ public:
 
 //phi
 class PHIVFG : public ExprVFG {
+public:
   std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> exprs;
 
-public:
+
   PHIVFG(){
     type = expr_phi;
   }
@@ -734,6 +828,27 @@ public:
     for(int i = 0; i < count; i++){
       if((*exprs)[i]->exist_none()){
         return true;
+      }
+    }
+    return false;
+  }
+  bool exist_loop(const VFGNode* node){
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->exist_loop(node)){
+        return true;
+      }
+    }
+    return false;
+  }
+  bool exist_binary(const VFGNode* node){ 
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->exist_binary(node)){
+        return true;
+      }
+      if((*exprs)[i]->getKind()==expr_loop_none){
+        (*exprs)[i] = make_shared<ConstantVFG>(0);
       }
     }
     return false;
@@ -772,7 +887,6 @@ public:
     if(exprs->size() == 1){
       return (*exprs)[0]->simplify();
     }
-
     std::set<long> contains;
     long max = -1;
     for(int i = 0; i < exprs->size(); i++){
@@ -800,6 +914,14 @@ public:
       return std::make_shared<ConstantVFG>(max);
     }
     else{
+      if(exprs->size() == 2){
+        if((*exprs)[0]->getKind() == expr_constant && (*exprs)[0]->getVal() <= 0){
+          return (*exprs)[1]->simplify();
+        }
+        if((*exprs)[1]->getKind() == expr_constant && (*exprs)[1]->getVal() <= 0){
+          return (*exprs)[0]->simplify();
+        }
+      }
       return std::make_shared<PHIVFG>(exprs); //move
     }
   }
@@ -810,9 +932,8 @@ public:
 };
 
 class CFG_PHIVFG : public ExprVFG {
-std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> exprs;
-
 public:
+std::shared_ptr<std::vector<std::shared_ptr<ExprVFG>>> exprs;
   CFG_PHIVFG(){
     type = expr_cfg_phi;
   }
@@ -833,6 +954,33 @@ public:
     }
     return false;
   }
+  bool exist_loop(const VFGNode* node){
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->exist_loop(node)){
+        return true;
+      }
+    }
+    return false;
+  }
+  bool exist_binary(const VFGNode* node){
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->exist_binary(node)){
+        return true;
+      }
+      if((*exprs)[i]->getKind()==expr_loop_none){
+        (*exprs)[i] = make_shared<ConstantVFG>(0);
+      }
+    }
+    return false;
+  }
+
+  void add_expr(std::shared_ptr<ExprVFG> dst){
+    exprs->push_back(dst);
+    return;
+  }
+
   void output() override{
     std::cout << "(CFG_PHI:" << "size:" << exprs->size() <<";";
     for(int i = 0; i < exprs->size(); i++){
@@ -891,6 +1039,16 @@ public:
         return (*exprs)[i]->simplify();
       }
     }
+
+    if(exprs->size() == 2){
+      if((*exprs)[0]->getKind() == expr_constant && (*exprs)[0]->getVal() <= 0){
+        return (*exprs)[1]->simplify();
+      }
+      if((*exprs)[1]->getKind() == expr_constant && (*exprs)[1]->getVal() <= 0){
+        return (*exprs)[0]->simplify();
+      }
+    }
+
     return std::make_shared<CFG_PHIVFG>(exprs); //move
   }
 
@@ -901,6 +1059,85 @@ public:
     }
   }
 };
+
+bool equal_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
+  if(LHS->getKind() != RHS->getKind()){
+    return false;
+  }
+  switch (LHS->getKind()){
+    case expr_constant:
+    {
+      return LHS->getVal() == RHS->getVal();
+      break;
+    }
+    case expr_variable:
+    { 
+      std::shared_ptr<VariableVFG> LHS_V = std::static_pointer_cast<VariableVFG>(LHS);
+      std::shared_ptr<VariableVFG> RHS_V = std::static_pointer_cast<VariableVFG>(RHS);
+      return LHS_V->actual_size == RHS_V->actual_size && LHS_V->val == RHS_V->val 
+            && LHS_V->offset == RHS_V->offset;
+      break;
+    }
+    case expr_binary:
+    { 
+      std::shared_ptr<BinaryVFG> LHS_B = std::static_pointer_cast<BinaryVFG>(LHS);
+      std::shared_ptr<BinaryVFG> RHS_B = std::static_pointer_cast<BinaryVFG>(RHS);
+      return equal_field(LHS_B->get_LHS(), RHS_B->get_LHS()) && equal_field(LHS_B->get_RHS(), RHS_B->get_RHS())
+            && LHS_B->op == RHS_B->op;
+      break;
+    }
+    case expr_phi:
+    { 
+      std::shared_ptr<PHIVFG> LHS_P = std::static_pointer_cast<PHIVFG>(LHS);
+      std::shared_ptr<PHIVFG> RHS_P = std::static_pointer_cast<PHIVFG>(RHS);
+      auto size = LHS_P->exprs->size();
+      if(size != RHS_P->exprs->size()){
+        return false;
+      }
+      for(int i = 0; i < size; i++){
+        if(!equal_field((*(LHS_P->exprs))[i], (*(RHS_P->exprs))[i]))
+          return false;
+      }
+      return true;
+      break;
+    }
+    case expr_var_field:
+    { 
+      std::shared_ptr<VarFieldVFG> LHS_field = std::static_pointer_cast<VarFieldVFG>(LHS);
+      std::shared_ptr<VarFieldVFG> RHS_field = std::static_pointer_cast<VarFieldVFG>(RHS);
+      if(LHS_field->def != RHS_field->def 
+      || LHS_field->index != RHS_field->index
+      || LHS_field->param != RHS_field->param
+      || LHS_field->val != RHS_field->val
+      || LHS_field->fields->size() != RHS_field->fields->size())
+        return false;
+      int size = LHS_field->fields->size();
+      for(vector<FieldIndex>::iterator iter = LHS_field->fields->begin(), src_iter = RHS_field->fields->begin();
+      ; iter++, src_iter++, size--){
+        if(size == 0){
+          break;
+        }
+        if((*iter).index != (*src_iter).index){
+          return false;
+        } 
+      }
+      return true;
+      break;
+    }
+    default:
+    {
+      return false;
+      break;
+    }
+  }
+  return false;
+}
+
+
+// bool less_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
+//   auto kind1
+// }
+
 
 std::shared_ptr<ExprVFG> parseBinaryOp(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS, char op){
   switch (op)
@@ -957,6 +1194,31 @@ std::shared_ptr<ExprVFG> parseBinaryOp(std::shared_ptr<ExprVFG> LHS, std::shared
       }
       break;
     }
+    case 'x':
+    {
+      if (LHS->getKind() == expr_constant && LHS->isZero()
+      || RHS->getKind() == expr_constant && RHS->isZero())
+        return std::make_shared<ConstantVFG>(0);
+      
+      if (LHS->getKind() == expr_constant && LHS->getVal() == 1){
+        return RHS;
+      }
+      if (RHS->getKind() == expr_constant && RHS->getVal() == 1){
+        return LHS;
+      }
+      if(LHS->getKind() == expr_binary){
+        std::shared_ptr<BinaryVFG> LHS_binary = std::static_pointer_cast<BinaryVFG>(LHS);
+        if(LHS_binary->get_op() == '#'){
+          auto LHS_new = parseBinaryOp(LHS_binary->get_LHS(), RHS, 'x');
+          auto RHS_new = parseBinaryOp(LHS_binary->get_RHS(), RHS, 'x');
+          LHS_new->simplify();
+          RHS_new->simplify();
+          std::shared_ptr<BinaryVFG> result = std::make_shared<BinaryVFG>(LHS_new, RHS_new, '#');
+          return result;
+        }
+      }
+      break;
+    }
     default:
     {
       break;
@@ -975,26 +1237,26 @@ int calculateOffset(std::vector<FieldIndex>* fields){
 }
 
 
-bool equal_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
-  std::shared_ptr<VarFieldVFG> LHS_field = std::static_pointer_cast<VarFieldVFG>(LHS);
-  std::shared_ptr<VarFieldVFG> RHS_field = std::static_pointer_cast<VarFieldVFG>(RHS);
-  if(LHS_field->def != RHS_field->def 
-  || LHS_field->index != RHS_field->index
-  || LHS_field->param != RHS_field->param
-  || LHS_field->val != RHS_field->val
-  || LHS_field->fields->size() != RHS_field->fields->size())
-    return false;
-  int size = LHS_field->fields->size();
-  for(vector<FieldIndex>::iterator iter = LHS_field->fields->begin(), src_iter = RHS_field->fields->begin();
-  ; iter++, src_iter++, size--){
-    if(size == 0){
-      break;
-    }
-    if((*iter).index != (*src_iter).index){
-      return false;
-    } 
-  }
-  return true;
-}
+// bool equal_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
+//   std::shared_ptr<VarFieldVFG> LHS_field = std::static_pointer_cast<VarFieldVFG>(LHS);
+//   std::shared_ptr<VarFieldVFG> RHS_field = std::static_pointer_cast<VarFieldVFG>(RHS);
+//   if(LHS_field->def != RHS_field->def 
+//   || LHS_field->index != RHS_field->index
+//   || LHS_field->param != RHS_field->param
+//   || LHS_field->val != RHS_field->val
+//   || LHS_field->fields->size() != RHS_field->fields->size())
+//     return false;
+//   int size = LHS_field->fields->size();
+//   for(vector<FieldIndex>::iterator iter = LHS_field->fields->begin(), src_iter = RHS_field->fields->begin();
+//   ; iter++, src_iter++, size--){
+//     if(size == 0){
+//       break;
+//     }
+//     if((*iter).index != (*src_iter).index){
+//       return false;
+//     } 
+//   }
+//   return true;
+// }
 
 #endif
