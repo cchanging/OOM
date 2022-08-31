@@ -40,6 +40,8 @@ int getLoadIndexList(const VFGNode* node, const SVFG *svfg, std::stack<FieldInde
 	auto pag = svfg->getPAG();
 	int index_num = 0;
 	while(true){
+		if(debug_flag)
+			std::cout << "debug_load:"<< current_node->toString() << endl;
 		if(current_node->getNodeKind() == SVF::VFGNode::VFGNodeK::Gep){
 			const GepVFGNode* gp = static_cast<const GepVFGNode*>(current_node);
 			const Instruction *inst = gp->getInst();
@@ -94,6 +96,11 @@ int getLoadIndexList(const VFGNode* node, const SVFG *svfg, std::stack<FieldInde
 						FieldIndex field_info(src_type_index, 0, dst_type_size);
 						extract_index->push(field_info);
 						index_num++;
+						auto temp_edge = *(current_node->InEdgeBegin());
+						current_node = temp_edge->getSrcNode();
+						continue;
+					}
+					if(calculateSize(src) == calculateSize(dest)){
 						auto temp_edge = *(current_node->InEdgeBegin());
 						current_node = temp_edge->getSrcNode();
 						continue;
@@ -160,6 +167,11 @@ std::stack<FieldIndex> getStoreIndexList(const VFGNode* node, const SVFG *svfg, 
 					current_node = temp_edge->getSrcNode();
 					continue;
 				}
+				if(calculateSize(src) == calculateSize(dest)){
+					auto temp_edge = *(current_node->InEdgeBegin());
+					current_node = temp_edge->getSrcNode();
+					continue;
+				}
 			}
 		}
 		break;
@@ -197,15 +209,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 		*error_flag = true;
 		return make_shared<NoneVFG>();
 	}
-	// while(!call_stack->empty()){
-	// 	auto temp = call_stack->pop();
-	// 	node_record_value += temp;
-	// 	record_index_1.push(temp);
-	// }
-	// while(!record_index_1.empty()){
-	// 	call_stack->push(record_index_1.top());
-	// 	record_index_1.pop();
-	// }
+
 	if(debug_flag){
 		std::stack<CallSiteID> record_index_1;
 		std::stack<FieldIndex> record_index_0;
@@ -518,17 +522,6 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 				break;
 			std::stack<FieldIndex> record_index;
 			const ActualINSVFGNode* apin_node = static_cast<const ActualINSVFGNode*>(node);
-			
-			// const CallICFGNode* call_node = static_cast<const CallICFGNode*>(apin_node->getCallSite());
-			// auto temp_call_site = call_node->getCallSite();
-			// const CallBase* call_base = static_cast<const CallBase*>(temp_call_site);
-			// if(llvm::Function::classof(call_base->getCalledOperand())){
-			// 	auto hard_func_name = call_base->getCalledOperand()->getName().str();
-			// 	if((hard_func_name.find("map_one") != hard_func_name.npos) && SVF::IntraMSSAPHISVFGNode ::classof(succ_node)){
-			// 		std::cout << "hard code map" << endl;
-			// 		return make_shared<NoneVFG>();
-			// 	}
-			// }
 
 			const NodeBS& pts = apin_node->getPointsTo();
     		NodeBS::iterator ii = pts.begin();
@@ -749,12 +742,6 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
         }
         case SVF::VFGNode::VFGNodeK::FPIN:
         {	
-			// auto node_name = node->getFun()->getName();
-			// if(node_name.find("copy_nonoverlapping") != node_name.npos){
-			// 	std::cout << "hard code" << endl;
-			// 	return make_shared<NoneVFG>();
-			// }
-			//_ZN4core10intrinsics19copy_nonoverlapping17h712917cda190ed4aE
 			//--------------------------field-------------------------
 			if(avfg->getFunction() == node->getFun()){
 				if(extract_flag && node->hasIncomingEdge()){
@@ -899,7 +886,7 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
         }
 
         //Statement
-		//AcutualParm->FormalParm, CopyVFGNode bitcast传递关系
+		//AcutualParm->FormalParm, CopyVFGNode bitcast
         case SVF::VFGNode::VFGNodeK::Addr:  
         {   
             if (llvm::Constant::classof(node->getValue())){
@@ -1086,7 +1073,12 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 			}
 			if(target){
 				result = parseVFGNode(target, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
-				if(result->getKind() == ExprTypes::expr_var_field && result->isZero()){
+				if(debug_flag){
+					result->output();
+					std::cout << "niubi" << endl;
+				}
+				if(result->getKind() == ExprTypes::expr_var_field && result->isZero() || findfNone(result)){
+					
 					const VFGNode *param_node = node;
 					bool param_flag = false;
 					while(!SVF::FormalParmVFGNode::classof(param_node)){
@@ -1110,8 +1102,16 @@ std::shared_ptr<ExprVFG> parseVFGNode(const VFGNode* node, const SVFG *svfg, AVF
 					}
             		if(avfg->paramlist.find(param_node) != avfg->paramlist.end()){
 						result->setVal(param_node);
-						std::shared_ptr<VarFieldVFG> temp = std::static_pointer_cast<VarFieldVFG>(result);
-						avfg->fields.push_back(temp); //clone?
+						
+						if(result->getKind() == expr_phi){
+							std::shared_ptr<ExprVFG> ts = returnfNone(result);
+							std::shared_ptr<VarFieldVFG> temp = std::static_pointer_cast<VarFieldVFG>(ts);
+							avfg->fields.push_back(temp); //clone?
+						}
+						else{
+							std::shared_ptr<VarFieldVFG> temp = std::static_pointer_cast<VarFieldVFG>(result);
+							avfg->fields.push_back(temp); //clone?
+						}
 						pop_FILO(extract_index, index_num);
 						//visited_set->erase(node_record);
 						return result;
@@ -1253,31 +1253,6 @@ std::shared_ptr<ExprVFG> findAndParse(const VFGNode* node, const SVFG *svfg, AVF
 				return result;
 		}
 	}
-	// for (auto it = node->OutEdgeBegin(), eit = node->OutEdgeEnd(); it != eit; ++it) {
-	// 	auto a_edge = *it;
-	// 	auto succ_node = a_edge->getDstNode();
-	// 	if (SVF::ActualParmVFGNode::classof(succ_node) || SVF::FormalParmVFGNode::classof(succ_node)){
-	// 		bool push_flag = false;
-	// 		if(SVF::CallDirSVFGEdge::classof(a_edge)){
-	// 			const CallDirSVFGEdge *ret_edge = static_cast<const CallDirSVFGEdge*>(a_edge);
-	// 			call_stack->push(ret_edge->getCallSiteId());
-	// 			push_flag = true;
-	// 		}
-	// 		if(SVF::CallIndSVFGEdge::classof(a_edge)){
-	// 			const CallIndSVFGEdge *ret_edge = static_cast<const CallIndSVFGEdge*>(a_edge);
-	// 			call_stack->push(ret_edge->getCallSiteId());
-	// 			push_flag = true;
-	// 		}
-
-	// 		auto result = findAndParse(succ_node, svfg, avfg, extract_index, call_stack, depth, error_flag, visited_set);
-
-	// 		if(push_flag)
-	// 			call_stack->pop();
-	// 		if(result->getKind() != ExprTypes::expr_none){
-	// 			return result;
-	// 		}
-	// 	}
-	// }
 	return make_shared<NoneVFG>();
 }
 

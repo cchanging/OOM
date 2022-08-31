@@ -5,42 +5,42 @@
 CalRetPairInCycle   117
 MaxNodeInCycle      57
 NodeInCycle         69
-TotalEdge           21504
+TotalEdge           21488
 TotalCycle          11
-TotalNode           7310
+TotalNode           7297
 #######################################################
 
 *********General Stats***************
 ################ (program : home/cj/data/cj/rCore-Tutorial-v3/os/withmain)###############
-BBWith3Succ         1516
-BBWith2Succ         2797
-StoresNum           47352
-FSObjNum            38664
-AddrsNum            42597
-TotalFieldObjects   12424
-GepsNum             38043
+BBWith3Succ         1514
+BBWith2Succ         2800
+StoresNum           47305
+FSObjNum            38624
+AddrsNum            42556
+TotalFieldObjects   12397
+GepsNum             38050
 LocalVarInRecur     285
-FIObjNum            1542
-LoadsNum            24560
+FIObjNum            1539
+LoadsNum            24524
 MaxStructSize       42
-TotalSVFStmts       262651
-TotalPointers       274257
-ReturnsNum          9674
-VarArrayObj         219
-CopysNum            37200
+TotalSVFStmts       262407
+TotalPointers       274063
+ReturnsNum          9652
+VarArrayObj         221
+CopysNum            37206
 ConstArrayObj       0
-CallsNum            23288
-TotalObjects        40207
-FunctionObjs        7310
-TotalPTASVFStmts    168100
-GlobalObjs          1378
+CallsNum            23239
+TotalObjects        40164
+FunctionObjs        7297
+TotalPTASVFStmts    167905
+GlobalObjs          1390
 HeapObjs            0
-StackObjs           31517
-ConstStructObj      1368
-BitCastNumber       17672
-VarStructObj        9554
-TotalCallSite       21552
-NonPtrObj           19404
+StackObjs           31475
+ConstStructObj      1377
+BitCastNumber       17650
+VarStructObj        9555
+TotalCallSite       21536
+NonPtrObj           19385
 IndCallSites        48
 -------------------------------------------------------
 #######################################################
@@ -48,113 +48,113 @@ IndCallSites        48
 *********Constraint Graph Stats***************
 ################ (program : home/cj/data/cj/rCore-Tutorial-v3/os/withmain)###############
 -------------------------------------------------------
-AvgIn/OutEdge       1.13508
+AvgIn/OutEdge       1.1348
 AvgIn/OutAddrEdge   0.237026
-AvgIn/OutLoadEdge   0.0847907
-AvgIn/OutCopyEdge   0.646556
+AvgIn/OutLoadEdge   0.0846651
+AvgIn/OutCopyEdge   0.646461
 MaxInAddrEdge       1
-MaxOutStoreEdge     527
-NumOfCGNode         353801
-TotalValidNode      175196
+MaxOutStoreEdge     525
+NumOfCGNode         353480
+TotalValidNode      175019
 AvgIn/OutStoreEdge  0
-TotalValidObjNode   44445
-NumOfGeps           37986
-NumOfCGEdge         157335
-NumOfAddrs          41526
+TotalValidObjNode   44387
+NumOfGeps           37993
+NumOfCGEdge         157128
+NumOfAddrs          41484
 MaxOutAddrEdge      1780
-NumOfLoads          14855
-NumOfStores         29206
+NumOfLoads          14818
+NumOfStores         29167
 MaxOutLoadEdge      7
-NumOfCopys          75288
+NumOfCopys          75150
 MaxOutCopyEdge      2857
-MaxInStoreEdge      3
-MaxInLoadEdge       274
-MaxInCopyEdge       342
+MaxInStoreEdge      4
+MaxInLoadEdge       272
+MaxInCopyEdge       339
 #######################################################
 
 *********Andersen Pointer Analysis Stats***************
 ################ (program : home/cj/data/cj/rCore-Tutorial-v3/os/withmain)###############
 -------------------------------------------------------
-AvgTopLvlPtsSize    2.28624
-AvgPtsSetSize       1.09267
+AvgTopLvlPtsSize    2.28348
+AvgPtsSetSize       1.09065
 LoadStoreTime       0
 CollapseTime        0
 UpdateCGTime        0
 CopyGepTime         0
 SCCMergeTime        0
 SCCDetectTime       0
-TotalTime           2.322
+TotalTime           2.638
 NullPointer         1569
-NumOfSCCDetect      6
+NumOfSCCDetect      7
 IndCallSites        48
 MaxPtsSetSize       103
 PointsToBlkPtr      0
-DYFieldObjs         12424
-PointsToConstPtr    481
-MemObjects          40207
-Pointers            270299
+DYFieldObjs         12397
+PointsToConstPtr    482
+MemObjects          40164
+Pointers            270096
 NumOfFieldExpand    0
-DYFieldPtrs         3958
+DYFieldPtrs         3967
 NumOfSFRs           0
 TotalCycleNum       60
 IndEdgeSolved       0
-GepProcessed        37993
+GepProcessed        38513
 MaxNodesInSCC       76
-LoadProcessed       15608
-CopyProcessed       56548
+LoadProcessed       15619
+CopyProcessed       60005
 NodesInCycles       933
-Iterations          6
-StoreProcessed      39948
-AddrProcessed       41985
-TotalObjects        52631
+Iterations          7
+StoreProcessed      39911
+AddrProcessed       41942
+TotalObjects        52561
 TotalPWCCycleNum    0
-TotalPointers       274257
+TotalPointers       274063
 #######################################################
 ****Persistent Points-To Cache Statistics: bv-finalize****
-UniquePointsToSets       54943
-TotalUnions              145247
-PropertyUnions           122172
-UniqueUnions             3119
-LookupUnions             13952
-PreemptiveUnions         6004
-TotalComplements         2114092
-PropertyComplements      2101696
-UniqueComplements        302
-LookupComplements        11792
-PreemptiveComplements    302
-TotalIntersections       45915
-PropertyIntersections    45305
-UniqueIntersections      5
+UniquePointsToSets       54889
+TotalUnions              149198
+PropertyUnions           122111
+UniqueUnions             3132
+LookupUnions             17926
+PreemptiveUnions         6029
+TotalComplements         2466163
+PropertyComplements      2450069
+UniqueComplements        344
+LookupComplements        15406
+PreemptiveComplements    344
+TotalIntersections       45903
+PropertyIntersections    45211
+UniqueIntersections      4
 LookupIntersections      0
-PreemptiveIntersections  605
+PreemptiveIntersections  688
 
 ****Memory SSA Statistics****
 
 ************************
 ################ (program : home/cj/data/cj/rCore-Tutorial-v3/os/withmain)###############
 -------------------------------------------------------
-AverageRegSize      1.39422
-SSARenameTime       0.083
-InsertPHITime       0.024
-GenMUCHITime        0.397
-GenRegionTime       0.89
-TotalMSSATime       1.58
-BBHasMSSAPhi        2580
-StoreHasChi         45708
-MaxRegSize          124
-MemRegions          42849
-FunHasRetMu         7158
-FunEntryChi         49726
-StoreChiNode        44974
-LoadMuNode          23158
-MSSAPhi             23310
-LoadHasMu           24560
-CSChiNode           7742
-CSMuNode            16152
-CSHasChi            3462
-FunRetMu            49533
-FunHasEntryChi      7108
-CSHasMu             6371
+AverageRegSize      1.38843
+SSARenameTime       0.086
+InsertPHITime       0.023
+GenMUCHITime        0.373
+GenRegionTime       0.883
+TotalMSSATime       1.567
+BBHasMSSAPhi        2572
+StoreHasChi         45650
+MaxRegSize          123
+MemRegions          42793
+FunHasRetMu         7145
+FunEntryChi         49656
+StoreChiNode        44916
+LoadMuNode          23122
+MSSAPhi             23034
+LoadHasMu           24524
+CSChiNode           7629
+CSMuNode            15990
+CSHasChi            3456
+FunRetMu            49462
+FunHasEntryChi      7096
+CSHasMu             6351
 #######################################################
 
 ****SVFG Statistics****
@@ -162,45 +162,45 @@ CSHasMu             6371
 ************************
 ################ (program : home/cj/data/cj/rCore-Tutorial-v3/os/withmain)###############
 -------------------------------------------------------
-AvgWeight           2.60196
+AvgWeight           2.58282
 OptTime             0
-ATNodeTime          0.177
+ATNodeTime          0.179
 TLNodeTime          0
-ConnIndEdgeTime     0.231
+ConnIndEdgeTime     0.226
 ConnDirEdgeTime     0
-TotalTime           0.408
+TotalTime           0.405
 MaxIndOutDeg        256
-Gep                 38043
-Addr                42597
-IndirectEdgeLabels  561021
-ActualRet           12995
-ActualParam         47404
-FormalRet           5064
-IndCallEdge         20099
-ActualIn            16152
+Gep                 38050
+Addr                42556
+IndirectEdgeLabels  553767
+ActualRet           12990
+ActualParam         47418
+FormalRet           5050
+IndCallEdge         19927
+ActualIn            15990
 AvgIndOutDeg        1
-Store               47352
-FormalParam         12553
-Copy                37200
-DirectEdge          277320
+Store               47305
+FormalParam         12552
+Copy                37206
+DirectEdge          277116
 AvgIndInDeg         1
-MaxIndInDeg         320
-ActualOut           7742
-TotalNode           454169
-MaxOutDegree        9664
-Load                24560
-PHI                 5652
-TotalEdge           492935
-DirectRetEdge       9674
-FormalOut           49533
-MSSAPhi             23310
-IndirectEdge        215615
-IndRetEdge          10369
-DirectCallEdge      23288
+MaxIndInDeg         310
+ActualOut           7629
+TotalNode           453298
+MaxOutDegree        9678
+PHI                 5633
+TotalEdge           491520
+Load                24524
+DirectRetEdge       9652
+FormalOut           49462
+MSSAPhi             23034
+IndirectEdge        214404
+IndRetEdge          10265
+DirectCallEdge      23239
 AvgInDegree         1
 AvgOutDegree        1
-FormalIn            49726
-MaxInDegree         320
+FormalIn            49656
+MaxInDegree         310
 #######################################################
 __rust_alloc-------------------------:
 __rust_alloc:
@@ -614,10 +614,6 @@ _ZN2os7easy_fs3efs14EasyFileSystem4open28_$u7b$$u7b$closure$u7d$$u7d$17h7aaa2a14
 os::easy_fs::efs::EasyFileSystem::open::_$u7b$$u7b$closure$u7d$$u7d$::h7aaa2a1435ef2540:
 (c:88)
 
-_ZN4core3ops8function6FnOnce9call_once17h99228c4090c1ccbcE-------------------------:
-core::ops::function::FnOnce::call_once::h99228c4090c1ccbc:
-(c:32)
-
 _ZN2os2fs4pipe9make_pipe17h642c99f805cd70ffE-------------------------:
 os::fs::pipe::make_pipe::h642c99f805cd70ff:
 (((c:88)#(c:32))#(c:32))
@@ -762,10 +758,6 @@ _ZN2os7easy_fs11block_cache10BlockCache4read17hfcee2c0caaef2ce7E----------------
 os::easy_fs::block_cache::BlockCache::read::hfcee2c0caaef2ce7:
 (c:88)
 
-_ZN4spin4once13Once$LT$T$GT$9call_once17heb715b6f3785bab3E-------------------------:
-spin::once::Once$LT$T$GT$::call_once::heb715b6f3785bab3:
-(c:32)
-
 _ZN5alloc11collections5btree4node21LeafNode$LT$K$C$V$GT$3new17h169f94893023d6b9E-------------------------:
 alloc::collections::btree::node::LeafNode$LT$K$C$V$GT$::new::h169f94893023d6b9:
 (c:192)
@@ -907,8 +899,8 @@ _ZN5alloc11collections11binary_heap19BinaryHeap$LT$T$GT$4push17h87deb42a50a89eb4
 alloc::collections::binary_heap::BinaryHeap$LT$T$GT$::push::h87deb42a50a89eb4:
 ((c:16)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))
 
-_ZN86_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$9try_pusho17h0b61bd975e4fb9e7E-------------------------:
-_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$::try_pusho::h0b61bd975e4fb9e7:
+_ZN86_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$9try_push617h60749ceb665a5861E-------------------------:
+_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$::try_push6::h60749ceb665a5861:
 ((c:16)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))
 
 _ZN5alloc11collections5btree4node117NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..Leaf$GT$8new_leaf17h46a6ca9a63fbb7adE-------------------------:
@@ -1003,10 +995,6 @@ _ZN2os4task7process24ProcessControlBlockInner11dealloc_tid17h26912b8f60d97a51E--
 os::task::process::ProcessControlBlockInner::dealloc_tid::h26912b8f60d97a51:
 ((c:8)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))
 
-_ZN2os4task25exit_current_and_run_next17h6529a19ba52a317cE-------------------------:
-os::task::exit_current_and_run_next::h6529a19ba52a317c:
-(c:0)
-
 _ZN5alloc11collections9vec_deque21VecDeque$LT$T$C$A$GT$9push_back17h052f7d0c97930cbbE-------------------------:
 alloc::collections::vec_deque::VecDeque$LT$T$C$A$GT$::push_back::h052f7d0c97930cbb:
 ((c:8)*((v:*-1-arg_0-192-64)+(v:*-1-arg_0-192-64)))
@@ -1044,12 +1032,6 @@ _$LT$alloc..collections..binary_heap..BinaryHeap$LT$T$GT$$u20$as$u20$os..timer..
 ((c:16)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))
 
 _ZN2os2mm10page_table22translated_byte_buffer17h75aeb3b585e31c63E-------------------------:
-LoadVFGNode ID: 138462 LoadStmt: [Var331966 <-- Var331965]	
-   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %3, i8* align 8 %4, i64 8, i1 false) 
-Warning: overdepth20001
-LoadVFGNode ID: 138462 LoadStmt: [Var331966 <-- Var331965]	
-   call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %3, i8* align 8 %4, i64 8, i1 false) 
-Warning: overdepth20001
 os::mm::page_table::translated_byte_buffer::h75aeb3b585e31c63:
 (c:0)
 
@@ -1140,10 +1122,6 @@ virtio_dma_dealloc:
 _ZN2os4task2id11TaskUserRes11dealloc_tid17ha1383a23b7f22851E-------------------------:
 os::task::id::TaskUserRes::dealloc_tid::ha1383a23b7f22851:
 ((c:8)*(p:((v:*-1-arg_0-0-64)+(c:1))((v:*-1-arg_0-0-64)*(c:2))(c:4)))
-
-_ZN2os7syscall7process8sys_exit17h8513846c5728632dE-------------------------:
-os::syscall::process::sys_exit::h8513846c5728632d:
-(c:0)
 
 _ZN2os4task7manager11TaskManager3add17h18b888b790cde1e4E-------------------------:
 os::task::manager::TaskManager::add::h18b888b790cde1e4:
@@ -1249,28 +1227,12 @@ _ZN14virtio_drivers5queue9VirtQueue3new17h83d3665ba94d235cE---------------------
 virtio_drivers::queue::VirtQueue::new::h83d3665ba94d235c:
 (c:0)
 
-_ZN14virtio_drivers7console13VirtIOConsole3new17h8bc74a3a57e8dd2eE-------------------------:
-virtio_drivers::console::VirtIOConsole::new::h8bc74a3a57e8dd2e:
-(c:0)
-
 _ZN14virtio_drivers3gpu9VirtIOGpu3new17h30d17e19aadd2c36E-------------------------:
 virtio_drivers::gpu::VirtIOGpu::new::h30d17e19aadd2c36:
 (c:0)
 
-_ZN14virtio_drivers3gpu9VirtIOGpu17setup_framebuffer17h80db029ae6c5bec1E-------------------------:
-virtio_drivers::gpu::VirtIOGpu::setup_framebuffer::h80db029ae6c5bec1:
-(c:0)
-
-_ZN14virtio_drivers3gpu9VirtIOGpu12setup_cursor17h0366daf73b703845E-------------------------:
-virtio_drivers::gpu::VirtIOGpu::setup_cursor::h0366daf73b703845:
-(c:0)
-
 _ZN2os2mm10memory_set9MemorySet14map_trampoline17h4c1bac9910b1008fE-------------------------:
 os::mm::memory_set::MemorySet::map_trampoline::h4c1bac9910b1008f:
-(c:0)
-
-_ZN2os4task7manager8add_task17h4c5ea723bebe75dfE-------------------------:
-os::task::manager::add_task::h4c5ea723bebe75df:
 (c:0)
 
 _ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hacafb1528c7e0c68E-------------------------:
@@ -1333,26 +1295,6 @@ _ZN14virtio_drivers3net9VirtIONet3new17h581b56704d2b9172E-----------------------
 virtio_drivers::net::VirtIONet::new::h581b56704d2b9172:
 (c:0)
 
-_ZN2os5timer11check_timer17hc17cd60db65269a9E-------------------------:
-os::timer::check_timer::hc17cd60db65269a9:
-(c:0)
-
-_ZN2os4task28suspend_current_and_run_next17ha8f9408d1b7971f3E-------------------------:
-os::task::suspend_current_and_run_next::ha8f9408d1b7971f3:
-(c:0)
-
-_ZN2os4sync7condvar7Condvar6signal17h195f23af6fd8a5c3E-------------------------:
-os::sync::condvar::Condvar::signal::h195f23af6fd8a5c3:
-(c:0)
-
-_ZN73_$LT$os..sync..mutex..MutexBlocking$u20$as$u20$os..sync..mutex..Mutex$GT$6unlock17h0e4e116e9b778b86E-------------------------:
-_$LT$os..sync..mutex..MutexBlocking$u20$as$u20$os..sync..mutex..Mutex$GT$::unlock::h0e4e116e9b778b86:
-(c:0)
-
-_ZN2os4sync9semaphore9Semaphore2up17hcf7727782410dc9aE-------------------------:
-os::sync::semaphore::Semaphore::up::hcf7727782410dc9a:
-(c:0)
-
 _ZN2os4sync7condvar7Condvar13wait_no_sched17h6f951f2b654324d9E-------------------------:
 os::sync::condvar::Condvar::wait_no_sched::h6f951f2b654324d9:
 ((c:8)*((v:*-1-arg_0-0-64)+(v:*-1-arg_0-0-64)))
@@ -1367,13 +1309,13 @@ _ZN81_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..fs..inode..NewPushTable$LT$T$G
 _$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..fs..inode..NewPushTable$LT$T$GT$$GT$::try_extend_from_slice::h735ed3273a403793:
 (p:(f:*-1-arg_0-128-64-*0)((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))
 
-_ZN102_$LT$os..drivers..chardev..ns16550a..NS16550a$LT$_$GT$$u20$as$u20$os..drivers..chardev..CharDevice$GT$10handle_irq17h290508c30a4857ffE-------------------------:
-_$LT$os..drivers..chardev..ns16550a..NS16550a$LT$_$GT$$u20$as$u20$os..drivers..chardev..CharDevice$GT$::handle_irq::h290508c30a4857ff:
-(c:0)
-
 _ZN5alloc11collections5btree3mem8take_mut17hd68f693e6c99c0fdE-------------------------:
 alloc::collections::btree::mem::take_mut::hd68f693e6c99c0fd:
 (c:288)
+
+_ZN75_$LT$os..task..manager..TASK_MANAGER$u20$as$u20$core..ops..deref..Deref$GT$5deref17h1fcecd25d4623820E-------------------------:
+_$LT$os..task..manager..TASK_MANAGER$u20$as$u20$core..ops..deref..Deref$GT$::deref::h1fcecd25d4623820:
+(c:64)
 
 _ZN5alloc3str56_$LT$impl$u20$alloc..borrow..ToOwned$u20$for$u20$str$GT$8to_owned17h5e301b8319fe6884E-------------------------:
 alloc::str::_$LT$impl$u20$alloc..borrow..ToOwned$u20$for$u20$str$GT$::to_owned::h5e301b8319fe6884:
@@ -1383,6 +1325,10 @@ _ZN5alloc11collections5btree3mem8take_mut17hac30799fea3bf3baE-------------------
 alloc::collections::btree::mem::take_mut::hac30799fea3bf3ba:
 (c:288)
 
+_ZN89_$LT$os..easy_fs..block_cache..BLOCK_CACHE_MANAGER$u20$as$u20$core..ops..deref..Deref$GT$5deref17hb096bc8161d8426fE-------------------------:
+_$LT$os..easy_fs..block_cache..BLOCK_CACHE_MANAGER$u20$as$u20$core..ops..deref..Deref$GT$::deref::hb096bc8161d8426f:
+(c:128)
+
 _ZN5alloc11collections5btree3mem8take_mut17h0a6688d4c2434990E-------------------------:
 alloc::collections::btree::mem::take_mut::h0a6688d4c2434990:
 (c:576)
@@ -1391,58 +1337,21 @@ _ZN5alloc11collections5btree4node127NodeRef$LT$alloc..collections..btree..node..
 alloc::collections::btree::node::NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..LeafOrInternal$GT$::push_internal_level::h04976150401cc1aa:
 (c:200)
 
-_ZN2os7syscall7process9sys_yield17h94b58eb66378f994E-------------------------:
-os::syscall::process::sys_yield::h94b58eb66378f994:
-(c:0)
-
-_ZN69_$LT$os..sync..mutex..MutexSpin$u20$as$u20$os..sync..mutex..Mutex$GT$4lock17h164348f6ed1895a6E-------------------------:
-_$LT$os..sync..mutex..MutexSpin$u20$as$u20$os..sync..mutex..Mutex$GT$::lock::h164348f6ed1895a6:
-(c:0)
-
-_ZN51_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$4read17h4cbba5671c89c7d0E-------------------------:
-_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$::read::h4cbba5671c89c7d0:
-(c:0)
-
-_ZN51_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$5write17h6b1cbae90532fd23E-------------------------:
-_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$::write::h6b1cbae90532fd23:
-(c:0)
-
-_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10handle_irq28_$u7b$$u7b$closure$u7d$$u7d$17hf28efee701d52698E-------------------------:
-_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::handle_irq::_$u7b$$u7b$closure$u7d$$u7d$::hf28efee701d52698:
-(c:0)
-
-_ZN2os7syscall4sync18sys_condvar_signal17h944771b12904b1dfE-------------------------:
-os::syscall::sync::sys_condvar_signal::h944771b12904b1df:
-(c:0)
-
-_ZN2os7syscall4sync16sys_semaphore_up17h0755b880e4b0bc43E-------------------------:
-os::syscall::sync::sys_semaphore_up::h0755b880e4b0bc43:
-(c:0)
-
 _ZN102_$LT$os..drivers..chardev..ns16550a..NS16550a$LT$_$GT$$u20$as$u20$os..drivers..chardev..CharDevice$GT$4read17h0f3ab122576c8cadE-------------------------:
 _$LT$os..drivers..chardev..ns16550a..NS16550a$LT$_$GT$$u20$as$u20$os..drivers..chardev..CharDevice$GT$::read::h0f3ab122576c8cad:
-(c:0)
-
-_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$11write_block28_$u7b$$u7b$closure$u7d$$u7d$17h4ebfa2c175d2aa66E-------------------------:
-_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::write_block::_$u7b$$u7b$closure$u7d$$u7d$::h4ebfa2c175d2aa66:
-(c:0)
-
-_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10read_block28_$u7b$$u7b$closure$u7d$$u7d$17hc206bcd7cb507c14E-------------------------:
-_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::read_block::_$u7b$$u7b$closure$u7d$$u7d$::hc206bcd7cb507c14:
 (c:0)
 
 _ZN2os7syscall4sync16sys_condvar_wait17hc1470ab6652d722bE-------------------------:
 os::syscall::sync::sys_condvar_wait::hc1470ab6652d722b:
 ((c:8)*((v:*-1-arg_2-0-64)+(v:*-1-arg_2-0-64)))
 
-_ZN2os5board11irq_handler17h22651d751183f2aaE-------------------------:
-key:src/boards/qemu_40_14
-os::board::irq_handler::h22651d751183f2aa:
-(c:0)
-
 _ZN5alloc11collections5btree4node127NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..LeafOrInternal$GT$19push_internal_level17h4919fcc0fa97d3bfE-------------------------:
 alloc::collections::btree::node::NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..LeafOrInternal$GT$::push_internal_level::h4919fcc0fa97d3bf:
 (c:288)
+
+_ZN2os4task7manager10fetch_task17hd4738f6a56f78bf8E-------------------------:
+os::task::manager::fetch_task::hd4738f6a56f78bf8:
+(c:64)
 
 _ZN76_$LT$alloc..string..String$u20$as$u20$core..convert..From$LT$$RF$str$GT$$GT$4from17h11d85eb5357fde6cE-------------------------:
 _$LT$alloc..string..String$u20$as$u20$core..convert..From$LT$$RF$str$GT$$GT$::from::h11d85eb5357fde6c:
@@ -1452,41 +1361,17 @@ _ZN5alloc11collections5btree4node127NodeRef$LT$alloc..collections..btree..node..
 alloc::collections::btree::node::NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..LeafOrInternal$GT$::push_internal_level::h93aeace1639d687d:
 (c:288)
 
+_ZN2os7easy_fs11block_cache20block_cache_sync_all17haa805ebfdd70239bE-------------------------:
+os::easy_fs::block_cache::block_cache_sync_all::haa805ebfdd70239b:
+(c:128)
+
 _ZN5alloc11collections5btree4node127NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..LeafOrInternal$GT$19push_internal_level17h6f57cc426839453eE-------------------------:
 alloc::collections::btree::node::NodeRef$LT$alloc..collections..btree..node..marker..Owned$C$K$C$V$C$alloc..collections..btree..node..marker..LeafOrInternal$GT$::push_internal_level::h6f57cc426839453e:
 (c:576)
 
-_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hc4459ecc09853229E-------------------------:
-os::sync::up::UPIntrFreeCell$LT$T$GT$::exclusive_session::hc4459ecc09853229:
+_ZN2os4task9processor9run_tasks17hdfb9b2153535f12eE-------------------------:
+os::task::processor::run_tasks::hdfb9b2153535f12e:
 (c:0)
-
-_ZN53_$LT$os..fs..stdio..Stdin$u20$as$u20$os..fs..File$GT$4read17h69eebb2f475c4e28E-------------------------:
-_$LT$os..fs..stdio..Stdin$u20$as$u20$os..fs..File$GT$::read::h69eebb2f475c4e28:
-(c:0)
-
-_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hd70547cc10b34973E-------------------------:
-os::sync::up::UPIntrFreeCell$LT$T$GT$::exclusive_session::hd70547cc10b34973:
-(c:0)
-
-_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hbd38295550d19275E-------------------------:
-os::sync::up::UPIntrFreeCell$LT$T$GT$::exclusive_session::hbd38295550d19275:
-(c:0)
-
-_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10handle_irq17hb7d6d53317aa9301E-------------------------:
-_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::handle_irq::hb7d6d53317aa9301:
-(c:0)
-
-_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$11write_block17h34caeb32ccc38c49E-------------------------:
-_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::write_block::h34caeb32ccc38c49:
-(c:0)
-
-_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10read_block17h7f3a1941328f2a68E-------------------------:
-_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::read_block::h7f3a1941328f2a68:
-(c:0)
-
-_ZN14virtio_drivers5input11VirtIOInput3new17h33d1da9fdb65410eE-------------------------:
-virtio_drivers::input::VirtIOInput::new::h33d1da9fdb65410e:
-(c:256)
 
 _ZN4core3ops8function6FnOnce9call_once17h963160e337a134b7E-------------------------:
 core::ops::function::FnOnce::call_once::h963160e337a134b7:
@@ -1514,7 +1399,7 @@ spin::once::Once$LT$T$GT$::call_once::h29175c528d88b800:
 
 _ZN2os7easy_fs11block_cache15get_block_cache17ha81948135c85788bE-------------------------:
 os::easy_fs::block_cache::get_block_cache::ha81948135c85788b:
-(c:0)
+(c:128)
 
 _ZN2os7syscall2fs8sys_pipe17ha034dd8e813aae88E-------------------------:
 os::syscall::fs::sys_pipe::ha034dd8e813aae88:
@@ -1523,6 +1408,10 @@ os::syscall::fs::sys_pipe::ha034dd8e813aae88:
 _ZN5alloc6string6String4push17h6ec9a6426185b691E-------------------------:
 alloc::string::String::push::h6ec9a6426185b691:
 ((p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))#(p:(f:*-1-arg_0-128-64-*0)((f:*-1-arg_0-64-64-*0)*(c:2))(c:8)))
+
+_ZN70_$LT$os..drivers..chardev..UART$u20$as$u20$core..ops..deref..Deref$GT$5deref17h7ee916232d7a7852E-------------------------:
+_$LT$os..drivers..chardev..UART$u20$as$u20$core..ops..deref..Deref$GT$::deref::h7ee916232d7a7852:
+((c:8)#(c:104))
 
 _ZN2os7easy_fs6layout9DiskInode12get_block_id17h697d709966d162b5E-------------------------:
 os::easy_fs::layout::DiskInode::get_block_id::h697d709966d162b5:
@@ -1560,6 +1449,14 @@ _ZN66_$LT$alloc..string..String$u20$as$u20$os..mm..page_table..NewS$GT$9try_push
 _$LT$alloc..string..String$u20$as$u20$os..mm..page_table..NewS$GT$::try_pushs::hbef31454566a9a4a:
 ((p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))#(p:(f:*-1-arg_0-128-64-*0)((f:*-1-arg_0-64-64-*0)*(c:2))(c:8)))
 
+_ZN56_$LT$os..console..Stdout$u20$as$u20$core..fmt..Write$GT$9write_str17h494b178a42505a17E-------------------------:
+_$LT$os..console..Stdout$u20$as$u20$core..fmt..Write$GT$::write_str::h494b178a42505a17:
+(c:0)
+
+_ZN53_$LT$os..fs..stdio..Stdin$u20$as$u20$os..fs..File$GT$4read17h69eebb2f475c4e28E-------------------------:
+_$LT$os..fs..stdio..Stdin$u20$as$u20$os..fs..File$GT$::read::h69eebb2f475c4e28:
+((c:8)#(c:104))
+
 _ZN2os7easy_fs11block_cache10BlockCache6modify17hf4458adf9c96addcE-------------------------:
 os::easy_fs::block_cache::BlockCache::modify::hf4458adf9c96addc:
 (c:0)
@@ -1596,6 +1493,14 @@ _ZN2os2mm10page_table14translated_str17h7e7bf80dea827310E-----------------------
 os::mm::page_table::translated_str::h7e7bf80dea827310:
 (c:0)
 
+_ZN50_$LT$$RF$mut$u20$W$u20$as$u20$core..fmt..Write$GT$9write_str17h10f373ec9a8f8558E-------------------------:
+_$LT$$RF$mut$u20$W$u20$as$u20$core..fmt..Write$GT$::write_str::h10f373ec9a8f8558:
+(c:0)
+
+_ZN4core3fmt5Write10write_char17hacc101fe8efa1d83E-------------------------:
+core::fmt::Write::write_char::hacc101fe8efa1d83:
+(c:0)
+
 _ZN5alloc11collections5btree3map21BTreeMap$LT$K$C$V$GT$6insert17hde6e30b5900ea77dE-------------------------:
 alloc::collections::btree::map::BTreeMap$LT$K$C$V$GT$::insert::hde6e30b5900ea77d:
 ((c:192)#(c:288))
@@ -1612,9 +1517,17 @@ _ZN5alloc11collections5btree3set17BTreeSet$LT$T$GT$6insert17hd2f2fa180ee5e7d2E--
 alloc::collections::btree::set::BTreeSet$LT$T$GT$::insert::hd2f2fa180ee5e7d2:
 ((c:104)#(c:200))
 
-_ZN2os2mm10memory_set7MapArea7map_one17h8282ad46cf423a20E-------------------------:
-os::mm::memory_set::MapArea::map_one::h8282ad46cf423a20:
+_ZN2os2mm10memory_set7MapArea7map_one17h7b5a2748ad23d618E-------------------------:
+os::mm::memory_set::MapArea::map_one::h7b5a2748ad23d618:
 ((c:192)#(c:288))
+
+_ZN2os4task7manager8add_task17h4c5ea723bebe75dfE-------------------------:
+os::task::manager::add_task::h4c5ea723bebe75df:
+(c:64)
+
+_ZN50_$LT$$RF$mut$u20$W$u20$as$u20$core..fmt..Write$GT$10write_char17h59313747c7b9a5d5E-------------------------:
+_$LT$$RF$mut$u20$W$u20$as$u20$core..fmt..Write$GT$::write_char::h59313747c7b9a5d5:
+(c:0)
 
 _ZN2os4task7manager23insert_into_pid2process17hfe38e4419ee97af0E-------------------------:
 os::task::manager::insert_into_pid2process::hfe38e4419ee97af0:
@@ -1636,25 +1549,73 @@ _ZN22buddy_system_allocator5frame14FrameAllocator7dealloc17h0b3b3eca46200ed0E---
 buddy_system_allocator::frame::FrameAllocator::dealloc::h0b3b3eca46200ed0:
 ((c:104)#(c:200))
 
-_ZN2os2mm10memory_set7MapArea3map17h0bfaed24d6f55740E-------------------------:
-os::mm::memory_set::MapArea::map::h0bfaed24d6f55740:
+_ZN2os2mm10memory_set7MapArea3map17h1cbf43dad44f777cE-------------------------:
+os::mm::memory_set::MapArea::map::h1cbf43dad44f777c:
 (c:0)
+
+_ZN2os5timer11check_timer17hc17cd60db65269a9E-------------------------:
+os::timer::check_timer::hc17cd60db65269a9:
+(c:0)
+
+_ZN2os4task28suspend_current_and_run_next17ha8f9408d1b7971f3E-------------------------:
+os::task::suspend_current_and_run_next::ha8f9408d1b7971f3:
+(c:64)
+
+_ZN2os4sync7condvar7Condvar6signal17h195f23af6fd8a5c3E-------------------------:
+os::sync::condvar::Condvar::signal::h195f23af6fd8a5c3:
+(c:64)
+
+_ZN73_$LT$os..sync..mutex..MutexBlocking$u20$as$u20$os..sync..mutex..Mutex$GT$6unlock17h0e4e116e9b778b86E-------------------------:
+_$LT$os..sync..mutex..MutexBlocking$u20$as$u20$os..sync..mutex..Mutex$GT$::unlock::h0e4e116e9b778b86:
+(c:64)
+
+_ZN2os4sync9semaphore9Semaphore2up17hcf7727782410dc9aE-------------------------:
+os::sync::semaphore::Semaphore::up::hcf7727782410dc9a:
+(c:64)
+
+_ZN102_$LT$os..drivers..chardev..ns16550a..NS16550a$LT$_$GT$$u20$as$u20$os..drivers..chardev..CharDevice$GT$10handle_irq17h290508c30a4857ffE-------------------------:
+_$LT$os..drivers..chardev..ns16550a..NS16550a$LT$_$GT$$u20$as$u20$os..drivers..chardev..CharDevice$GT$::handle_irq::h290508c30a4857ff:
+(c:64)
 
 _ZN22buddy_system_allocator5frame14FrameAllocator6insert17h459942ffbb6ec143E-------------------------:
 buddy_system_allocator::frame::FrameAllocator::insert::h459942ffbb6ec143:
 (c:0)
 
-trap_from_kernel-------------------------:
-trap_from_kernel:
+_ZN2os7syscall7process9sys_yield17h94b58eb66378f994E-------------------------:
+os::syscall::process::sys_yield::h94b58eb66378f994:
+(c:64)
+
+_ZN69_$LT$os..sync..mutex..MutexSpin$u20$as$u20$os..sync..mutex..Mutex$GT$4lock17h164348f6ed1895a6E-------------------------:
+_$LT$os..sync..mutex..MutexSpin$u20$as$u20$os..sync..mutex..Mutex$GT$::lock::h164348f6ed1895a6:
 (c:0)
 
-_ZN4core3ops8function6FnOnce9call_once17h61db270b3251c4d6E-------------------------:
-core::ops::function::FnOnce::call_once::h61db270b3251c4d6:
-((c:88)#(c:56))
+_ZN51_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$4read17h4cbba5671c89c7d0E-------------------------:
+_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$::read::h4cbba5671c89c7d0:
+(c:0)
 
-_ZN4spin4once13Once$LT$T$GT$9call_once17h74e8532cd2d1bd5aE-------------------------:
-spin::once::Once$LT$T$GT$::call_once::h74e8532cd2d1bd5a:
-((c:88)#(c:56))
+_ZN51_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$5write17h6b1cbae90532fd23E-------------------------:
+_$LT$os..fs..pipe..Pipe$u20$as$u20$os..fs..File$GT$::write::h6b1cbae90532fd23:
+(c:0)
+
+_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10handle_irq28_$u7b$$u7b$closure$u7d$$u7d$17hf28efee701d52698E-------------------------:
+_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::handle_irq::_$u7b$$u7b$closure$u7d$$u7d$::hf28efee701d52698:
+(c:0)
+
+_ZN2os7syscall4sync18sys_condvar_signal17h944771b12904b1dfE-------------------------:
+os::syscall::sync::sys_condvar_signal::h944771b12904b1df:
+(c:64)
+
+_ZN2os7syscall4sync16sys_semaphore_up17h0755b880e4b0bc43E-------------------------:
+os::syscall::sync::sys_semaphore_up::h0755b880e4b0bc43:
+(c:64)
+
+_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hc4459ecc09853229E-------------------------:
+os::sync::up::UPIntrFreeCell$LT$T$GT$::exclusive_session::hc4459ecc09853229:
+(c:0)
+
+_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10handle_irq17hb7d6d53317aa9301E-------------------------:
+_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::handle_irq::hb7d6d53317aa9301:
+(c:0)
 
 _ZN2os7easy_fs6layout9DiskInode7read_at17hfd036749f7bb744cE-------------------------:
 os::easy_fs::layout::DiskInode::read_at::hfd036749f7bb744c:
@@ -1728,10 +1689,6 @@ _ZN2os7drivers5block10virtio_blk11VirtIOBlock3new17h140273ddda12821eE-----------
 os::drivers::block::virtio_blk::VirtIOBlock::new::h140273ddda12821e:
 (c:0)
 
-_ZN2os4task2id12kstack_alloc17hdc6e476b249b09d7E-------------------------:
-os::task::id::kstack_alloc::hdc6e476b249b09d7:
-(c:0)
-
 _ZN2os4task2id11TaskUserRes14alloc_user_res17ha8a39ba1106c184fE-------------------------:
 os::task::id::TaskUserRes::alloc_user_res::ha8a39ba1106c184f:
 (c:0)
@@ -1756,12 +1713,12 @@ _ZN2os2mm10memory_set9MemorySet10new_kernel17h01eef272d3bbde2eE-----------------
 os::mm::memory_set::MemorySet::new_kernel::h01eef272d3bbde2e:
 (c:8)
 
-_ZN2os2mm10memory_set9MemorySet8from_elf17ha666aeff042db648E-------------------------:
-os::mm::memory_set::MemorySet::from_elf::ha666aeff042db648:
+_ZN2os2mm10memory_set9MemorySet8from_elf17h810ee3df59661e94E-------------------------:
+os::mm::memory_set::MemorySet::from_elf::h810ee3df59661e94:
 (c:8)
 
-_ZN2os2mm10memory_set9MemorySet17from_existed_user17h9539311b0f92a9fdE-------------------------:
-os::mm::memory_set::MemorySet::from_existed_user::h9539311b0f92a9fd:
+_ZN2os2mm10memory_set9MemorySet17from_existed_user17hbc7088fb50becd4bE-------------------------:
+os::mm::memory_set::MemorySet::from_existed_user::hbc7088fb50becd4b:
 (c:8)
 
 _ZN4spin4once13Once$LT$T$GT$9call_once17hc121b0348b466036E-------------------------:
@@ -1769,16 +1726,12 @@ spin::once::Once$LT$T$GT$::call_once::hc121b0348b466036:
 (c:120)
 
 _ZN2os7easy_fs3vfs5Inode2ls28_$u7b$$u7b$closure$u7d$$u7d$17he64172a8a77c20abE-------------------------:
-ActualOUTSVFGNode ID: 446882 at callsite:   call void @"_ZN5alloc3vec16Vec$LT$T$C$A$GT$4push17h143af288cf2bb546E"(%"alloc::vec::Vec<mm::frame_allocator::FrameTracker>"* align 8 %v, %"alloc::string::String"* %_44) #14, !dbg !6206 {fun: _ZN2os7easy_fs3vfs5Inode2ls28_$u7b$$u7b$closure$u7d$$u7d$17he64172a8a77c20abE}12312V_4 = CSCHI(MR_12312V_4)
-pts{235315 350409 350410 }
+ActualOUTSVFGNode ID: 446125 at callsite:   call void @"_ZN5alloc3vec16Vec$LT$T$C$A$GT$4push17h143af288cf2bb546E"(%"alloc::vec::Vec<mm::frame_allocator::FrameTracker>"* align 8 %v, %"alloc::string::String"* %_44) #14, !dbg !6145 {fun: _ZN2os7easy_fs3vfs5Inode2ls28_$u7b$$u7b$closure$u7d$$u7d$17he64172a8a77c20abE}12483V_4 = CSCHI(MR_12483V_4)
+pts{234680 347429 347430 }
 CS[{ ln: 169  cl: 17  fl: src/easy_fs/vfs.rs }]
 Warning: overdepth20001
 os::easy_fs::vfs::Inode::ls::_$u7b$$u7b$closure$u7d$$u7d$::he64172a8a77c20ab:
 (c:0)
-
-_ZN2os4task7process19ProcessControlBlock4exec17hc275cd4ddb7e0d03E-------------------------:
-os::task::process::ProcessControlBlock::exec::hc275cd4ddb7e0d03:
-(c:8)
 
 _ZN2os7easy_fs3vfs5Inode15read_disk_inode17hc585548d75a33839E-------------------------:
 os::easy_fs::vfs::Inode::read_disk_inode::hc585548d75a33839:
@@ -1804,9 +1757,18 @@ _ZN2os7easy_fs3vfs5Inode4find28_$u7b$$u7b$closure$u7d$$u7d$17hbacc2b7938fc99f4E-
 os::easy_fs::vfs::Inode::find::_$u7b$$u7b$closure$u7d$$u7d$::hbacc2b7938fc99f4:
 (c:56)
 
+_ZN76_$LT$os..drivers..block..BLOCK_DEVICE$u20$as$u20$core..ops..deref..Deref$GT$5deref17hf1010d42a0796d72E-------------------------:
+_$LT$os..drivers..block..BLOCK_DEVICE$u20$as$u20$core..ops..deref..Deref$GT$::deref::hf1010d42a0796d72:
+(c:120)
+
 _ZN2os7easy_fs11block_cache10BlockCache4read17hcb21f7ccb7ffece0E-------------------------:
 os::easy_fs::block_cache::BlockCache::read::hcb21f7ccb7ffece0:
 (c:0)
+
+_ZN2os5board11irq_handler17h22651d751183f2aaE-------------------------:
+key:src/boards/qemu_40_14
+os::board::irq_handler::h22651d751183f2aa:
+((((c:8)#(c:104))#(c:64))#(c:120))
 
 _ZN2os7easy_fs3vfs5Inode7read_at17h1f3b366c8d29f7acE-------------------------:
 os::easy_fs::vfs::Inode::read_at::h1f3b366c8d29f7ac:
@@ -1814,15 +1776,19 @@ os::easy_fs::vfs::Inode::read_at::h1f3b366c8d29f7ac:
 
 _ZN2os7easy_fs3vfs5Inode5clear17h4c7a1dd2f877613eE-------------------------:
 os::easy_fs::vfs::Inode::clear::h4c7a1dd2f877613e:
-(c:0)
+(c:128)
 
 _ZN2os7easy_fs3vfs5Inode8write_at17hf478b54f9e0ccb9aE-------------------------:
 os::easy_fs::vfs::Inode::write_at::hf478b54f9e0ccb9a:
-(c:0)
+(c:128)
 
 _ZN2os7easy_fs11block_cache10BlockCache4read17h16f157c7d7ac2693E-------------------------:
 os::easy_fs::block_cache::BlockCache::read::h16f157c7d7ac2693:
 (c:56)
+
+trap_from_kernel-------------------------:
+trap_from_kernel:
+((((c:8)#(c:104))#(c:64))#(c:120))
 
 _ZN2os2fs5inode7OSInode8read_all17h3b1a85a3251eec26E-------------------------:
 os::fs::inode::OSInode::read_all::h3b1a85a3251eec26:
@@ -1836,45 +1802,41 @@ _ZN55_$LT$os..fs..inode..OSInode$u20$as$u20$os..fs..File$GT$5write17h397080a4d28
 _$LT$os..fs..inode..OSInode$u20$as$u20$os..fs..File$GT$::write::h397080a4d28ff4d0:
 (c:0)
 
-_ZN2os4task4task16TaskControlBlock3new17h5798dec48cd1fae4E-------------------------:
-os::task::task::TaskControlBlock::new::h5798dec48cd1fae4:
-(c:0)
-
-_ZN2os4task7process19ProcessControlBlock3new17hafda7ac808ac9118E-------------------------:
-os::task::process::ProcessControlBlock::new::hafda7ac808ac9118:
-((((((((c:8)#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:200))#((c:192)#(c:288)))
-
 _ZN4core3ops8function6FnOnce9call_once17h901da6822ed1808cE-------------------------:
 core::ops::function::FnOnce::call_once::h901da6822ed1808c:
 ((c:8)#(c:80))
 
-_ZN2os4task7process19ProcessControlBlock4fork17h9e3dda9000b9c7b2E-------------------------:
-os::task::process::ProcessControlBlock::fork::h9e3dda9000b9c7b2:
-((((c:8)#(c:288))#(c:200))#((c:192)#(c:288)))
-
-_ZN2os7syscall6thread17sys_thread_create17h97265675de45b386E-------------------------:
-os::syscall::thread::sys_thread_create::h97265675de45b386:
-(c:200)
-
 _ZN2os2fs5inode9open_file28_$u7b$$u7b$closure$u7d$$u7d$17hc849cba5da6bd74cE-------------------------:
 os::fs::inode::open_file::_$u7b$$u7b$closure$u7d$$u7d$::hc849cba5da6bd74c:
-(c:48)
+((c:128)#(c:48))
 
 _ZN2os7easy_fs3vfs5Inode6create17hfec9c9ed91a87d1cE-------------------------:
 os::easy_fs::vfs::Inode::create::hfec9c9ed91a87d1c:
-(c:56)
+((c:128)#(c:56))
+
+_ZN4core3ops8function6FnOnce9call_once17h61db270b3251c4d6E-------------------------:
+core::ops::function::FnOnce::call_once::h61db270b3251c4d6:
+(((c:120)#(c:88))#(c:56))
 
 _ZN4spin4once13Once$LT$T$GT$9call_once17h022195c99b60e922E-------------------------:
 spin::once::Once$LT$T$GT$::call_once::h022195c99b60e922:
 ((c:8)#(c:80))
 
-_ZN2os7syscall7process8sys_fork17hd38b5967e8c302bcE-------------------------:
-os::syscall::process::sys_fork::hd38b5967e8c302bc:
-(((((c:8)#(c:288))#(c:200))#(c:192))#(c:288))
-
 _ZN4core6option15Option$LT$T$GT$3map17h54a473fdcafafe62E-------------------------:
 core::option::Option$LT$T$GT$::map::h54a473fdcafafe62:
-(c:48)
+((c:128)#(c:48))
+
+_ZN4spin4once13Once$LT$T$GT$9call_once17h74e8532cd2d1bd5aE-------------------------:
+spin::once::Once$LT$T$GT$::call_once::h74e8532cd2d1bd5a:
+(((c:120)#(c:88))#(c:56))
+
+_ZN76_$LT$os..mm..memory_set..KERNEL_SPACE$u20$as$u20$core..ops..deref..Deref$GT$5deref17h0c37330749fcf44bE-------------------------:
+_$LT$os..mm..memory_set..KERNEL_SPACE$u20$as$u20$core..ops..deref..Deref$GT$::deref::h0c37330749fcf44b:
+((c:8)#(c:80))
+
+_ZN2os4task7process19ProcessControlBlock4exec17hc275cd4ddb7e0d03E-------------------------:
+os::task::process::ProcessControlBlock::exec::hc275cd4ddb7e0d03:
+((c:8)#((c:8)#(c:80)))
 
 _ZN2os7easy_fs3vfs5Inode15read_disk_inode17h2863d345d639e0aeE-------------------------:
 os::easy_fs::vfs::Inode::read_disk_inode::h2863d345d639e0ae:
@@ -1883,6 +1845,22 @@ os::easy_fs::vfs::Inode::read_disk_inode::h2863d345d639e0ae:
 _ZN2os7easy_fs3vfs5Inode15read_disk_inode17h2b55a17eb7e98197E-------------------------:
 os::easy_fs::vfs::Inode::read_disk_inode::h2b55a17eb7e98197:
 (c:0)
+
+_ZN69_$LT$os..fs..inode..ROOT_INODE$u20$as$u20$core..ops..deref..Deref$GT$5deref17h2cd6b6f9572e4400E-------------------------:
+_$LT$os..fs..inode..ROOT_INODE$u20$as$u20$core..ops..deref..Deref$GT$::deref::h2cd6b6f9572e4400:
+(((c:120)#(c:88))#(c:56))
+
+_ZN2os2mm10memory_set12kernel_token17hfd8b7b821e356d29E-------------------------:
+os::mm::memory_set::kernel_token::hfd8b7b821e356d29:
+((c:8)#(c:80))
+
+_ZN2os4task2id12kstack_alloc17hdc6e476b249b09d7E-------------------------:
+os::task::id::kstack_alloc::hdc6e476b249b09d7:
+((c:8)#(c:80))
+
+_ZN2os2mm4init17h750fc321845c819dE-------------------------:
+os::mm::init::h750fc321845c819d:
+((c:8)#(c:80))
 
 _ZN2os7easy_fs3vfs5Inode4find17ha6cbd5bf3576aff0E-------------------------:
 os::easy_fs::vfs::Inode::find::ha6cbd5bf3576aff0:
@@ -1894,31 +1872,227 @@ os::easy_fs::vfs::Inode::ls::h22739c8996a27b8f:
 
 _ZN2os2fs5inode9list_apps17h8ca47e5c85786e12E-------------------------:
 os::fs::inode::list_apps::h8ca47e5c85786e12:
+(((c:120)#(c:88))#(c:56))
+
+virtio_virt_to_phys-------------------------:
+virtio_virt_to_phys:
+((c:8)#(c:80))
+
+_ZN2os4task4task16TaskControlBlock3new17h5798dec48cd1fae4E-------------------------:
+os::task::task::TaskControlBlock::new::h5798dec48cd1fae4:
+((c:8)#(c:80))
+
+_ZN14virtio_drivers3hal12virt_to_phys17h6d01705a6080c11aE-------------------------:
+virtio_drivers::hal::virt_to_phys::h6d01705a6080c11a:
+((c:8)#(c:80))
+
+_ZN14virtio_drivers5queue10Descriptor7set_buf17h054ba6959a7ad65dE-------------------------:
+virtio_drivers::queue::Descriptor::set_buf::h054ba6959a7ad65d:
+((c:8)#(c:80))
+
+_ZN14virtio_drivers5queue9VirtQueue3add17h552b43050c035ff5E-------------------------:
+virtio_drivers::queue::VirtQueue::add::h552b43050c035ff5:
+(c:0)
+
+_ZN14virtio_drivers3blk9VirtIOBlk10read_block17hfd5fb80b9b289ee8E-------------------------:
+virtio_drivers::blk::VirtIOBlk::read_block::hfd5fb80b9b289ee8:
+(c:0)
+
+_ZN14virtio_drivers3blk9VirtIOBlk13read_block_nb17ha0bd56b73fc76b51E-------------------------:
+virtio_drivers::blk::VirtIOBlk::read_block_nb::ha0bd56b73fc76b51:
+(c:0)
+
+_ZN14virtio_drivers3blk9VirtIOBlk11write_block17h75d25e149eb34c77E-------------------------:
+virtio_drivers::blk::VirtIOBlk::write_block::h75d25e149eb34c77:
+(c:0)
+
+_ZN14virtio_drivers3blk9VirtIOBlk14write_block_nb17hfc9d77ee6b3e0588E-------------------------:
+virtio_drivers::blk::VirtIOBlk::write_block_nb::hfc9d77ee6b3e0588:
+(c:0)
+
+_ZN14virtio_drivers7console13VirtIOConsole13poll_retrieve17h12be94fa4ce1637bE-------------------------:
+virtio_drivers::console::VirtIOConsole::poll_retrieve::h12be94fa4ce1637b:
+(c:0)
+
+_ZN14virtio_drivers7console13VirtIOConsole4send17h4bbd32959be50a57E-------------------------:
+virtio_drivers::console::VirtIOConsole::send::h4bbd32959be50a57:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu7request17he8299daffc4b21c8E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::request::he8299daffc4b21c8:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu7request17h7e7ad55698996cceE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::request::h7e7ad55698996cce:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu7request17h7ccb43b987ec3d43E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::request::h7ccb43b987ec3d43:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu7request17hf10ec805378842fcE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::request::hf10ec805378842fc:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu7request17hf5eff17889b7ab73E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::request::hf5eff17889b7ab73:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu7request17h9ebcb7fc7bd6c704E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::request::h9ebcb7fc7bd6c704:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu14cursor_request17he230a042a67b807fE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::cursor_request::he230a042a67b807f:
+(c:0)
+
+_ZN14virtio_drivers5input11VirtIOInput17pop_pending_event17hf14b767187ef268bE-------------------------:
+virtio_drivers::input::VirtIOInput::pop_pending_event::hf14b767187ef268b:
+(c:0)
+
+_ZN14virtio_drivers3net9VirtIONet4recv17h8bf6e1d0eff11fe3E-------------------------:
+virtio_drivers::net::VirtIONet::recv::h8bf6e1d0eff11fe3:
+(c:0)
+
+_ZN14virtio_drivers3net9VirtIONet4send17hd07d024adc3ba06cE-------------------------:
+virtio_drivers::net::VirtIONet::send::hd07d024adc3ba06c:
+(c:0)
+
+_ZN14virtio_drivers7console13VirtIOConsole4recv17h7cb182f3ed3d3791E-------------------------:
+virtio_drivers::console::VirtIOConsole::recv::h7cb182f3ed3d3791:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu11set_scanout17h97db58790aff6dbfE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::set_scanout::h97db58790aff6dbf:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu23resource_attach_backing17h95d8f7999b8fc572E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::resource_attach_backing::h95d8f7999b8fc572:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu18resource_create_2d17h8d0a4832527e4b4dE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::resource_create_2d::h8d0a4832527e4b4d:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu16get_display_info17h03e202f2487944c6E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::get_display_info::h03e202f2487944c6:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu14resource_flush17h7b588efd6cb9c986E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::resource_flush::h7b588efd6cb9c986:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu19transfer_to_host_2d17h0b8a1960491aa93fE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::transfer_to_host_2d::h0b8a1960491aa93f:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu13update_cursor17h126e3c2bc78e9339E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::update_cursor::h126e3c2bc78e9339:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu5flush17h2d4fed916beea372E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::flush::h2d4fed916beea372:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu11move_cursor17h257f6f407f83b8bfE-------------------------:
+virtio_drivers::gpu::VirtIOGpu::move_cursor::h257f6f407f83b8bf:
+(c:0)
+
+_ZN2os4task7process19ProcessControlBlock3new17hafda7ac808ac9118E-------------------------:
+os::task::process::ProcessControlBlock::new::hafda7ac808ac9118:
+((((((((((((((c:8)#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:8))#(c:80))#(c:200))#(c:8))#(c:80))#(c:192))#(c:288))#(c:64))
+
+_ZN14virtio_drivers5input11VirtIOInput3new17h33d1da9fdb65410eE-------------------------:
+virtio_drivers::input::VirtIOInput::new::h33d1da9fdb65410e:
+(c:256)
+
+_ZN2os4task7process19ProcessControlBlock4fork17h1302b3423a92c409E-------------------------:
+os::task::process::ProcessControlBlock::fork::h1302b3423a92c409:
+((((((((c:8)#(c:288))#(c:8))#(c:80))#(c:200))#(c:192))#(c:288))#(c:64))
+
+_ZN2os7syscall6thread17sys_thread_create17h97265675de45b386E-------------------------:
+os::syscall::thread::sys_thread_create::h97265675de45b386:
+(((((c:8)#(c:80))#(c:200))#(c:64))#((c:8)#(c:80)))
+
+_ZN2os2fs5inode9open_file17hcf3ce84d77e9944aE-------------------------:
+os::fs::inode::open_file::hcf3ce84d77e9944a:
+((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))
+
+_ZN2os7syscall7process8sys_fork17hd38b5967e8c302bcE-------------------------:
+os::syscall::process::sys_fork::hd38b5967e8c302bc:
+((((((((c:8)#(c:288))#(c:8))#(c:80))#(c:200))#(c:192))#(c:288))#(c:64))
+
+_ZN2os7syscall2fs8sys_open17hf16da32e83ebefe1E-------------------------:
+os::syscall::fs::sys_open::hf16da32e83ebefe1:
+((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))
+
+_ZN2os7syscall7process8sys_exec17hf12abc5c91da8e68E-------------------------:
+os::syscall::process::sys_exec::hf12abc5c91da8e68:
+(((((((((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))#(c:8))#(c:8))#(c:80))#(c:8))#(c:8))#(c:80))#((c:8)#((c:8)#(c:80))))
+
+_ZN14virtio_drivers7console13VirtIOConsole3new17h8bc74a3a57e8dd2eE-------------------------:
+virtio_drivers::console::VirtIOConsole::new::h8bc74a3a57e8dd2e:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu17setup_framebuffer17h80db029ae6c5bec1E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::setup_framebuffer::h80db029ae6c5bec1:
+(c:0)
+
+_ZN14virtio_drivers3gpu9VirtIOGpu12setup_cursor17h0366daf73b703845E-------------------------:
+virtio_drivers::gpu::VirtIOGpu::setup_cursor::h0366daf73b703845:
+(c:0)
+
+_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$11write_block28_$u7b$$u7b$closure$u7d$$u7d$17h4ebfa2c175d2aa66E-------------------------:
+_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::write_block::_$u7b$$u7b$closure$u7d$$u7d$::h4ebfa2c175d2aa66:
+(c:0)
+
+_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10read_block28_$u7b$$u7b$closure$u7d$$u7d$17hc206bcd7cb507c14E-------------------------:
+_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::read_block::_$u7b$$u7b$closure$u7d$$u7d$::hc206bcd7cb507c14:
+(c:0)
+
+_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hd70547cc10b34973E-------------------------:
+os::sync::up::UPIntrFreeCell$LT$T$GT$::exclusive_session::hd70547cc10b34973:
+(c:0)
+
+_ZN2os4sync2up23UPIntrFreeCell$LT$T$GT$17exclusive_session17hbd38295550d19275E-------------------------:
+os::sync::up::UPIntrFreeCell$LT$T$GT$::exclusive_session::hbd38295550d19275:
+(c:0)
+
+_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$11write_block17h34caeb32ccc38c49E-------------------------:
+_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::write_block::h34caeb32ccc38c49:
+(c:0)
+
+_ZN99_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$10read_block17h7f3a1941328f2a68E-------------------------:
+_$LT$os..drivers..block..virtio_blk..VirtIOBlock$u20$as$u20$os..easy_fs..block_dev..BlockDevice$GT$::read_block::h7f3a1941328f2a68:
+(c:0)
+
+_ZN4core3ops8function6FnOnce9call_once17hc22b5a92a41d249aE-------------------------:
+core::ops::function::FnOnce::call_once::hc22b5a92a41d249a:
+(((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))#((((((((((((((c:8)#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:8))#(c:80))#(c:200))#(c:8))#(c:80))#(c:192))#(c:288))#(c:64)))
+
+_ZN4spin4once13Once$LT$T$GT$9call_once17hb46d784ade284c54E-------------------------:
+spin::once::Once$LT$T$GT$::call_once::hb46d784ade284c54:
+((((((((((((((((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))#(c:8))#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:8))#(c:80))#(c:200))#(c:8))#(c:80))#(c:192))#(c:288))#(c:64))
+
+_ZN62_$LT$os..task..INITPROC$u20$as$u20$core..ops..deref..Deref$GT$5deref17h642f3af3bc4b7077E-------------------------:
+_$LT$os..task..INITPROC$u20$as$u20$core..ops..deref..Deref$GT$::deref::h642f3af3bc4b7077:
+((((((((((((((((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))#(c:8))#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:8))#(c:80))#(c:200))#(c:8))#(c:80))#(c:192))#(c:288))#(c:64))
+
+_ZN2os4task25exit_current_and_run_next17h6529a19ba52a317cE-------------------------:
+os::task::exit_current_and_run_next::h6529a19ba52a317c:
+((((((((((((((((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))#(c:8))#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:8))#(c:80))#(c:200))#(c:8))#(c:80))#(c:192))#(c:288))#(c:64))
+
+_ZN2os4task12add_initproc17h425276fd4ad335d5E-------------------------:
+os::task::add_initproc::h425276fd4ad335d5:
+((((((((((((((((((((((((c:120)#(c:88))#(c:56))#(c:56))#(c:128))#(c:48))#(c:120))#(c:88))#(c:56))#(c:56))#(c:8))#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:8))#(c:80))#(c:200))#(c:8))#(c:80))#(c:192))#(c:288))#(c:64))
+
+_ZN2os7syscall7process8sys_exit17h8513846c5728632dE-------------------------:
+os::syscall::process::sys_exit::h8513846c5728632d:
 (c:0)
 
 rust_main-------------------------:
 rust_main:
 (c:0)
-
-_ZN2os2fs5inode9open_file17hcf3ce84d77e9944aE-------------------------:
-os::fs::inode::open_file::hcf3ce84d77e9944a:
-(((c:56)#(c:48))#(c:56))
-
-_ZN2os7syscall2fs8sys_open17hf16da32e83ebefe1E-------------------------:
-os::syscall::fs::sys_open::hf16da32e83ebefe1:
-(((c:56)#(c:48))#(c:56))
-
-_ZN2os7syscall7process8sys_exec17hf12abc5c91da8e68E-------------------------:
-os::syscall::process::sys_exec::hf12abc5c91da8e68:
-((((c:56)#(c:48))#(c:56))#(c:8))
-
-_ZN4core3ops8function6FnOnce9call_once17hc22b5a92a41d249aE-------------------------:
-core::ops::function::FnOnce::call_once::hc22b5a92a41d249a:
-((((c:56)#(c:48))#(c:56))#((((((((c:8)#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:200))#((c:192)#(c:288))))
-
-_ZN4spin4once13Once$LT$T$GT$9call_once17hb46d784ade284c54E-------------------------:
-spin::once::Once$LT$T$GT$::call_once::hb46d784ade284c54:
-((((((((((((c:56)#(c:48))#(c:56))#(c:8))#(c:48))#(c:16))#(c:16))#(c:16))#(c:288))#(c:200))#(c:192))#(c:288))
 
 _ZN2os7syscall7syscall17h43ae789c435bf4e3E-------------------------:
 os::syscall::syscall::h43ae789c435bf4e3:
@@ -1928,7 +2102,7 @@ trap_handler-------------------------:
 trap_handler:
 (c:0)
 
----------------------warning:_ZN2os2mm10memory_set7MapArea7map_one17h8282ad46cf423a20E
+---------------------warning:_ZN2os2mm10memory_set7MapArea7map_one17h7b5a2748ad23d618E
 
 warning for the following function:
 name:insert<os::mm::address::VirtPageNum, os::mm::frame_allocator::FrameTracker>:in_loop
@@ -1946,17 +2120,15 @@ line:921
 callsite_name:_ZN5alloc11collections5btree4node210Handle$LT$alloc..collections..btree..node..NodeRef$LT$alloc..collections..btree..node..marker..Mut$C$K$C$V$C$alloc..collections..btree..node..marker..Leaf$GT$$C$alloc..collections..btree..node..marker..Edge$GT$16insert_recursing17h22fc1c3120c3709aE
 callsite_filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/collections/btree/node.rs
 callsite_line:958
----------------------warning:_ZN2os7syscall2fs8sys_read17h3db3a56846b351b7E
+---------------------warning:_ZN2os7syscall7process8sys_exit17h8513846c5728632dE
 
 warning for the following function:
-name:try_pusho<&mut [u8]>
-filename:src/mm/page_table.rs
-line:26
-callsite_name:_ZN2os2mm10page_table22translated_byte_buffer17h75aeb3b585e31c63E
-callsite_filename:src/mm/page_table.rs
-callsite_line:178
----------------------warning:_ZN2os7syscall2fs9sys_write17hcc4aef29ee3258b1E
----------------------warning:_ZN2os7syscall7process8sys_fork17hd38b5967e8c302bcE
+name:deref:in_loop
+filename:/home/cj/.cargo/registry/src/github.com-1ecc6299db9ec823/lazy_static-1.4.0/src/lib.rs
+line:135
+callsite_name:_ZN2os4task25exit_current_and_run_next17h6529a19ba52a317cE
+callsite_filename:src/task/mod.rs
+callsite_line:88
 
 warning for the following function:
 name:insert<usize, alloc::sync::Arc<os::task::process::ProcessControlBlock>>:in_loop
@@ -1965,50 +2137,52 @@ line:921
 callsite_name:_ZN5alloc11collections5btree4node210Handle$LT$alloc..collections..btree..node..NodeRef$LT$alloc..collections..btree..node..marker..Mut$C$K$C$V$C$alloc..collections..btree..node..marker..Leaf$GT$$C$alloc..collections..btree..node..marker..Edge$GT$16insert_recursing17hd1086e5aa739b1b6E
 callsite_filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/collections/btree/node.rs
 callsite_line:958
-sum:768
-sum_error_handle:437
-sum_func:331
-oom_call:19
+---------------------warning:_ZN2os7syscall7process8sys_fork17hd38b5967e8c302bcE
+sum:1016
+sum_error_handle:583
+sum_func:433
+oom_call:27
 OOM_Function_ZN98_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..drivers..block..virtio_blk..NewPushTable$LT$T$GT$$GT$9try_pusha17he97b395300ab7da1E~((c:8)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN2os2mm10memory_set9MemorySet5push117h7602fac8db974fa1E~(c:0)|
 OOM_Function_ZN86_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..memory_set..NewPushTable$LT$T$GT$$GT$9try_push517h557c60c2d1a3b16fE~((c:48)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
-OOM_Function_ZN2os2mm10memory_set7MapArea7map_one17h8282ad46cf423a20E~(c:192)|(c:288)|
+OOM_Function_ZN2os2mm10memory_set7MapArea7map_one17h7b5a2748ad23d618E~(c:192)|(c:288)|
 OOM_Function_ZN86_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$9try_push617h3258d313886ddcaeE~((c:8)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN128_$LT$alloc..collections..btree..map..BTreeMap$LT$T$C$V$GT$$u20$as$u20$os..drivers..block..virtio_blk..NewInsert$LT$T$C$V$GT$$GT$8try_insa17h39c58ae13653b340E~(c:480)|(c:576)|
-OOM_Function_ZN66_$LT$alloc..string..String$u20$as$u20$os..mm..page_table..NewS$GT$9try_pushs17hbef31454566a9a4aE~(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))|(p:(f:*-1-arg_0-128-64-*0)((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))|
 OOM_Function_ZN105_$LT$alloc..collections..binary_heap..BinaryHeap$LT$T$GT$$u20$as$u20$os..timer..NewPushTable$LT$T$GT$$GT$9try_push417h659ceafa8c50bfd0E~((c:16)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))|
+OOM_Function_ZN86_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$9try_pusho17h60749ceb665a5861E~((c:16)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN2os4sync7condvar7Condvar3new17he42bbc57097723e6E~(c:64)|
 OOM_Function_ZN68_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..NewP$LT$T$GT$$GT$9new_push117h61ba767d04b29e3aE~((c:8)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))|
 OOM_Function_ZN68_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..NewP$LT$T$GT$$GT$9new_push217hcc99a1f01dddbae0E~((c:24)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN85_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..process..NewPushTable$LT$T$GT$$GT$9try_pushp17h78012e97d7616092E~((c:8)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))|
 OOM_Function_ZN2os4task7manager11TaskManager3add17h18b888b790cde1e4E~((c:8)*((v:*-1-arg_0-192-64)+(v:*-1-arg_0-192-64)))|
 OOM_Function_ZN81_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..fs..inode..NewPushTable$LT$T$GT$$GT$21try_extend_from_slice17h735ed3273a403793E~(p:(f:*-1-arg_0-128-64-*0)((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))|
-OOM_Function_ZN2os7easy_fs11block_cache15get_block_cache17ha81948135c85788bE~(c:0)|
+OOM_Function_ZN2os7easy_fs11block_cache15get_block_cache17ha81948135c85788bE~(c:128)|
 OOM_Function_ZN2os7easy_fs6layout9DiskInode12get_block_id17h697d709966d162b5E~(c:0)|
 OOM_Function_ZN2os7easy_fs11block_cache17BlockCacheManager16get_block_cache117h4462ba4737776caeE~(c:576)|((c:16)*((v:*-1-arg_0-192-64)+(v:*-1-arg_0-192-64)))|
 OOM_Function_ZN87_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..easy_fs..layout..NewPushTable$LT$T$GT$$GT$9try_push917ha7df5d703817096fE~((c:4)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN84_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..easy_fs..vfs..NewPushTable$LT$T$GT$$GT$9try_push817h27e571fbcca9e818E~((c:4)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN2os7syscall2fs7sys_dup17h21ed9d2cc32c6528E~(c:0)|
-OOM_Function_ZN2os7syscall2fs8sys_open17hf16da32e83ebefe1E~(c:56)|(c:48)|(c:56)|
+OOM_Function_ZN2os7syscall2fs8sys_open17hf16da32e83ebefe1E~(c:120)|(c:88)|(c:56)|(c:56)|(c:128)|(c:48)|(c:120)|(c:88)|(c:56)|(c:56)|
 OOM_Function_ZN2os7syscall2fs8sys_pipe17ha034dd8e813aae88E~(c:88)|(c:32)|(c:32)|
 OOM_Function_ZN2os7syscall2fs8sys_read17h3db3a56846b351b7E~(c:0)|
 OOM_Function_ZN2os7syscall2fs9sys_write17hcc4aef29ee3258b1E~(c:0)|
+OOM_Function_ZN2os7syscall7process8sys_exit17h8513846c5728632dE~(c:0)|
 OOM_Function_ZN2os7syscall4sync9sys_sleep17h9756641737cca25aE~(c:0)|
-OOM_Function_ZN2os7syscall7process9sys_yield17h94b58eb66378f994E~(c:0)|
-OOM_Function_ZN2os7syscall7process8sys_exec17hf12abc5c91da8e68E~(c:56)|(c:48)|(c:56)|(c:8)|
-OOM_Function_ZN2os7syscall6thread17sys_thread_create17h97265675de45b386E~(c:200)|
-OOM_Function_ZN2os7syscall4sync16sys_condvar_wait17hc1470ab6652d722bE~((c:8)*((v:*-1-arg_2-0-64)+(v:*-1-arg_2-0-64)))|
-OOM_Function_ZN2os7syscall4sync18sys_condvar_signal17h944771b12904b1dfE~(c:0)|
-OOM_Function_ZN2os7syscall4sync18sys_condvar_create17h8a9dab8bf487f631E~(c:56)|((c:8)*(p:((v:*-1-arg_1-0-64)+(c:1))((v:*-1-arg_1-0-64)*(c:2))(c:4)))|
-OOM_Function_ZN2os7syscall4sync18sys_semaphore_down17hac97e53a06da0b0aE~((c:8)*((v:*-1-arg_1-0-64)+(v:*-1-arg_1-0-64)))|
-OOM_Function_ZN2os7syscall4sync16sys_semaphore_up17h0755b880e4b0bc43E~(c:0)|
-OOM_Function_ZN2os7syscall4sync20sys_semaphore_create17h369b8def50da25e5E~(c:64)|(c:64)|((c:8)*(p:((v:*-1-arg_1-0-64)+(c:1))((v:*-1-arg_1-0-64)*(c:2))(c:4)))|
-OOM_Function_ZN2os7syscall4sync16sys_mutex_create17h040472ae0b790bd4E~(c:64)|(c:64)|(c:32)|((c:16)*(p:((v:*-1-arg_1-0-64)+(c:1))((v:*-1-arg_1-0-64)*(c:2))(c:4)))|
-OOM_Function_ZN2os7syscall7process8sys_fork17hd38b5967e8c302bcE~(c:8)|(c:288)|(c:200)|(c:192)|(c:288)|
+OOM_Function_ZN2os7syscall7process9sys_yield17h94b58eb66378f994E~(c:64)|
+OOM_Function_ZN2os7syscall7process8sys_exec17hf12abc5c91da8e68E~(c:120)|(c:88)|(c:56)|(c:56)|(c:128)|(c:48)|(c:120)|(c:88)|(c:56)|(c:56)|(c:8)|(c:8)|(c:80)|(c:8)|(c:8)|(c:80)|(c:8)|(c:8)|(c:80)|
+OOM_Function_ZN2os7syscall6thread17sys_thread_create17h97265675de45b386E~(c:8)|(c:80)|(c:200)|(c:64)|(c:8)|(c:80)|
+OOM_Function_ZN2os7syscall4sync16sys_condvar_wait17hc1470ab6652d722bE~((c:8)*((v:*-1-arg_0-0-64)+(v:*-1-arg_0-0-64)))|
+OOM_Function_ZN2os7syscall4sync18sys_condvar_signal17h944771b12904b1dfE~(c:64)|
+OOM_Function_ZN2os7syscall4sync18sys_condvar_create17h8a9dab8bf487f631E~(c:56)|((c:8)*(p:((v:*-1-arg_0-0-64)+(c:1))((v:*-1-arg_0-0-64)*(c:2))(c:4)))|
+OOM_Function_ZN2os7syscall4sync18sys_semaphore_down17hac97e53a06da0b0aE~((c:8)*((v:*-1-arg_0-0-64)+(v:*-1-arg_0-0-64)))|
+OOM_Function_ZN2os7syscall4sync16sys_semaphore_up17h0755b880e4b0bc43E~(c:64)|
+OOM_Function_ZN2os7syscall4sync20sys_semaphore_create17h369b8def50da25e5E~(c:64)|(c:64)|((c:8)*(p:((v:*-1-arg_0-0-64)+(c:1))((v:*-1-arg_0-0-64)*(c:2))(c:4)))|
+OOM_Function_ZN2os7syscall4sync16sys_mutex_create17h040472ae0b790bd4E~(c:64)|(c:64)|(c:32)|((c:16)*(p:((v:*-1-arg_0-0-64)+(c:1))((v:*-1-arg_0-0-64)*(c:2))(c:4)))|
+OOM_Function_ZN2os7syscall7process8sys_fork17hd38b5967e8c302bcE~(c:8)|(c:288)|(c:8)|(c:80)|(c:200)|(c:192)|(c:288)|(c:64)|
 OOM_Function_ZN85_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..process..NewPushTable$LT$T$GT$$GT$9try_push317ha14cc841eadb2e09E~((c:16)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN85_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..process..NewPushTable$LT$T$GT$$GT$9try_push317h4c54be498d30456bE~((c:8)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))|
 OOM_Function_ZN85_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..process..NewPushTable$LT$T$GT$$GT$9try_push317h6816edfd04e1c48bE~((c:8)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))|
 OOM_Function_ZN87_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..syscall..thread..NewPushTable$LT$T$GT$$GT$9try_push217h132349a53b453c12E~((c:8)*(p:((v:*-1-arg_0-128-64)+(c:1))((v:*-1-arg_0-128-64)*(c:2))(c:4)))|
 OOM_Function_ZN88_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..syscall..process..NewPushTable$LT$T$GT$$GT$9try_push117h68e06c25bec78e67E~((c:24)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
 OOM_Function_ZN85_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..task..process..NewPushTable$LT$T$GT$$GT$9try_pushl17hea06ae88906ced30E~((c:8)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
-OOM_Function_ZN86_$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$os..mm..page_table..NewPushTable$LT$T$GT$$GT$9try_pusho17h60749ceb665a5861E~((c:16)*(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:4)))|
+OOM_Function_ZN66_$LT$alloc..string..String$u20$as$u20$os..mm..page_table..NewS$GT$9try_pushs17hbef31454566a9a4aE~(p:((f:*-1-arg_0-128-64-*0)+(c:1))((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))|(p:(f:*-1-arg_0-128-64-*0)((f:*-1-arg_0-64-64-*0)*(c:2))(c:8))|

@@ -424,7 +424,10 @@ public:
     type = expr_var_field;
   }
   bool isZero(){return param == 0;}
-  bool exist_none(){return false;}
+  bool exist_none(){
+    if(!param) return true;
+    return false;
+  }
   bool exist_binary(const VFGNode* node){return false;}
   bool exist_loop(const VFGNode* node){return false;}
   const VFGNode* getVFG() {
@@ -456,7 +459,8 @@ public:
     return val->getId();
   }
   void setVal(const VFGNode* node) override{
-    param = node;
+    if(param == 0)
+      param = node;
     return;
   }
   void output() override{
@@ -534,6 +538,7 @@ public:
   }
 
   void transform(std::map<int, FieldTransform>* param_transform){
+    if(!param) return;
     const Argument* argument = SVFUtil::dyn_cast<Argument>(param->getValue());
     int key = argument->getArgNo();
     auto info = (*param_transform)[key];
@@ -622,6 +627,36 @@ public:
       std::cout << op;
     RHS->output();
     std::cout << ")";
+  }
+
+  void setVal(const VFGNode* node) override{
+    LHS->setVal(node);
+    RHS->setVal(node);
+    return;
+  }
+  void push_to_vector(std::vector<std::shared_ptr<ExprVFG>> *input_vec){
+    if(LHS->getKind() == expr_binary){
+      std::shared_ptr<BinaryVFG> binary = std::static_pointer_cast<BinaryVFG>(LHS);
+      if(binary->op == '#'){
+        binary->push_to_vector(input_vec);
+      }
+      else{
+        input_vec->push_back(LHS);
+      }
+    }
+    else{input_vec->push_back(LHS);}
+
+    if(RHS->getKind() == expr_binary){
+      std::shared_ptr<BinaryVFG> binary = std::static_pointer_cast<BinaryVFG>(RHS);
+      if(binary->op == '#'){
+        binary->push_to_vector(input_vec);
+      }
+      else{
+        input_vec->push_back(RHS);
+      }
+    }
+    else{input_vec->push_back(RHS);}
+    
   }
   bool isZero(){return LHS->isZero() && RHS->isZero();}
   std::shared_ptr<ExprVFG> replace(std::shared_ptr<ExprVFG> dst, std::shared_ptr<ExprVFG> src){
@@ -832,6 +867,13 @@ public:
     }
     return false;
   }
+  void setVal(const VFGNode* node) override{
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      (*exprs)[i]->setVal(node);
+    }
+    return;
+  }
   bool exist_loop(const VFGNode* node){
     int count = exprs->size(); 
     for(int i = 0; i < count; i++){
@@ -879,6 +921,27 @@ public:
     }
   }
 
+  void foldphi(std::vector<std::shared_ptr<ExprVFG>> *fold_expr){
+    int count = exprs->size(); 
+    for(int i = 0; i < count; i++){
+      if((*exprs)[i]->getKind() == expr_phi){
+        std::shared_ptr<PHIVFG> phi = std::static_pointer_cast<PHIVFG>((*exprs)[i]);
+        phi->foldphi(fold_expr);
+      }
+      else{
+        bool push_flag = true;
+        for(auto iter:*fold_expr){
+          if(equal_field(iter, (*exprs)[i])){
+            push_flag = false;
+            break;
+          }
+        }
+        if(push_flag)
+          fold_expr->push_back((*exprs)[i]);
+      }      
+    }
+  }
+
   std::shared_ptr<ExprVFG> simplify(){
     bool flag = true;
     if(exprs->size() == 0){
@@ -889,6 +952,7 @@ public:
     }
     std::set<long> contains;
     long max = -1;
+    std::vector<std::shared_ptr<ExprVFG>> new_vector;
     for(int i = 0; i < exprs->size(); i++){
       (*exprs)[i] = (*exprs)[i]->simplify();
       if(flag && (*exprs)[i]->getKind() == expr_constant){
@@ -898,7 +962,7 @@ public:
       else{
         flag = false;
       }
-      //去除phi中重复节点
+      //remove duplication
       long target = (long)&*((*exprs)[i]);
       if((*exprs)[i]->getKind() == expr_constant || (*exprs)[i]->getKind() == expr_variable
         || (*exprs)[i]->getKind() == expr_binary || (*exprs)[i]->getKind() == expr_var_field)
@@ -922,9 +986,12 @@ public:
           return (*exprs)[0]->simplify();
         }
       }
-      return std::make_shared<PHIVFG>(exprs); //move
+      foldphi(&new_vector);
+      return std::make_shared<PHIVFG>(std::make_shared<std::vector<std::shared_ptr<ExprVFG>>>(new_vector)); //move
     }
   }
+
+
 
   void foldExpr(std::vector<std::shared_ptr<ExprVFG>> *fold_expr){
     fold_expr->push_back(std::make_shared<PHIVFG>(exprs));
@@ -1134,10 +1201,6 @@ bool equal_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
 }
 
 
-// bool less_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
-//   auto kind1
-// }
-
 
 std::shared_ptr<ExprVFG> parseBinaryOp(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS, char op){
   switch (op)
@@ -1237,26 +1300,46 @@ int calculateOffset(std::vector<FieldIndex>* fields){
 }
 
 
-// bool equal_field(std::shared_ptr<ExprVFG> LHS, std::shared_ptr<ExprVFG> RHS){
-//   std::shared_ptr<VarFieldVFG> LHS_field = std::static_pointer_cast<VarFieldVFG>(LHS);
-//   std::shared_ptr<VarFieldVFG> RHS_field = std::static_pointer_cast<VarFieldVFG>(RHS);
-//   if(LHS_field->def != RHS_field->def 
-//   || LHS_field->index != RHS_field->index
-//   || LHS_field->param != RHS_field->param
-//   || LHS_field->val != RHS_field->val
-//   || LHS_field->fields->size() != RHS_field->fields->size())
-//     return false;
-//   int size = LHS_field->fields->size();
-//   for(vector<FieldIndex>::iterator iter = LHS_field->fields->begin(), src_iter = RHS_field->fields->begin();
-//   ; iter++, src_iter++, size--){
-//     if(size == 0){
-//       break;
-//     }
-//     if((*iter).index != (*src_iter).index){
-//       return false;
-//     } 
-//   }
-//   return true;
-// }
+std::vector<std::shared_ptr<ExprVFG>> split_exprs(std::shared_ptr<BinaryVFG> expr){
+  std::vector<std::shared_ptr<ExprVFG>> record;
+  expr->push_to_vector(&record);
+  return record;
+} 
+
+bool findfNone(std::shared_ptr<ExprVFG> expr){
+  if(expr->getKind() != expr_phi)
+   return false;
+  std::shared_ptr<PHIVFG> phi = std::static_pointer_cast<PHIVFG>(expr);
+  bool flag = false;
+  for(auto iter: *(phi->exprs)){
+    if(iter->getKind() == expr_var_field){
+      std::shared_ptr<VarFieldVFG> field = std::static_pointer_cast<VarFieldVFG>(iter);
+      if(field->getParam() == 0)
+        return true;
+    }
+    flag = flag || findfNone(iter);
+    if(flag) return flag;
+  }
+  return flag;
+}
+
+std::shared_ptr<ExprVFG> returnfNone(std::shared_ptr<ExprVFG> expr){
+  if(expr->getKind() != expr_phi)
+   return make_shared<NoneVFG>();
+  std::shared_ptr<PHIVFG> phi = std::static_pointer_cast<PHIVFG>(expr);
+  bool flag = false;
+  for(auto iter: *(phi->exprs)){
+    if(iter->getKind() == expr_var_field){
+      std::shared_ptr<VarFieldVFG> field = std::static_pointer_cast<VarFieldVFG>(iter);
+      if(field->getParam() == 0)
+        return field;
+    }
+    flag = flag || findfNone(iter);
+    if(flag) return make_shared<NoneVFG>();
+  }
+  return make_shared<NoneVFG>();
+}
+
+
 
 #endif

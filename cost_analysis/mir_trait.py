@@ -7,7 +7,7 @@ import os
 def deal_with_mir(file):
     with open(file,encoding='utf-8') as file:
         content = file.readlines()
-    rule = r"^_[\d+] = <dyn .+ as .+>::.+"
+    rule = r"^_.+ = <dyn .+ as .+>::.+"
     for line in content:
         temp = line.strip().split("//")
         statement = temp[0].strip()

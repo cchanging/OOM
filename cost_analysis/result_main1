@@ -2491,7 +2491,7 @@ callsite_filename:src/fs/inode.rs
 callsite_line:30
 ---------------------warning
 
-warning for the following function:  全局
+warning for the following function:  全局  ok
 name:push<os::timer::TimerCondVar>
 filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/collections/binary_heap.rs
 line:491
@@ -2501,7 +2501,7 @@ callsite_line:57
 ---------------------warning
 ---------------------warning
 
-warning for the following function:
+warning for the following function:   ok
 name:fork
 filename:src/task/process.rs
 line:188
@@ -2509,7 +2509,7 @@ callsite_name:_ZN2os7syscall7process8sys_fork17hbfe050e465139dacE
 callsite_filename:src/syscall/process.rs  全局
 callsite_line:38
 
-warning for the following function:
+warning for the following function:  ok
 name:push<core::option::Option<alloc::sync::Arc<os::task::task::TaskControlBlock>>, alloc::alloc::Global>
 filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/vec/mod.rs
 line:1727
@@ -2517,7 +2517,7 @@ callsite_name:_ZN2os4task7process19ProcessControlBlock4fork17h80e72644c38bb5a1E
 callsite_filename:src/task/process.rs
 callsite_line:188
 
-warning for the following function:
+warning for the following function: ok
 name:push<core::option::Option<alloc::sync::Arc<(dyn os::fs::File + core::marker::Send + core::marker::Sync)>>, alloc::alloc::Global>
 filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/vec/mod.rs
 line:1727
@@ -2525,7 +2525,7 @@ callsite_name:_ZN2os4task7process19ProcessControlBlock4fork17h80e72644c38bb5a1E
 callsite_filename:src/task/process.rs
 callsite_line:188
 
-warning for the following function:
+warning for the following function:  ok
 name:push
 filename:src/mm/memory_set.rs
 line:74
@@ -2534,7 +2534,7 @@ callsite_filename:src/mm/memory_set.rs
 callsite_line:212
 ---------------------warning
 
-warning for the following function:
+warning for the following function:   ok
 name:push<alloc::string::String, alloc::alloc::Global>
 filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/vec/mod.rs
 line:1727
@@ -2567,7 +2567,7 @@ callsite_filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/
 callsite_line:52
 ---------------------warning
 
-warning for the following function:
+warning for the following function: ok
 name:push<core::option::Option<alloc::sync::Arc<os::task::task::TaskControlBlock>>, alloc::alloc::Global>
 filename:/rustc/1f7fb6413d6d6c0c929b223e478e44c3db991b03/library/alloc/src/vec/mod.rs
 line:1727
@@ -2614,7 +2614,7 @@ callsite_line:107
 ---------------------warning
 ---------------------warning
 
-warning for the following function:
+warning for the following function:  1
 name:wait_with_mutex
 filename:src/sync/condvar.rs      全局
 line:50
