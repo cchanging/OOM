@@ -3,7 +3,7 @@ import sys
 import os
 
 
-
+#used for extracting the information of dynamic trait function call in MIR  
 def deal_with_mir(file):
     with open(file,encoding='utf-8') as file:
         content = file.readlines()

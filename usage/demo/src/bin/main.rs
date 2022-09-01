@@ -1,10 +1,12 @@
 #![feature(as_array_of_cells)]
 #![feature(try_reserve_kind)]
+#![feature(allocator_api)]
 extern crate OOMmacro;
 extern crate OOMGuardAllocator;
 use OOMGuardAllocator::OOMGuard_Allocator;
 use OOMmacro::*;
 use std::collections::TryReserveError;
+use core::alloc::AllocError;
 use std::alloc::{GlobalAlloc, Layout, System};
 
 #[global_allocator]
@@ -32,6 +34,12 @@ struct AA{
   pub b: i32,
 }
 
+
+impl From<AllocError> for myError{
+  fn from(t: AllocError) -> myError {
+      myError::allocation_fail(String::from("TRY ALLOCATION FAIL, LOCATION: try_test_oom()"))    
+  }
+}
 
 impl From<TryReserveError> for myError{
   fn from(t: TryReserveError) -> myError {

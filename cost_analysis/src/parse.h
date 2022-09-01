@@ -931,7 +931,8 @@ public:
       else{
         bool push_flag = true;
         for(auto iter:*fold_expr){
-          if(equal_field(iter, (*exprs)[i])){
+          if(equal_field(iter, (*exprs)[i]) || 
+          ((*exprs)[i]->getKind() == expr_constant && (*exprs)[i]->getVal() == 0)){
             push_flag = false;
             break;
           }

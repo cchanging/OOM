@@ -298,25 +298,25 @@ unsafe fn parseVariable(input: &Vec<char>, siter: &mut Count)->Box<ExprAST>{
     while input[end] != '-'{
         end = end + 1;
     } 
-    let def = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+    let def = FromStr::from_str(&string[siter.v..end]).unwrap();
     siter.v = end + 5;
     end = siter.v;
     while input[end] != '-'{
         end = end + 1;
     } 
-    let index = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+    let index = FromStr::from_str(&string[siter.v..end]).unwrap();
     siter.v = end + 1;
     end = siter.v;
     while input[end] != '-'{
         end = end + 1;
     } 
-    let offset = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+    let offset = FromStr::from_str(&string[siter.v..end]).unwrap();
     siter.v = end + 1;
     end = siter.v;
     while input[end] != ')'{
         end = end + 1;
     } 
-    let current_size = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+    let current_size = FromStr::from_str(&string[siter.v..end]).unwrap();
     siter.v = end + 1;
     return Box::new(ExprAST::Variable(VariableExprAST::new(offset, index, def, current_size)));
 }
@@ -337,13 +337,13 @@ unsafe fn parseFields(input: &Vec<char>, siter: &mut Count)->Box<ExprAST>{
     while input[end] != '-'{
         end = end + 1;
     } 
-    let def = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+    let def = FromStr::from_str(&string[siter.v..end]).unwrap();
     siter.v = end + 5;
     end = siter.v;
     while input[end] != '-'{
         end = end + 1;
     } 
-    let index = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+    let index = FromStr::from_str(&string[siter.v..end]).unwrap();
     let mut fields = Vec::<FieldInfo>::new();
     while input[end] != ')'{
         siter.v = end + 1;
@@ -351,19 +351,19 @@ unsafe fn parseFields(input: &Vec<char>, siter: &mut Count)->Box<ExprAST>{
         while input[end] != '-'{
             end = end + 1;
         } 
-        let offset = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+        let offset = FromStr::from_str(&string[siter.v..end]).unwrap();
         siter.v = end + 1;
         end = siter.v;
         while input[end] != '-'{
             end = end + 1;
         } 
-        let size = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+        let size = FromStr::from_str(&string[siter.v..end]).unwrap();
         siter.v = end + 2;
         end = siter.v;
         while input[end] != '-' && input[end] != ')' {
             end = end + 1;
         } 
-        let sub_def = std::str::FromStr::from_str(&string[siter.v..end]).unwrap();
+        let sub_def = FromStr::from_str(&string[siter.v..end]).unwrap();
         fields.push(FieldInfo{offset:offset, size:size, def:sub_def});
     }
     siter.v = end + 1;
@@ -403,7 +403,7 @@ unsafe fn parseExpr(input: &Vec<char>, siter: &mut Count)->Box<ExprAST>{
     }
 }
 
-fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, stmt: &mut Vec::<Stmt>, count: &mut Count)->Tmp{
+fn output(args: &Vec::<&Ident>, args_type: &Vec::<Option<&Type>>, slot: &Box<ExprAST>, stmt: &mut Vec::<Stmt>, count: &mut Count)->Tmp{
     match **slot{
         ExprAST::Constant(ref constant) => {
             return Tmp::Const(constant.val)
@@ -415,15 +415,31 @@ fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, s
             let t1 = Ident::new(&name, Span::call_site());
             count.v = count.v + 1;
             let param = args[variable.index];
-            let param_type = args_type[variable.index];
+            //let param_type = args_type[variable.index].unwrap();
             let mut types: Type = parse_quote! {*const u8};
-            let mut cast_types: Type = parse_quote! {*const #param_type};
+            let mut count_def = variable.def;
+            let mut self_flag = false;
+            let mut cast_types: Type = {
+                if let Some(param_type) = args_type[variable.index]{
+                    parse_quote! {*const #param_type}
+                }
+                else{
+                    count_def = count_def - 1;
+                    self_flag = true;
+                    parse_quote! {&Self}
+                }
+            };
             let offset = variable.offset/8;
-            for i in 0..variable.def{
+            for i in 0..count_def{
                 types = parse_quote!{*const #types};
             }
-            let mut expr: Expr = parse_quote! {&#param as #cast_types as #types};
-            for i in 0..variable.def{
+            let mut expr: Expr = 
+            if self_flag{
+                parse_quote! {&#param as #cast_types as *const Self as #types}
+            } else {
+                parse_quote! {&#param as #cast_types as #types}
+            };
+            for i in 0..count_def{
                 expr = parse_quote!{*(#expr)};
             }
             expr = parse_quote!{(#expr).add(#offset)};
@@ -449,6 +465,14 @@ fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, s
             let t1 = Ident::new(&name, Span::call_site());
             count.v = count.v + 1;
             match binary.op{
+                '?' => {
+                    stmt.push(
+                        parse_quote! {
+                            let #t1 = (#LHS as usize).next_power_of_two() as i64;
+                        }
+                    );
+                    return Tmp::Variable(t1);
+                }
                 '+' => {
                     stmt.push(
                         parse_quote! {
@@ -517,14 +541,32 @@ fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, s
             let t1 = Ident::new(&name, Span::call_site());
             count.v = count.v + 1;
             let param = args[field.index];
-            let param_type = args_type[field.index];
+            //let param_type = args_type[field.index].unwrap();
             let mut types: Type = parse_quote! {*const u8};
-            let mut cast_types: Type = parse_quote! {*const #param_type};
-            for i in 0..field.def{
+            let mut count_def = field.def;
+            //let mut cast_types: Type = parse_quote! {*const #param_type};
+            let mut self_flag = false;
+            let mut cast_types: Type = {
+                if let Some(param_type) = args_type[field.index]{
+                    parse_quote! {*const #param_type}
+                }
+                else{
+                    count_def = count_def - 1;
+                    self_flag = true;
+                    parse_quote! {&Self}
+                }
+            };
+            for i in 0..count_def{
                 types = parse_quote!{*const #types};
             }
-            let mut expr: Expr = parse_quote! {&#param as #cast_types as #types};
-            for i in 0..field.def{
+
+            let mut expr: Expr = 
+            if self_flag{
+                parse_quote! {&#param as #cast_types as *const Self as #types}
+            } else {
+                parse_quote! {&#param as #cast_types as #types}
+            };
+            for i in 0..count_def{
                 expr = parse_quote!{*(#expr)};
             }
             for iter in &field.fields{
@@ -550,21 +592,31 @@ fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, s
             return Tmp::Variable(t1);
         }
         ExprAST::Phi(ref phi) => {
-            if phi.phi.len() != 2{
-                println!("ERROR!PHILEN");
-            }
-            let value1 = output(args, args_type, &phi.phi[0], stmt, count);
-            let value2 = output(args, args_type, &phi.phi[1], stmt, count);
+            let mut length = 2;
             let p = count.v.to_string();
             let name_temp = String::from("test");
             let name = name_temp + &p;
             let t1 = Ident::new(&name, Span::call_site());
             count.v = count.v + 1;
+            if phi.phi.len() < 2{
+                println!("ERROR!PHILEN");
+            }
+            let mut value1 = output(args, args_type, &phi.phi[0], stmt, count);
+            let mut value2 = output(args, args_type, &phi.phi[1], stmt, count);
             stmt.push(
                 parse_quote! {
-                    let #t1 = std::cmp::max(#value1, #value2);
+                    let mut #t1 = core::cmp::max(#value1, #value2);
                 }
             );
+            while(length < phi.phi.len()){
+                value2 = output(args, args_type, &phi.phi[length], stmt, count);
+                stmt.push(
+                    parse_quote! {
+                        #t1 = core::cmp::max(#t1, #value2);
+                    }
+                );
+                length += 1;
+            }
             return Tmp::Variable(t1);
         }
     }
@@ -572,7 +624,7 @@ fn output(args: &Vec::<&Ident>, args_type: &Vec::<&Type>, slot: &Box<ExprAST>, s
 }
 
 fn read_file(fname: &str)->Option<Vec<Box<ExprAST>>>{
-    let text_try = fs::read_to_string("...path of memory cost file");
+    let text_try = fs::read_to_string("/home/cj/OOM/cost_analysis/result0");//...path of memory cost file");
     if !(text_try.is_ok()){
         return None;
     }
@@ -621,16 +673,28 @@ pub fn oom_safe(args: TokenStream, input: TokenStream) -> TokenStream{
     //         read_file();
     //     }
     // }
+    let temp_v = Ident::new("self", Span::call_site());
     let mut input = parse_macro_input!(input as ItemFn);
     //let mut args = parse_macro_input!(args as Args);
     let mut additional_stmt = Vec::<Stmt>::new();
     let mut args = Vec::<&Ident>::new();
-    let mut args_type = Vec::<&Type>::new();
+    let mut args_type = Vec::<Option<&Type>>::new();
     let param_input = &input.sig.inputs;
     let function_name = &input.sig.ident.to_string();
+
     println!("begin {:?}:",function_name);
     let iters = param_input.iter();
     for iter in iters{
+        if let syn::FnArg::Receiver(a) = &iter{
+            additional_stmt.push(
+                parse_quote! {
+                    OOMGuardAllocator::my_wrap(&self);
+                }
+            );
+            
+            args.push(&temp_v);
+            args_type.push(None);
+        }
         if let syn::FnArg::Typed(a) = &iter{
             if let syn::Pat::Ident(b) = &*a.pat{
                 let c = &b.ident;
@@ -640,16 +704,15 @@ pub fn oom_safe(args: TokenStream, input: TokenStream) -> TokenStream{
                         OOMGuardAllocator::my_wrap(& #c);
                     }
                 );
-                additional_stmt.push(
-                    parse_quote! {
-                        OOMGuardAllocator::my_wrap_end(& #c);
-                    }
-                );
             }
-            args_type.push(&*a.ty);
+            args_type.push(Some(&*a.ty));
         }
     }
-
+    additional_stmt.push(
+        parse_quote! {
+            OOMGuardAllocator::my_wrap_end();
+        }
+    );
 
     //handle return type check 
     //-----------------------------------
@@ -687,7 +750,7 @@ pub fn oom_safe(args: TokenStream, input: TokenStream) -> TokenStream{
         };
         where_clause.predicates.push(
             parse_quote! {
-                #ident : From<TryReserveError>
+                #ident : From<AllocError>
             }
         );
     }

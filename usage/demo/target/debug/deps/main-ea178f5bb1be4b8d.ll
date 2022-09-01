@@ -6,7 +6,7 @@ target triple = "x86_64-unknown-linux-gnu"
 %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>" = type { %"std::alloc::System"*, [511 x i64] }
 %"std::alloc::System" = type {}
 %"core::fmt::Arguments" = type { { [0 x { [0 x i8]*, i64 }]*, i64 }, { i64*, i64 }, { [0 x { i8*, i64* }]*, i64 } }
-%"OOMGuardAllocator::MyPage" = type { %"OOMGuardAllocator::MyPage"*, i64, i64, i8*, [256 x i8] }
+%"OOMGuardAllocator::MyPage" = type { i8*, %"OOMGuardAllocator::MyPage"*, i64, i64, [256 x i8] }
 %"core::panic::location::Location" = type { { [0 x i8]*, i64 }, i32, i32 }
 %"core::result::Result<core::ptr::non_null::NonNull<[u8]>, core::alloc::AllocError>::Err" = type { %"core::alloc::AllocError" }
 %"core::alloc::AllocError" = type {}
@@ -19,12 +19,12 @@ target triple = "x86_64-unknown-linux-gnu"
 %"core::alloc::layout::LayoutError" = type {}
 %"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>" = type { i64, [2 x i64] }
 %"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>::Err" = type { [1 x i64], { i64, i64 } }
-%AA = type { { i32*, i32 }, i32, i32 }
-%"OOMGuardAllocator::Count" = type { i64, i64, i64, i8, [7 x i8], %"alloc::string::String", [4096 x i64], i64 }
-%"alloc::string::String" = type { %"alloc::vec::Vec<u8>" }
-%"alloc::vec::Vec<u8>" = type { { i8*, i64 }, i64 }
+%"OOMGuardAllocator::Count" = type { i64, i64, i64, i8, [7 x i8], [4096 x i64], i64, i64, [4096 x i64], i64, i64 }
 %"core::cell::Cell<OOMGuardAllocator::Count>" = type { %"core::cell::UnsafeCell<OOMGuardAllocator::Count>" }
 %"core::cell::UnsafeCell<OOMGuardAllocator::Count>" = type { %"OOMGuardAllocator::Count" }
+%AA = type { { i32*, i32 }, i32, i32 }
+%"alloc::string::String" = type { %"alloc::vec::Vec<u8>" }
+%"alloc::vec::Vec<u8>" = type { { i8*, i64 }, i64 }
 %"core::fmt::Formatter" = type { { i64, i64 }, { i64, i64 }, { {}*, [3 x i64]* }, i32, i32, i8, [7 x i8] }
 %"core::fmt::Opaque" = type {}
 %"core::option::Option<usize>::Some" = type { [1 x i64], i64 }
@@ -69,70 +69,61 @@ target triple = "x86_64-unknown-linux-gnu"
 %"unwind::libunwind::_Unwind_Exception" = type { i64, void (i32, %"unwind::libunwind::_Unwind_Exception"*)*, [6 x i64] }
 %"unwind::libunwind::_Unwind_Context" = type { [0 x i8] }
 
-@alloc142 = private unnamed_addr constant <{ [49 x i8] }> <{ [49 x i8] c"/home/cj/OOM/allocator/allocator_crate/src/lib.rs" }>, align 1
-@alloc72 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\A6\01\00\00 \00\00\00" }>, align 8
-@str.0 = internal constant [28 x i8] c"attempt to add with overflow"
 @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E = external global [9 x { i64*, i64 }]
-@alloc74 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\CA\01\00\00\1B\00\00\00" }>, align 8
-@alloc76 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\D1\01\00\00\15\00\00\00" }>, align 8
-@alloc78 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\D2\01\00\00\1B\00\00\00" }>, align 8
+@alloc106 = private unnamed_addr constant <{ [49 x i8] }> <{ [49 x i8] c"/home/cj/OOM/allocator/allocator_crate/src/lib.rs" }>, align 1
+@alloc71 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DB\01\00\00\1B\00\00\00" }>, align 8
+@_ZN17OOMGuardAllocator11MyblocksNum17hdc597d1ff9b698dfE = external global [8 x i64]
+@alloc73 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DC\01\00\00\09\00\00\00" }>, align 8
+@str.0 = internal constant [33 x i8] c"attempt to subtract with overflow"
+@alloc75 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\E4\01\00\00\15\00\00\00" }>, align 8
+@str.1 = internal constant [28 x i8] c"attempt to add with overflow"
+@alloc77 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\E5\01\00\00\1B\00\00\00" }>, align 8
 @alloc56 = private unnamed_addr constant <{ [14 x i8] }> <{ [14 x i8] c"NOT EXIST PAGE" }>, align 1
-@alloc57 = private unnamed_addr constant <{ i8*, [8 x i8] }> <{ i8* getelementptr inbounds (<{ [14 x i8] }>, <{ [14 x i8] }>* @alloc56, i32 0, i32 0, i32 0), [8 x i8] c"\0E\00\00\00\00\00\00\00" }>, align 8
+@alloc24 = private unnamed_addr constant <{ [1 x i8] }> <{ [1 x i8] c"\0A" }>, align 1
+@alloc57 = private unnamed_addr constant <{ i8*, [8 x i8], i8*, [8 x i8] }> <{ i8* getelementptr inbounds (<{ [14 x i8] }>, <{ [14 x i8] }>* @alloc56, i32 0, i32 0, i32 0), [8 x i8] c"\0E\00\00\00\00\00\00\00", i8* getelementptr inbounds (<{ [1 x i8] }>, <{ [1 x i8] }>* @alloc24, i32 0, i32 0, i32 0), [8 x i8] c"\01\00\00\00\00\00\00\00" }>, align 8
+@alloc79 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\ED\01\00\00\1F\00\00\00" }>, align 8
+@alloc81 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\ED\01\00\00s\00\00\00" }>, align 8
+@alloc83 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\ED\01\00\00\1E\00\00\00" }>, align 8
+@str.2 = internal constant [33 x i8] c"attempt to multiply with overflow"
+@alloc85 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\F0\01\00\006\00\00\00" }>, align 8
+@alloc87 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\F8\01\00\00\15\00\00\00" }>, align 8
+@alloc89 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\BE\01\00\00\1F\00\00\00" }>, align 8
+@alloc51 = private unnamed_addr constant <{ [23 x i8] }> <{ [23 x i8] c"NOT ENOUGH LARGE_PAGE!\0A" }>, align 1
+@alloc52 = private unnamed_addr constant <{ i8*, [8 x i8] }> <{ i8* getelementptr inbounds (<{ [23 x i8] }>, <{ [23 x i8] }>* @alloc51, i32 0, i32 0, i32 0), [8 x i8] c"\17\00\00\00\00\00\00\00" }>, align 8
 @alloc4 = private unnamed_addr constant <{ [0 x i8] }> zeroinitializer, align 8
-@alloc80 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\CF\01\00\00\15\00\00\00" }>, align 8
-@alloc82 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DA\01\00\00\1F\00\00\00" }>, align 8
-@alloc84 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DA\01\00\00s\00\00\00" }>, align 8
-@alloc86 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DA\01\00\00\1E\00\00\00" }>, align 8
-@str.1 = internal constant [33 x i8] c"attempt to multiply with overflow"
-@_ZN17OOMGuardAllocator11MyblocksNum17ha104d8890128a2f9E = external global [8 x i64]
-@alloc88 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DC\01\00\00\22\00\00\00" }>, align 8
-@str.2 = internal constant [33 x i8] c"attempt to subtract with overflow"
-@alloc90 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DC\01\00\00\11\00\00\00" }>, align 8
-@alloc92 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\DE\01\00\006\00\00\00" }>, align 8
-@alloc94 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\E6\01\00\00\15\00\00\00" }>, align 8
-@alloc96 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\AE\01\00\00\1F\00\00\00" }>, align 8
-@alloc51 = private unnamed_addr constant <{ [22 x i8] }> <{ [22 x i8] c"NOT ENOUGH LARGE_PAGE!" }>, align 1
-@alloc52 = private unnamed_addr constant <{ i8*, [8 x i8] }> <{ i8* getelementptr inbounds (<{ [22 x i8] }>, <{ [22 x i8] }>* @alloc51, i32 0, i32 0, i32 0), [8 x i8] c"\16\00\00\00\00\00\00\00" }>, align 8
-@alloc98 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\B3\01\00\00\15\00\00\00" }>, align 8
-@alloc100 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\BA\01\00\00\1D\00\00\00" }>, align 8
-@alloc102 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\BF\01\00\00S\00\00\00" }>, align 8
-@alloc104 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\02\02\00\00\0C\00\00\00" }>, align 8
-@alloc106 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\0A\02\00\00\1A\00\00\00" }>, align 8
-@alloc108 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\0B\02\00\001\00\00\00" }>, align 8
-@alloc110 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\0F\02\00\00\1A\00\00\00" }>, align 8
-@alloc112 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\0F\02\00\00\09\00\00\00" }>, align 8
-@alloc114 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\14\02\00\00\0D\00\00\00" }>, align 8
-@alloc116 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\16\02\00\00U\00\00\00" }>, align 8
+@alloc91 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\CB\01\00\00\1D\00\00\00" }>, align 8
+@alloc93 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\D0\01\00\00S\00\00\00" }>, align 8
+@alloc95 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\12\02\00\00\14\00\00\00" }>, align 8
+@alloc97 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\13\02\00\00\14\00\00\00" }>, align 8
+@alloc99 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\1C\02\00\00\1A\00\00\00" }>, align 8
+@alloc101 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00 \02\00\00\09\00\00\00" }>, align 8
+@alloc103 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00$\02\00\00\0D\00\00\00" }>, align 8
+@alloc105 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00&\02\00\00U\00\00\00" }>, align 8
 @str.3 = internal constant [25 x i8] c"attempt to divide by zero"
-@alloc118 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\16\02\00\00\09\00\00\00" }>, align 8
-@alloc137 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00v\01\00\00\11\00\00\00" }>, align 8
-@alloc139 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00w\01\00\00\11\00\00\00" }>, align 8
-@alloc141 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00~\01\00\00\0D\00\00\00" }>, align 8
-@alloc143 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc142, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00\84\01\00\00\0D\00\00\00" }>, align 8
+@alloc107 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [49 x i8] }>, <{ [49 x i8] }>* @alloc106, i32 0, i32 0, i32 0), [16 x i8] c"1\00\00\00\00\00\00\00&\02\00\00\09\00\00\00" }>, align 8
 @vtable.4 = private unnamed_addr constant <{ i8*, [16 x i8], i8*, i8*, i8*, [0 x i8] }> <{ i8* bitcast (void (i64**)* @"_ZN4core3ptr85drop_in_place$LT$std..rt..lang_start$LT$$LP$$RP$$GT$..$u7b$$u7b$closure$u7d$$u7d$$GT$17h3169881d36a0abf7E" to i8*), [16 x i8] c"\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00", i8* bitcast (i32 (i64**)* @"_ZN4core3ops8function6FnOnce40call_once$u7b$$u7b$vtable.shim$u7d$$u7d$17h734a4646a20be0e3E" to i8*), i8* bitcast (i32 (i64**)* @"_ZN3std2rt10lang_start28_$u7b$$u7b$closure$u7d$$u7d$17h66be39c909e5aad3E" to i8*), i8* bitcast (i32 (i64**)* @"_ZN3std2rt10lang_start28_$u7b$$u7b$closure$u7d$$u7d$17h66be39c909e5aad3E" to i8*), [0 x i8] zeroinitializer }>, align 8
-@alloc149 = private unnamed_addr constant <{ [12 x i8] }> <{ [12 x i8] c"invalid args" }>, align 1
-@alloc150 = private unnamed_addr constant <{ [75 x i8] }> <{ [75 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/core/src/fmt/mod.rs" }>, align 1
-@alloc151 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [75 x i8] }>, <{ [75 x i8] }>* @alloc150, i32 0, i32 0, i32 0), [16 x i8] c"K\00\00\00\00\00\00\00k\01\00\00\0D\00\00\00" }>, align 8
-@alloc152 = private unnamed_addr constant <{ [80 x i8] }> <{ [80 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/core/src/alloc/layout.rs" }>, align 1
-@alloc153 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [80 x i8] }>, <{ [80 x i8] }>* @alloc152, i32 0, i32 0, i32 0), [16 x i8] c"P\00\00\00\00\00\00\00\98\01\00\00\1A\00\00\00" }>, align 8
-@alloc154 = private unnamed_addr constant <{ [43 x i8] }> <{ [43 x i8] c"called `Result::unwrap()` on an `Err` value" }>, align 1
+@alloc130 = private unnamed_addr constant <{ [12 x i8] }> <{ [12 x i8] c"invalid args" }>, align 1
+@alloc131 = private unnamed_addr constant <{ [75 x i8] }> <{ [75 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/core/src/fmt/mod.rs" }>, align 1
+@alloc132 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [75 x i8] }>, <{ [75 x i8] }>* @alloc131, i32 0, i32 0, i32 0), [16 x i8] c"K\00\00\00\00\00\00\00k\01\00\00\0D\00\00\00" }>, align 8
+@alloc133 = private unnamed_addr constant <{ [80 x i8] }> <{ [80 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/core/src/alloc/layout.rs" }>, align 1
+@alloc134 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [80 x i8] }>, <{ [80 x i8] }>* @alloc133, i32 0, i32 0, i32 0), [16 x i8] c"P\00\00\00\00\00\00\00\98\01\00\00\1A\00\00\00" }>, align 8
+@alloc135 = private unnamed_addr constant <{ [43 x i8] }> <{ [43 x i8] c"called `Result::unwrap()` on an `Err` value" }>, align 1
 @vtable.5 = private unnamed_addr constant <{ i8*, [16 x i8], i8*, [0 x i8] }> <{ i8* bitcast (void (%"core::alloc::layout::LayoutError"*)* @"_ZN4core3ptr53drop_in_place$LT$core..alloc..layout..LayoutError$GT$17h0de9862122333e31E" to i8*), [16 x i8] c"\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00", i8* bitcast (i1 (%"core::alloc::layout::LayoutError"*, %"core::fmt::Formatter"*)* @"_ZN69_$LT$core..alloc..layout..LayoutError$u20$as$u20$core..fmt..Debug$GT$3fmt17h904faa326d3b1c4fE" to i8*), [0 x i8] zeroinitializer }>, align 8
 @0 = private unnamed_addr constant <{ [16 x i8] }> <{ [16 x i8] c"\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00" }>, align 8
-@alloc162 = private unnamed_addr constant <{ [74 x i8] }> <{ [74 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/alloc/src/alloc.rs" }>, align 1
-@alloc159 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [74 x i8] }>, <{ [74 x i8] }>* @alloc162, i32 0, i32 0, i32 0), [16 x i8] c"J\00\00\00\00\00\00\00\AA\00\00\00\1B\00\00\00" }>, align 8
-@alloc161 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [74 x i8] }>, <{ [74 x i8] }>* @alloc162, i32 0, i32 0, i32 0), [16 x i8] c"J\00\00\00\00\00\00\00\CA\00\00\00\1B\00\00\00" }>, align 8
-@alloc163 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [74 x i8] }>, <{ [74 x i8] }>* @alloc162, i32 0, i32 0, i32 0), [16 x i8] c"J\00\00\00\00\00\00\00\D7\00\00\00\1F\00\00\00" }>, align 8
-@alloc172 = private unnamed_addr constant <{ [76 x i8] }> <{ [76 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/alloc/src/raw_vec.rs" }>, align 1
-@alloc165 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc172, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\C8\01\00\00\16\00\00\00" }>, align 8
-@alloc167 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc172, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\CA\01\00\00\05\00\00\00" }>, align 8
-@alloc169 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc172, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\87\01\00\00\1C\00\00\00" }>, align 8
-@alloc171 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc172, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\91\01\00\00\13\00\00\00" }>, align 8
-@alloc173 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc172, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00m\01\00\00\09\00\00\00" }>, align 8
-@alloc174 = private unnamed_addr constant <{ [45 x i8] }> <{ [45 x i8] c"TRY ALLOCATION FAIL, LOCATION: try_test_oom()" }>, align 1
-@alloc175 = private unnamed_addr constant <{ [15 x i8] }> <{ [15 x i8] c"src/bin/main.rs" }>, align 1
-@alloc176 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [15 x i8] }>, <{ [15 x i8] }>* @alloc175, i32 0, i32 0, i32 0), [16 x i8] c"\0F\00\00\00\00\00\00\007\00\00\00\03\00\00\00" }>, align 8
+@alloc143 = private unnamed_addr constant <{ [74 x i8] }> <{ [74 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/alloc/src/alloc.rs" }>, align 1
+@alloc140 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [74 x i8] }>, <{ [74 x i8] }>* @alloc143, i32 0, i32 0, i32 0), [16 x i8] c"J\00\00\00\00\00\00\00\AA\00\00\00\1B\00\00\00" }>, align 8
+@alloc142 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [74 x i8] }>, <{ [74 x i8] }>* @alloc143, i32 0, i32 0, i32 0), [16 x i8] c"J\00\00\00\00\00\00\00\CA\00\00\00\1B\00\00\00" }>, align 8
+@alloc144 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [74 x i8] }>, <{ [74 x i8] }>* @alloc143, i32 0, i32 0, i32 0), [16 x i8] c"J\00\00\00\00\00\00\00\D7\00\00\00\1F\00\00\00" }>, align 8
+@alloc153 = private unnamed_addr constant <{ [76 x i8] }> <{ [76 x i8] c"/rustc/34926f0a1681458588a2d4240c0715ef9eff7d35/library/alloc/src/raw_vec.rs" }>, align 1
+@alloc146 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc153, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\C8\01\00\00\16\00\00\00" }>, align 8
+@alloc148 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc153, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\CA\01\00\00\05\00\00\00" }>, align 8
+@alloc150 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc153, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\87\01\00\00\1C\00\00\00" }>, align 8
+@alloc152 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc153, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00\91\01\00\00\13\00\00\00" }>, align 8
+@alloc154 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [76 x i8] }>, <{ [76 x i8] }>* @alloc153, i32 0, i32 0, i32 0), [16 x i8] c"L\00\00\00\00\00\00\00m\01\00\00\09\00\00\00" }>, align 8
+@alloc155 = private unnamed_addr constant <{ [45 x i8] }> <{ [45 x i8] c"TRY ALLOCATION FAIL, LOCATION: try_test_oom()" }>, align 1
+@alloc156 = private unnamed_addr constant <{ [15 x i8] }> <{ [15 x i8] c"src/bin/main.rs" }>, align 1
+@alloc157 = private unnamed_addr constant <{ i8*, [16 x i8] }> <{ i8* getelementptr inbounds (<{ [15 x i8] }>, <{ [15 x i8] }>* @alloc156, i32 0, i32 0, i32 0), [16 x i8] c"\0F\00\00\00\00\00\00\00?\00\00\00\03\00\00\00" }>, align 8
 @alloc13 = private unnamed_addr constant <{ [4 x i8] }> <{ [4 x i8] c"\0D\00\00\00" }>, align 4
-@alloc24 = private unnamed_addr constant <{ [1 x i8] }> <{ [1 x i8] c"\0A" }>, align 1
 @alloc23 = private unnamed_addr constant <{ i8*, [8 x i8], i8*, [8 x i8] }> <{ i8* getelementptr inbounds (<{ [0 x i8] }>, <{ [0 x i8] }>* @alloc4, i32 0, i32 0, i32 0), [8 x i8] zeroinitializer, i8* getelementptr inbounds (<{ [1 x i8] }>, <{ [1 x i8] }>* @alloc24, i32 0, i32 0, i32 0), [8 x i8] c"\01\00\00\00\00\00\00\00" }>, align 8
 @alloc27 = private unnamed_addr constant <{ [10 x i8] }> <{ [10 x i8] c"TEST OVER\0A" }>, align 1
 @alloc28 = private unnamed_addr constant <{ i8*, [8 x i8] }> <{ i8* getelementptr inbounds (<{ [10 x i8] }>, <{ [10 x i8] }>* @alloc27, i32 0, i32 0, i32 0), [8 x i8] c"\0A\00\00\00\00\00\00\00" }>, align 8
@@ -143,20 +134,22 @@ target triple = "x86_64-unknown-linux-gnu"
 define internal i8* @"_ZN114_$LT$OOMGuardAllocator..OOMGuard_Allocator$LT$DefaultAllocator$GT$$u20$as$u20$core..alloc..global..GlobalAlloc$GT$5alloc17hdfbdbbb7792b424aE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %0, i64 %1) unnamed_addr #0 {
 start:
   %2 = alloca i8*, align 8
-  %3 = alloca i8*, align 8
-  %_78 = alloca %"core::fmt::Arguments", align 8
+  %_87 = alloca i64, align 8
+  %_85 = alloca i64*, align 8
+  %_84 = alloca [1 x { i8*, i64* }], align 8
+  %_77 = alloca %"core::fmt::Arguments", align 8
   %current1 = alloca %"OOMGuardAllocator::MyPage"*, align 8
-  %_32 = alloca %"core::fmt::Arguments", align 8
+  %_23 = alloca %"core::fmt::Arguments", align 8
   %past = alloca %"OOMGuardAllocator::MyPage"*, align 8
   %current = alloca %"OOMGuardAllocator::MyPage"*, align 8
   %ret_ptr = alloca i8*, align 8
   %i = alloca i64, align 8
-  %4 = alloca i8*, align 8
+  %3 = alloca i8*, align 8
   %layout = alloca { i64, i64 }, align 8
-  %5 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
-  store i64 %0, i64* %5, align 8
-  %6 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
-  store i64 %1, i64* %6, align 8
+  %4 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
+  store i64 %0, i64* %4, align 8
+  %5 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
+  store i64 %1, i64* %5, align 8
 ; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::get_flag
   %_4 = call zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag17h014aeefe6d791b7bE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self)
   br label %bb1
@@ -167,435 +160,430 @@ bb1:                                              ; preds = %start
 
 bb3:                                              ; preds = %bb1
 ; call core::alloc::layout::Layout::size
-  %_10 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
+  %_9 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
   br label %bb4
 
 bb2:                                              ; preds = %bb1
-  %7 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
-  %_6 = load %"std::alloc::System"*, %"std::alloc::System"** %7, align 4096, !nonnull !3
-  %8 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
-  %_7.0 = load i64, i64* %8, align 8
-  %9 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
-  %_7.1 = load i64, i64* %9, align 8, !range !4
+  %6 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
+  %_6 = load %"std::alloc::System"*, %"std::alloc::System"** %6, align 4096, !nonnull !3
+  %7 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
+  %_7.0 = load i64, i64* %7, align 8
+  %8 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
+  %_7.1 = load i64, i64* %8, align 8, !range !4
 ; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::alloc
-  %10 = call i8* @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$5alloc17h8c2d5bf582c5184aE"(%"std::alloc::System"* nonnull align 1 %_6, i64 %_7.0, i64 %_7.1)
-  store i8* %10, i8** %4, align 8
-  br label %bb54
+  %9 = call i8* @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$5alloc17h8c2d5bf582c5184aE"(%"std::alloc::System"* nonnull align 1 %_6, i64 %_7.0, i64 %_7.1)
+  store i8* %9, i8** %3, align 8
+  br label %bb52
 
-bb54:                                             ; preds = %bb27, %bb53, %bb2
-  %11 = load i8*, i8** %4, align 8
-  ret i8* %11
+bb52:                                             ; preds = %bb23, %bb12, %bb51, %bb35, %bb2
+  %10 = load i8*, i8** %3, align 8
+  ret i8* %10
 
 bb4:                                              ; preds = %bb3
-  %12 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_10, i64 1)
-  %_12.0 = extractvalue { i64, i1 } %12, 0
-  %_12.1 = extractvalue { i64, i1 } %12, 1
-  %13 = call i1 @llvm.expect.i1(i1 %_12.1, i1 false)
-  br i1 %13, label %panic, label %bb5
+; call OOMGuardAllocator::cal_tools::find_block
+  %11 = call i64 @_ZN17OOMGuardAllocator9cal_tools10find_block17h27b93b27ace7baf8E(i64 %_9)
+  store i64 %11, i64* %i, align 8
+  br label %bb5
 
 bb5:                                              ; preds = %bb4
-; call OOMGuardAllocator::cal_tools::find_block
-  %14 = call i64 @_ZN17OOMGuardAllocator9cal_tools10find_block17h27b93b27ace7baf8E(i64 %_12.0)
-  store i64 %14, i64* %i, align 8
-  br label %bb6
-
-panic:                                            ; preds = %bb4
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc72 to %"core::panic::location::Location"*)) #14
-  unreachable
+  store i8* null, i8** %ret_ptr, align 8
+  %_12 = load i64, i64* %i, align 8
+  %12 = icmp eq i64 %_12, 8
+  br i1 %12, label %bb6, label %bb25
 
 bb6:                                              ; preds = %bb5
-  store i8* null, i8** %ret_ptr, align 8
-  %_14 = load i64, i64* %i, align 8
-  %15 = icmp eq i64 %_14, 8
-  br i1 %15, label %bb7, label %bb29
+  %_15 = load i64, i64* %i, align 8
+  %_17 = icmp ult i64 %_15, 9
+  %13 = call i1 @llvm.expect.i1(i1 %_17, i1 true)
+  br i1 %13, label %bb7, label %panic11
 
-bb7:                                              ; preds = %bb6
-; call core::alloc::layout::Layout::size
-  %_17 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb8
+bb25:                                             ; preds = %bb5
+  %_64 = load i64, i64* %i, align 8
+  %_66 = icmp ult i64 %_64, 9
+  %14 = call i1 @llvm.expect.i1(i1 %_66, i1 true)
+  br i1 %14, label %bb26, label %panic
 
-bb29:                                             ; preds = %bb6
-  %_71 = load i64, i64* %i, align 8
-  %_73 = icmp ult i64 %_71, 9
-  %16 = call i1 @llvm.expect.i1(i1 %_73, i1 true)
-  br i1 %16, label %bb30, label %panic2
+bb26:                                             ; preds = %bb25
+  %15 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_64
+  %16 = bitcast { i64*, i64 }* %15 to %"OOMGuardAllocator::MyPage"**
+  %17 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %16, align 8
+  store %"OOMGuardAllocator::MyPage"* %17, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %_68 = load i64, i64* %i, align 8
+  %_70 = icmp ult i64 %_68, 8
+  %18 = call i1 @llvm.expect.i1(i1 %_70, i1 true)
+  br i1 %18, label %bb27, label %panic2
+
+panic:                                            ; preds = %bb25
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_64, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc71 to %"core::panic::location::Location"*)) #14
+  unreachable
+
+bb27:                                             ; preds = %bb26
+  %19 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17hdc597d1ff9b698dfE, i64 0, i64 %_68
+  %20 = load i64, i64* %19, align 8
+  %21 = call { i64, i1 } @llvm.ssub.with.overflow.i64(i64 %20, i64 1)
+  %_71.0 = extractvalue { i64, i1 } %21, 0
+  %_71.1 = extractvalue { i64, i1 } %21, 1
+  %22 = call i1 @llvm.expect.i1(i1 %_71.1, i1 false)
+  br i1 %22, label %panic3, label %bb28
+
+panic2:                                           ; preds = %bb26
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_68, i64 8, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc73 to %"core::panic::location::Location"*)) #14
+  unreachable
+
+bb28:                                             ; preds = %bb27
+  %23 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17hdc597d1ff9b698dfE, i64 0, i64 %_68
+  store i64 %_71.0, i64* %23, align 8
+  br label %bb29
+
+panic3:                                           ; preds = %bb27
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.0 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc73 to %"core::panic::location::Location"*)) #14
+  unreachable
+
+bb29:                                             ; preds = %bb41, %bb38, %bb28
+  %_73 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %_72 = icmp eq %"OOMGuardAllocator::MyPage"* %_73, null
+  br i1 %_72, label %bb30, label %bb39
+
+bb39:                                             ; preds = %bb29
+  %_103 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %24 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_103, i32 0, i32 3
+  %_102 = load i64, i64* %24, align 8
+  %25 = icmp eq i64 %_102, 999
+  br i1 %25, label %bb41, label %bb40
 
 bb30:                                             ; preds = %bb29
-  %17 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_71
-  %18 = bitcast { i64*, i64 }* %17 to %"OOMGuardAllocator::MyPage"**
-  %19 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %18, align 8
-  store %"OOMGuardAllocator::MyPage"* %19, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  br label %bb31
+  %_75 = load i64, i64* %i, align 8
+  %26 = icmp eq i64 %_75, 8
+  br i1 %26, label %bb31, label %bb36
 
-panic2:                                           ; preds = %bb29
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_71, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc74 to %"core::panic::location::Location"*)) #14
-  unreachable
+bb31:                                             ; preds = %bb30
+; call core::alloc::layout::Layout::size
+  %27 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
+  store i64 %27, i64* %_87, align 8
+  br label %bb32
 
-bb31:                                             ; preds = %bb40, %bb37, %bb30
-  %_75 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %_74 = icmp eq %"OOMGuardAllocator::MyPage"* %_75, null
-  br i1 %_74, label %bb32, label %bb38
-
-bb38:                                             ; preds = %bb31
-  %_94 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %20 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_94, i32 0, i32 2
-  %_93 = load i64, i64* %20, align 8
-  %21 = icmp eq i64 %_93, 999
-  br i1 %21, label %bb40, label %bb39
-
-bb32:                                             ; preds = %bb31
-  %_77 = load i64, i64* %i, align 8
-  %22 = icmp eq i64 %_77, 8
-  br i1 %22, label %bb33, label %bb35
-
-bb33:                                             ; preds = %bb32
-; call core::fmt::Arguments::new_v1
-  call void @_ZN4core3fmt9Arguments6new_v117h7f23f9f3c278f407E(%"core::fmt::Arguments"* noalias nocapture sret(%"core::fmt::Arguments") dereferenceable(48) %_78, [0 x { [0 x i8]*, i64 }]* nonnull align 8 bitcast (<{ i8*, [8 x i8] }>* @alloc57 to [0 x { [0 x i8]*, i64 }]*), i64 1, [0 x { i8*, i64* }]* nonnull align 8 bitcast (<{ [0 x i8] }>* @alloc4 to [0 x { i8*, i64* }]*), i64 0)
-  br label %bb34
-
-bb35:                                             ; preds = %bb32
-  %_86 = load i64, i64* %i, align 8
-  %23 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_86, i64 1)
-  %_87.0 = extractvalue { i64, i1 } %23, 0
-  %_87.1 = extractvalue { i64, i1 } %23, 1
-  %24 = call i1 @llvm.expect.i1(i1 %_87.1, i1 false)
-  br i1 %24, label %panic3, label %bb36
-
-bb36:                                             ; preds = %bb35
-  store i64 %_87.0, i64* %i, align 8
-  %_90 = load i64, i64* %i, align 8
-  %_92 = icmp ult i64 %_90, 9
-  %25 = call i1 @llvm.expect.i1(i1 %_92, i1 true)
-  br i1 %25, label %bb37, label %panic4
-
-panic3:                                           ; preds = %bb35
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc76 to %"core::panic::location::Location"*)) #14
-  unreachable
+bb36:                                             ; preds = %bb30
+  %_95 = load i64, i64* %i, align 8
+  %28 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_95, i64 1)
+  %_96.0 = extractvalue { i64, i1 } %28, 0
+  %_96.1 = extractvalue { i64, i1 } %28, 1
+  %29 = call i1 @llvm.expect.i1(i1 %_96.1, i1 false)
+  br i1 %29, label %panic4, label %bb37
 
 bb37:                                             ; preds = %bb36
-  %26 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_90
-  %27 = bitcast { i64*, i64 }* %26 to %"OOMGuardAllocator::MyPage"**
-  %_88 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %27, align 8
-  store %"OOMGuardAllocator::MyPage"* %_88, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  br label %bb31
+  store i64 %_96.0, i64* %i, align 8
+  %_99 = load i64, i64* %i, align 8
+  %_101 = icmp ult i64 %_99, 9
+  %30 = call i1 @llvm.expect.i1(i1 %_101, i1 true)
+  br i1 %30, label %bb38, label %panic5
 
 panic4:                                           ; preds = %bb36
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_90, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc78 to %"core::panic::location::Location"*)) #14
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.1 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc75 to %"core::panic::location::Location"*)) #14
   unreachable
+
+bb38:                                             ; preds = %bb37
+  %31 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_99
+  %32 = bitcast { i64*, i64 }* %31 to %"OOMGuardAllocator::MyPage"**
+  %_97 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %32, align 8
+  store %"OOMGuardAllocator::MyPage"* %_97, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  br label %bb29
+
+panic5:                                           ; preds = %bb37
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_99, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc77 to %"core::panic::location::Location"*)) #14
+  unreachable
+
+bb32:                                             ; preds = %bb31
+  store i64* %_87, i64** %_85, align 8
+  %_args = load i64*, i64** %_85, align 8, !nonnull !3
+; call core::fmt::ArgumentV1::new
+  %33 = call { i8*, i64* } @_ZN4core3fmt10ArgumentV13new17ha7354cbf4aaa89d6E(i64* align 8 dereferenceable(8) %_args, i1 (i64*, %"core::fmt::Formatter"*)* nonnull @"_ZN4core3fmt3num3imp54_$LT$impl$u20$core..fmt..Display$u20$for$u20$usize$GT$3fmt17h716e7ed010a408dfE")
+  %_90.0 = extractvalue { i8*, i64* } %33, 0
+  %_90.1 = extractvalue { i8*, i64* } %33, 1
+  br label %bb33
+
+bb33:                                             ; preds = %bb32
+  %34 = bitcast [1 x { i8*, i64* }]* %_84 to { i8*, i64* }*
+  %35 = getelementptr inbounds { i8*, i64* }, { i8*, i64* }* %34, i32 0, i32 0
+  store i8* %_90.0, i8** %35, align 8
+  %36 = getelementptr inbounds { i8*, i64* }, { i8*, i64* }* %34, i32 0, i32 1
+  store i64* %_90.1, i64** %36, align 8
+  %_81.0 = bitcast [1 x { i8*, i64* }]* %_84 to [0 x { i8*, i64* }]*
+; call core::fmt::Arguments::new_v1
+  call void @_ZN4core3fmt9Arguments6new_v117h7f23f9f3c278f407E(%"core::fmt::Arguments"* noalias nocapture sret(%"core::fmt::Arguments") dereferenceable(48) %_77, [0 x { [0 x i8]*, i64 }]* nonnull align 8 bitcast (<{ i8*, [8 x i8], i8*, [8 x i8] }>* @alloc57 to [0 x { [0 x i8]*, i64 }]*), i64 2, [0 x { i8*, i64* }]* nonnull align 8 %_81.0, i64 1)
+  br label %bb34
 
 bb34:                                             ; preds = %bb33
-; call core::panicking::panic_fmt
-  call void @_ZN4core9panicking9panic_fmt17h8bc989e1fc10c635E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48) %_78, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc80 to %"core::panic::location::Location"*)) #14
-  unreachable
+; call std::io::stdio::_print
+  call void @_ZN3std2io5stdio6_print17h68c20082d25e6dc7E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48) %_77)
+  br label %bb35
 
-bb40:                                             ; preds = %bb38
-  %28 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %29 = bitcast %"OOMGuardAllocator::MyPage"* %28 to %"OOMGuardAllocator::MyPage"**
-  %_134 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %29, align 8
-  store %"OOMGuardAllocator::MyPage"* %_134, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  br label %bb31
-
-bb39:                                             ; preds = %bb38
-  %_95 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %30 = bitcast %"OOMGuardAllocator::MyPage"* %_95 to i8*
-  store i8* %30, i8** %ret_ptr, align 8
-  %_99 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %_101 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %31 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_101, i32 0, i32 2
-  %_100 = load i64, i64* %31, align 8
-  %_103 = icmp ult i64 %_100, 256
-  %32 = call i1 @llvm.expect.i1(i1 %_103, i1 true)
-  br i1 %32, label %bb41, label %panic5
+bb35:                                             ; preds = %bb34
+  %37 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
+  %_93 = load %"std::alloc::System"*, %"std::alloc::System"** %37, align 4096, !nonnull !3
+  %38 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
+  %_94.0 = load i64, i64* %38, align 8
+  %39 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
+  %_94.1 = load i64, i64* %39, align 8, !range !4
+; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::alloc
+  %40 = call i8* @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$5alloc17h8c2d5bf582c5184aE"(%"std::alloc::System"* nonnull align 1 %_93, i64 %_94.0, i64 %_94.1)
+  store i8* %40, i8** %3, align 8
+  br label %bb52
 
 bb41:                                             ; preds = %bb39
-  %33 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_99, i32 0, i32 4
-  %34 = getelementptr inbounds [256 x i8], [256 x i8]* %33, i64 0, i64 %_100
-  %_98 = load i8, i8* %34, align 1
-  %_97 = zext i8 %_98 to i64
-  %_106 = load i64, i64* %i, align 8
-  %_108 = icmp ult i64 %_106, 9
-  %35 = call i1 @llvm.expect.i1(i1 %_108, i1 true)
-  br i1 %35, label %bb42, label %panic6
+  %41 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %42 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %41, i32 0, i32 1
+  %_130 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %42, align 8
+  store %"OOMGuardAllocator::MyPage"* %_130, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  br label %bb29
 
-panic5:                                           ; preds = %bb39
+bb40:                                             ; preds = %bb39
+  %_104 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %43 = bitcast %"OOMGuardAllocator::MyPage"* %_104 to i8*
+  store i8* %43, i8** %ret_ptr, align 8
+  %_108 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %_110 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %44 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_110, i32 0, i32 3
+  %_109 = load i64, i64* %44, align 8
+  %_112 = icmp ult i64 %_109, 256
+  %45 = call i1 @llvm.expect.i1(i1 %_112, i1 true)
+  br i1 %45, label %bb42, label %panic6
+
+bb42:                                             ; preds = %bb40
+  %46 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_108, i32 0, i32 4
+  %47 = getelementptr inbounds [256 x i8], [256 x i8]* %46, i64 0, i64 %_109
+  %_107 = load i8, i8* %47, align 1
+  %_106 = zext i8 %_107 to i64
+  %_115 = load i64, i64* %i, align 8
+  %_117 = icmp ult i64 %_115, 9
+  %48 = call i1 @llvm.expect.i1(i1 %_117, i1 true)
+  br i1 %48, label %bb43, label %panic7
+
+panic6:                                           ; preds = %bb40
 ; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_100, i64 256, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc82 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb42:                                             ; preds = %bb41
-  %36 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_106
-  %37 = getelementptr inbounds { i64*, i64 }, { i64*, i64 }* %36, i32 0, i32 1
-  %_104 = load i64, i64* %37, align 8
-  %38 = call { i64, i1 } @llvm.umul.with.overflow.i64(i64 %_97, i64 %_104)
-  %_109.0 = extractvalue { i64, i1 } %38, 0
-  %_109.1 = extractvalue { i64, i1 } %38, 1
-  %39 = call i1 @llvm.expect.i1(i1 %_109.1, i1 false)
-  br i1 %39, label %panic7, label %bb43
-
-panic6:                                           ; preds = %bb41
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_106, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc84 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_109, i64 256, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc79 to %"core::panic::location::Location"*)) #14
   unreachable
 
 bb43:                                             ; preds = %bb42
-  %_112 = load i64, i64* %i, align 8
-  %_114 = icmp ult i64 %_112, 8
-  %40 = call i1 @llvm.expect.i1(i1 %_114, i1 true)
-  br i1 %40, label %bb44, label %panic8
+  %49 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_115
+  %50 = getelementptr inbounds { i64*, i64 }, { i64*, i64 }* %49, i32 0, i32 1
+  %_113 = load i64, i64* %50, align 8
+  %51 = call { i64, i1 } @llvm.umul.with.overflow.i64(i64 %_106, i64 %_113)
+  %_118.0 = extractvalue { i64, i1 } %51, 0
+  %_118.1 = extractvalue { i64, i1 } %51, 1
+  %52 = call i1 @llvm.expect.i1(i1 %_118.1, i1 false)
+  br i1 %52, label %panic8, label %bb44
 
 panic7:                                           ; preds = %bb42
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.1 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc86 to %"core::panic::location::Location"*)) #14
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_115, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc81 to %"core::panic::location::Location"*)) #14
   unreachable
 
 bb44:                                             ; preds = %bb43
-  %41 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17ha104d8890128a2f9E, i64 0, i64 %_112
-  %_110 = load i64, i64* %41, align 8
-  %42 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %_110, i64 1)
-  %_115.0 = extractvalue { i64, i1 } %42, 0
-  %_115.1 = extractvalue { i64, i1 } %42, 1
-  %43 = call i1 @llvm.expect.i1(i1 %_115.1, i1 false)
-  br i1 %43, label %panic9, label %bb45
+  %_120 = load i8*, i8** %ret_ptr, align 8
+  br label %bb45
 
 panic8:                                           ; preds = %bb43
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_112, i64 8, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc88 to %"core::panic::location::Location"*)) #14
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.2 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc83 to %"core::panic::location::Location"*)) #14
   unreachable
 
 bb45:                                             ; preds = %bb44
-  %_117 = load i64, i64* %i, align 8
-  %_119 = icmp ult i64 %_117, 8
-  %44 = call i1 @llvm.expect.i1(i1 %_119, i1 true)
-  br i1 %44, label %bb46, label %panic10
-
-panic9:                                           ; preds = %bb44
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.2 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc88 to %"core::panic::location::Location"*)) #14
-  unreachable
+  %53 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_118.0, i64 288)
+  %_124.0 = extractvalue { i64, i1 } %53, 0
+  %_124.1 = extractvalue { i64, i1 } %53, 1
+  %54 = call i1 @llvm.expect.i1(i1 %_124.1, i1 false)
+  br i1 %54, label %panic9, label %bb46
 
 bb46:                                             ; preds = %bb45
-  %45 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17ha104d8890128a2f9E, i64 0, i64 %_117
-  store i64 %_115.0, i64* %45, align 8
-  %_121 = load i8*, i8** %ret_ptr, align 8
+  %55 = getelementptr inbounds i8, i8* %_120, i64 %_124.0
+  store i8* %55, i8** %2, align 8
+  %_3.i = load i8*, i8** %2, align 8
   br label %bb47
 
-panic10:                                          ; preds = %bb45
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_117, i64 8, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc90 to %"core::panic::location::Location"*)) #14
+panic9:                                           ; preds = %bb45
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.1 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc85 to %"core::panic::location::Location"*)) #14
   unreachable
 
 bb47:                                             ; preds = %bb46
-  %46 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_109.0, i64 288)
-  %_125.0 = extractvalue { i64, i1 } %46, 0
-  %_125.1 = extractvalue { i64, i1 } %46, 1
-  %47 = call i1 @llvm.expect.i1(i1 %_125.1, i1 false)
-  br i1 %47, label %panic11, label %bb48
+  store i8* %_3.i, i8** %ret_ptr, align 8
+  %_126 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %56 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_126, i32 0, i32 3
+  %_125 = load i64, i64* %56, align 8
+  %57 = icmp eq i64 %_125, 0
+  br i1 %57, label %bb48, label %bb49
 
 bb48:                                             ; preds = %bb47
-  %48 = getelementptr inbounds i8, i8* %_121, i64 %_125.0
-  store i8* %48, i8** %3, align 8
-  %_3.i = load i8*, i8** %3, align 8
-  br label %bb49
+  %_127 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %58 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_127, i32 0, i32 3
+  store i64 999, i64* %58, align 8
+  br label %bb51
 
-panic11:                                          ; preds = %bb47
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc92 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb49:                                             ; preds = %bb48
-  store i8* %_3.i, i8** %ret_ptr, align 8
-  %_126 = udiv i64 %_109.0, 16
-  %_128 = load i8*, i8** %ret_ptr, align 8
-  %49 = trunc i64 %_126 to i8
-  store i8 %49, i8* %_128, align 1
-  %_130 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %50 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_130, i32 0, i32 2
-  %_129 = load i64, i64* %50, align 8
-  %51 = icmp eq i64 %_129, 0
-  br i1 %51, label %bb50, label %bb51
+bb49:                                             ; preds = %bb47
+  %_128 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
+  %59 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_128, i32 0, i32 3
+  %60 = load i64, i64* %59, align 8
+  %61 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %60, i64 1)
+  %_129.0 = extractvalue { i64, i1 } %61, 0
+  %_129.1 = extractvalue { i64, i1 } %61, 1
+  %62 = call i1 @llvm.expect.i1(i1 %_129.1, i1 false)
+  br i1 %62, label %panic10, label %bb50
 
 bb50:                                             ; preds = %bb49
-  %_131 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %52 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_131, i32 0, i32 2
-  store i64 999, i64* %52, align 8
-  br label %bb53
+  %63 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_128, i32 0, i32 3
+  store i64 %_129.0, i64* %63, align 8
+  br label %bb51
 
-bb51:                                             ; preds = %bb49
-  %_132 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current1, align 8
-  %53 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_132, i32 0, i32 2
-  %54 = load i64, i64* %53, align 8
-  %55 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %54, i64 1)
-  %_133.0 = extractvalue { i64, i1 } %55, 0
-  %_133.1 = extractvalue { i64, i1 } %55, 1
-  %56 = call i1 @llvm.expect.i1(i1 %_133.1, i1 false)
-  br i1 %56, label %panic12, label %bb52
-
-bb52:                                             ; preds = %bb51
-  %57 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_132, i32 0, i32 2
-  store i64 %_133.0, i64* %57, align 8
-  br label %bb53
-
-panic12:                                          ; preds = %bb51
+panic10:                                          ; preds = %bb49
 ; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.2 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc94 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.0 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc87 to %"core::panic::location::Location"*)) #14
   unreachable
 
-bb53:                                             ; preds = %bb50, %bb52
-  %_135 = load i8*, i8** %ret_ptr, align 8
-  %58 = getelementptr inbounds i8, i8* %_135, i64 1
-  store i8* %58, i8** %2, align 8
-  %_3.i15 = load i8*, i8** %2, align 8
-  store i8* %_3.i15, i8** %4, align 8
-  br label %bb54
+bb51:                                             ; preds = %bb48, %bb50
+  %64 = load i8*, i8** %ret_ptr, align 8
+  store i8* %64, i8** %3, align 8
+  br label %bb52
 
-bb8:                                              ; preds = %bb7
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_alloc
-  call void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$12update_alloc17hf78fd44323c8cfb8E"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %_17)
+bb7:                                              ; preds = %bb6
+  %65 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_15
+  %66 = bitcast { i64*, i64 }* %65 to %"OOMGuardAllocator::MyPage"**
+  %67 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %66, align 8
+  store %"OOMGuardAllocator::MyPage"* %67, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %68 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  store %"OOMGuardAllocator::MyPage"* %68, %"OOMGuardAllocator::MyPage"** %past, align 8
+  br label %bb8
+
+panic11:                                          ; preds = %bb6
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_15, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc89 to %"core::panic::location::Location"*)) #14
+  unreachable
+
+bb8:                                              ; preds = %bb24, %bb7
+  %_20 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
   br label %bb9
 
 bb9:                                              ; preds = %bb8
+  %_19 = icmp eq %"OOMGuardAllocator::MyPage"* %_20, null
+  br i1 %_19, label %bb10, label %bb13
+
+bb13:                                             ; preds = %bb9
+  %_35 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %69 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_35, i32 0, i32 2
+  %_34 = load i64, i64* %69, align 8
 ; call core::alloc::layout::Layout::size
-  %_21 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb10
+  %_36 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
+  br label %bb14
 
 bb10:                                             ; preds = %bb9
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::record_msg
-  call void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$10record_msg17h2b68f1ec5def827dE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %_21, i64 1)
+; call core::fmt::Arguments::new_v1
+  call void @_ZN4core3fmt9Arguments6new_v117h7f23f9f3c278f407E(%"core::fmt::Arguments"* noalias nocapture sret(%"core::fmt::Arguments") dereferenceable(48) %_23, [0 x { [0 x i8]*, i64 }]* nonnull align 8 bitcast (<{ i8*, [8 x i8] }>* @alloc52 to [0 x { [0 x i8]*, i64 }]*), i64 1, [0 x { i8*, i64* }]* nonnull align 8 bitcast (<{ [0 x i8] }>* @alloc4 to [0 x { i8*, i64* }]*), i64 0)
   br label %bb11
 
 bb11:                                             ; preds = %bb10
-  %_25 = load i64, i64* %i, align 8
-  %_27 = icmp ult i64 %_25, 9
-  %59 = call i1 @llvm.expect.i1(i1 %_27, i1 true)
-  br i1 %59, label %bb12, label %panic13
+; call std::io::stdio::_print
+  call void @_ZN3std2io5stdio6_print17h68c20082d25e6dc7E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48) %_23)
+  br label %bb12
 
 bb12:                                             ; preds = %bb11
-  %60 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_25
-  %61 = bitcast { i64*, i64 }* %60 to %"OOMGuardAllocator::MyPage"**
-  %62 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %61, align 8
-  store %"OOMGuardAllocator::MyPage"* %62, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %63 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  store %"OOMGuardAllocator::MyPage"* %63, %"OOMGuardAllocator::MyPage"** %past, align 8
-  br label %bb13
-
-panic13:                                          ; preds = %bb11
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_25, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc96 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb13:                                             ; preds = %bb28, %bb12
-  %_30 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  br label %bb14
+  %70 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
+  %_31 = load %"std::alloc::System"*, %"std::alloc::System"** %70, align 4096, !nonnull !3
+  %71 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
+  %_32.0 = load i64, i64* %71, align 8
+  %72 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
+  %_32.1 = load i64, i64* %72, align 8, !range !4
+; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::alloc
+  %73 = call i8* @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$5alloc17h8c2d5bf582c5184aE"(%"std::alloc::System"* nonnull align 1 %_31, i64 %_32.0, i64 %_32.1)
+  store i8* %73, i8** %3, align 8
+  br label %bb52
 
 bb14:                                             ; preds = %bb13
-  %_29 = icmp eq %"OOMGuardAllocator::MyPage"* %_30, null
-  br i1 %_29, label %bb15, label %bb17
+  %_33 = icmp uge i64 %_34, %_36
+  br i1 %_33, label %bb15, label %bb24
 
-bb17:                                             ; preds = %bb14
-  %_42 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %64 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_42, i32 0, i32 1
-  %_41 = load i64, i64* %64, align 8
-; call core::alloc::layout::Layout::size
-  %_43 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb18
+bb24:                                             ; preds = %bb14
+  %_60 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  store %"OOMGuardAllocator::MyPage"* %_60, %"OOMGuardAllocator::MyPage"** %past, align 8
+  %74 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %75 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %74, i32 0, i32 1
+  %_61 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %75, align 8
+  store %"OOMGuardAllocator::MyPage"* %_61, %"OOMGuardAllocator::MyPage"** %current, align 8
+  br label %bb8
 
 bb15:                                             ; preds = %bb14
-; call core::fmt::Arguments::new_v1
-  call void @_ZN4core3fmt9Arguments6new_v117h7f23f9f3c278f407E(%"core::fmt::Arguments"* noalias nocapture sret(%"core::fmt::Arguments") dereferenceable(48) %_32, [0 x { [0 x i8]*, i64 }]* nonnull align 8 bitcast (<{ i8*, [8 x i8] }>* @alloc52 to [0 x { [0 x i8]*, i64 }]*), i64 1, [0 x { i8*, i64* }]* nonnull align 8 bitcast (<{ [0 x i8] }>* @alloc4 to [0 x { i8*, i64* }]*), i64 0)
-  br label %bb16
+  %_39 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %76 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_39, i32 0, i32 3
+  %_38 = load i64, i64* %76, align 8
+  %77 = inttoptr i64 %_38 to i8*
+  store i8* %77, i8** %ret_ptr, align 8
+  %_41 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %past, align 8
+  %_42 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %_40 = icmp eq %"OOMGuardAllocator::MyPage"* %_41, %_42
+  br i1 %_40, label %bb16, label %bb18
+
+bb18:                                             ; preds = %bb15
+  %78 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %79 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %78, i32 0, i32 1
+  %_51 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %79, align 8
+  %80 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %past, align 8
+  %81 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %80, i32 0, i32 1
+  store %"OOMGuardAllocator::MyPage"* %_51, %"OOMGuardAllocator::MyPage"** %81, align 8
+  br label %bb19
 
 bb16:                                             ; preds = %bb15
-; call core::panicking::panic_fmt
-  call void @_ZN4core9panicking9panic_fmt17h8bc989e1fc10c635E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48) %_32, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc98 to %"core::panic::location::Location"*)) #14
+  %82 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %83 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %82, i32 0, i32 1
+  %_43 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %83, align 8
+  %_48 = load i64, i64* %i, align 8
+  %_50 = icmp ult i64 %_48, 9
+  %84 = call i1 @llvm.expect.i1(i1 %_50, i1 true)
+  br i1 %84, label %bb17, label %panic12
+
+bb17:                                             ; preds = %bb16
+  %_46 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_48
+  %85 = bitcast { i64*, i64 }* %_46 to %"OOMGuardAllocator::MyPage"**
+  store %"OOMGuardAllocator::MyPage"* %_43, %"OOMGuardAllocator::MyPage"** %85, align 8
+  br label %bb19
+
+panic12:                                          ; preds = %bb16
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_48, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc91 to %"core::panic::location::Location"*)) #14
   unreachable
 
-bb18:                                             ; preds = %bb17
-  %_40 = icmp uge i64 %_41, %_43
-  br i1 %_40, label %bb19, label %bb28
-
-bb28:                                             ; preds = %bb18
-  %_67 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  store %"OOMGuardAllocator::MyPage"* %_67, %"OOMGuardAllocator::MyPage"** %past, align 8
-  %65 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %66 = bitcast %"OOMGuardAllocator::MyPage"* %65 to %"OOMGuardAllocator::MyPage"**
-  %_68 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %66, align 8
-  store %"OOMGuardAllocator::MyPage"* %_68, %"OOMGuardAllocator::MyPage"** %current, align 8
-  br label %bb13
-
-bb19:                                             ; preds = %bb18
-  %_46 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %67 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %_46, i32 0, i32 2
-  %_45 = load i64, i64* %67, align 8
-  %68 = inttoptr i64 %_45 to i8*
-  store i8* %68, i8** %ret_ptr, align 8
-  %_48 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %past, align 8
-  %_49 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %_47 = icmp eq %"OOMGuardAllocator::MyPage"* %_48, %_49
-  br i1 %_47, label %bb20, label %bb22
-
-bb22:                                             ; preds = %bb19
-  %69 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %70 = bitcast %"OOMGuardAllocator::MyPage"* %69 to %"OOMGuardAllocator::MyPage"**
-  %_58 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %70, align 8
-  %71 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %past, align 8
-  %72 = bitcast %"OOMGuardAllocator::MyPage"* %71 to %"OOMGuardAllocator::MyPage"**
-  store %"OOMGuardAllocator::MyPage"* %_58, %"OOMGuardAllocator::MyPage"** %72, align 8
-  br label %bb23
+bb19:                                             ; preds = %bb18, %bb17
+  br label %bb20
 
 bb20:                                             ; preds = %bb19
-  %73 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %74 = bitcast %"OOMGuardAllocator::MyPage"* %73 to %"OOMGuardAllocator::MyPage"**
-  %_50 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %74, align 8
-  %_55 = load i64, i64* %i, align 8
-  %_57 = icmp ult i64 %_55, 9
-  %75 = call i1 @llvm.expect.i1(i1 %_57, i1 true)
-  br i1 %75, label %bb21, label %panic14
+; call core::alloc::layout::Layout::from_size_align
+  %86 = call { i64, i64 } @_ZN4core5alloc6layout6Layout15from_size_align17h7a85f533126cfbc4E(i64 288, i64 16)
+  %_53.0 = extractvalue { i64, i64 } %86, 0
+  %_53.1 = extractvalue { i64, i64 } %86, 1
+  br label %bb21
 
 bb21:                                             ; preds = %bb20
-  %_53 = getelementptr inbounds [9 x { i64*, i64 }], [9 x { i64*, i64 }]* @_ZN17OOMGuardAllocator7MyPages17h88e9f62e421a8614E, i64 0, i64 %_55
-  %76 = bitcast { i64*, i64 }* %_53 to %"OOMGuardAllocator::MyPage"**
-  store %"OOMGuardAllocator::MyPage"* %_50, %"OOMGuardAllocator::MyPage"** %76, align 8
+; call core::result::Result<T,E>::unwrap
+  %87 = call { i64, i64 } @"_ZN4core6result19Result$LT$T$C$E$GT$6unwrap17h9ee8ea14ba9ea516E"(i64 %_53.0, i64 %_53.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc93 to %"core::panic::location::Location"*))
+  %a.0 = extractvalue { i64, i64 } %87, 0
+  %a.1 = extractvalue { i64, i64 } %87, 1
+  br label %bb22
+
+bb22:                                             ; preds = %bb21
+  %88 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
+  %_56 = load %"std::alloc::System"*, %"std::alloc::System"** %88, align 4096, !nonnull !3
+  %_58 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
+  %_57 = bitcast %"OOMGuardAllocator::MyPage"* %_58 to i8*
+; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::dealloc
+  call void @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$7dealloc17hda33867e6eaf4794E"(%"std::alloc::System"* nonnull align 1 %_56, i8* %_57, i64 %a.0, i64 %a.1)
   br label %bb23
 
-panic14:                                          ; preds = %bb20
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_55, i64 9, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc100 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb23:                                             ; preds = %bb22, %bb21
-  br label %bb24
-
-bb24:                                             ; preds = %bb23
-; call core::alloc::layout::Layout::from_size_align
-  %77 = call { i64, i64 } @_ZN4core5alloc6layout6Layout15from_size_align17h7a85f533126cfbc4E(i64 288, i64 16)
-  %_60.0 = extractvalue { i64, i64 } %77, 0
-  %_60.1 = extractvalue { i64, i64 } %77, 1
-  br label %bb25
-
-bb25:                                             ; preds = %bb24
-; call core::result::Result<T,E>::unwrap
-  %78 = call { i64, i64 } @"_ZN4core6result19Result$LT$T$C$E$GT$6unwrap17h9ee8ea14ba9ea516E"(i64 %_60.0, i64 %_60.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc102 to %"core::panic::location::Location"*))
-  %a.0 = extractvalue { i64, i64 } %78, 0
-  %a.1 = extractvalue { i64, i64 } %78, 1
-  br label %bb26
-
-bb26:                                             ; preds = %bb25
-  %79 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
-  %_63 = load %"std::alloc::System"*, %"std::alloc::System"** %79, align 4096, !nonnull !3
-  %_65 = load %"OOMGuardAllocator::MyPage"*, %"OOMGuardAllocator::MyPage"** %current, align 8
-  %_64 = bitcast %"OOMGuardAllocator::MyPage"* %_65 to i8*
-; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::dealloc
-  call void @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$7dealloc17hda33867e6eaf4794E"(%"std::alloc::System"* nonnull align 1 %_63, i8* %_64, i64 %a.0, i64 %a.1)
-  br label %bb27
-
-bb27:                                             ; preds = %bb26
-  %80 = load i8*, i8** %ret_ptr, align 8
-  store i8* %80, i8** %4, align 8
-  br label %bb54
+bb23:                                             ; preds = %bb22
+  %89 = load i8*, i8** %ret_ptr, align 8
+  store i8* %89, i8** %3, align 8
+  br label %bb52
 }
 
 ; <OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator> as core::alloc::global::GlobalAlloc>::dealloc
@@ -607,239 +595,196 @@ start:
   store i64 %0, i64* %2, align 8
   %3 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
   store i64 %1, i64* %3, align 8
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::get_flag
-  %_5 = call zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag17h014aeefe6d791b7bE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self)
+; call core::alloc::layout::Layout::size
+  %_5 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
   br label %bb1
 
 bb1:                                              ; preds = %start
-  %_4 = xor i1 %_5, true
+  %_4 = icmp ugt i64 %_5, 2048
   br i1 %_4, label %bb2, label %bb3
 
 bb3:                                              ; preds = %bb1
-; call core::alloc::layout::Layout::size
-  %_12 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
+  %_12 = ptrtoint i8* %ptr to i64
   br label %bb4
 
 bb2:                                              ; preds = %bb1
   %4 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
-  %_7 = load %"std::alloc::System"*, %"std::alloc::System"** %4, align 4096, !nonnull !3
+  %_8 = load %"std::alloc::System"*, %"std::alloc::System"** %4, align 4096, !nonnull !3
   %5 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
-  %_9.0 = load i64, i64* %5, align 8
+  %_10.0 = load i64, i64* %5, align 8
   %6 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
-  %_9.1 = load i64, i64* %6, align 8, !range !4
+  %_10.1 = load i64, i64* %6, align 8, !range !4
 ; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::dealloc
-  call void @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$7dealloc17hda33867e6eaf4794E"(%"std::alloc::System"* nonnull align 1 %_7, i8* %ptr, i64 %_9.0, i64 %_9.1)
-  br label %bb30
+  call void @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$7dealloc17hda33867e6eaf4794E"(%"std::alloc::System"* nonnull align 1 %_8, i8* %ptr, i64 %_10.0, i64 %_10.1)
+  br label %bb21
 
-bb30:                                             ; preds = %bb29, %bb10, %bb2
+bb21:                                             ; preds = %bb20, %bb7, %bb2
   ret void
 
 bb4:                                              ; preds = %bb3
-  %7 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_12, i64 1)
-  %_14.0 = extractvalue { i64, i1 } %7, 0
-  %_14.1 = extractvalue { i64, i1 } %7, 1
-  %8 = call i1 @llvm.expect.i1(i1 %_14.1, i1 false)
+  %7 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %_12, i64 288)
+  %_15.0 = extractvalue { i64, i1 } %7, 0
+  %_15.1 = extractvalue { i64, i1 } %7, 1
+  %8 = call i1 @llvm.expect.i1(i1 %_15.1, i1 false)
   br i1 %8, label %panic, label %bb5
 
 bb5:                                              ; preds = %bb4
-  %_10 = icmp ugt i64 %_14.0, 2048
-  br i1 %_10, label %bb6, label %bb11
+  %_19 = urem i64 %_15.0, 4096
+  %9 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %_15.0, i64 %_19)
+  %_21.0 = extractvalue { i64, i1 } %9, 0
+  %_21.1 = extractvalue { i64, i1 } %9, 1
+  %10 = call i1 @llvm.expect.i1(i1 %_21.1, i1 false)
+  br i1 %10, label %panic1, label %bb6
 
 panic:                                            ; preds = %bb4
 ; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc104 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.0 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc95 to %"core::panic::location::Location"*)) #14
   unreachable
 
-bb11:                                             ; preds = %bb5
-; call core::ptr::mut_ptr::<impl *mut T>::sub
-  %true_ptr = call i8* @"_ZN4core3ptr7mut_ptr31_$LT$impl$u20$$BP$mut$u20$T$GT$3sub17hb93871a1ed7145faE"(i8* %ptr, i64 1)
-  br label %bb12
-
 bb6:                                              ; preds = %bb5
-  %9 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
-  %_16 = load %"std::alloc::System"*, %"std::alloc::System"** %9, align 4096, !nonnull !3
-  %10 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
-  %_18.0 = load i64, i64* %10, align 8
-  %11 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
-  %_18.1 = load i64, i64* %11, align 8, !range !4
-; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::dealloc
-  call void @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$7dealloc17hda33867e6eaf4794E"(%"std::alloc::System"* nonnull align 1 %_16, i8* %ptr, i64 %_18.0, i64 %_18.1)
-  br label %bb7
+  %head = inttoptr i64 %_21.0 to i64*
+  %_22 = load i64, i64* %head, align 8
+  %11 = icmp eq i64 %_22, 123456789
+  br i1 %11, label %bb8, label %bb7
 
-bb7:                                              ; preds = %bb6
-; call core::alloc::layout::Layout::size
-  %_21 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb8
+panic1:                                           ; preds = %bb5
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.0 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc97 to %"core::panic::location::Location"*)) #14
+  unreachable
 
-bb8:                                              ; preds = %bb7
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_dealloc
-  call void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$14update_dealloc17h347f9497c315ff58E"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %_21)
+bb8:                                              ; preds = %bb6
+  %true_ptr = ptrtoint i8* %ptr to i64
   br label %bb9
 
+bb7:                                              ; preds = %bb6
+  %12 = bitcast %"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* %self to %"std::alloc::System"**
+  %_23 = load %"std::alloc::System"*, %"std::alloc::System"** %12, align 4096, !nonnull !3
+  %13 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 0
+  %_25.0 = load i64, i64* %13, align 8
+  %14 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %layout, i32 0, i32 1
+  %_25.1 = load i64, i64* %14, align 8, !range !4
+; call std::sys::unix::alloc::<impl core::alloc::global::GlobalAlloc for std::alloc::System>::dealloc
+  call void @"_ZN3std3sys4unix5alloc81_$LT$impl$u20$core..alloc..global..GlobalAlloc$u20$for$u20$std..alloc..System$GT$7dealloc17hda33867e6eaf4794E"(%"std::alloc::System"* nonnull align 1 %_23, i8* %ptr, i64 %_25.0, i64 %_25.1)
+  br label %bb21
+
 bb9:                                              ; preds = %bb8
-; call core::alloc::layout::Layout::size
-  %_25 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb10
+  %15 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %true_ptr, i64 288)
+  %_32.0 = extractvalue { i64, i1 } %15, 0
+  %_32.1 = extractvalue { i64, i1 } %15, 1
+  %16 = call i1 @llvm.expect.i1(i1 %_32.1, i1 false)
+  br i1 %16, label %panic2, label %bb10
 
 bb10:                                             ; preds = %bb9
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::record_msg
-  call void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$10record_msg17h2b68f1ec5def827dE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %_25, i64 2)
-  br label %bb30
+  %_33 = ptrtoint i64* %head to i64
+  %17 = call { i64, i1 } @llvm.usub.with.overflow.i64(i64 %_32.0, i64 %_33)
+  %_35.0 = extractvalue { i64, i1 } %17, 0
+  %_35.1 = extractvalue { i64, i1 } %17, 1
+  %18 = call i1 @llvm.expect.i1(i1 %_35.1, i1 false)
+  br i1 %18, label %panic3, label %bb11
+
+panic2:                                           ; preds = %bb9
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.0 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc99 to %"core::panic::location::Location"*)) #14
+  unreachable
+
+bb11:                                             ; preds = %bb10
+  %current = bitcast i64* %head to %"OOMGuardAllocator::MyPage"*
+  %19 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 2
+  %size_class = load i64, i64* %19, align 8
+; call OOMGuardAllocator::cal_tools::find_block
+  %i = call i64 @_ZN17OOMGuardAllocator9cal_tools10find_block17h27b93b27ace7baf8E(i64 %size_class)
+  br label %bb12
+
+panic3:                                           ; preds = %bb10
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.0 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc99 to %"core::panic::location::Location"*)) #14
+  unreachable
 
 bb12:                                             ; preds = %bb11
-  %_31 = load i8, i8* %true_ptr, align 1
-  %_30 = zext i8 %_31 to i64
-  %12 = call { i64, i1 } @llvm.umul.with.overflow.i64(i64 %_30, i64 16)
-  %_33.0 = extractvalue { i64, i1 } %12, 0
-  %_33.1 = extractvalue { i64, i1 } %12, 1
-  %13 = call i1 @llvm.expect.i1(i1 %_33.1, i1 false)
-  br i1 %13, label %panic1, label %bb13
+  %_45 = icmp ult i64 %i, 8
+  %20 = call i1 @llvm.expect.i1(i1 %_45, i1 true)
+  br i1 %20, label %bb13, label %panic4
 
 bb13:                                             ; preds = %bb12
-  br label %bb14
+  %21 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17hdc597d1ff9b698dfE, i64 0, i64 %i
+  %22 = load i64, i64* %21, align 8
+  %23 = call { i64, i1 } @llvm.sadd.with.overflow.i64(i64 %22, i64 1)
+  %_46.0 = extractvalue { i64, i1 } %23, 0
+  %_46.1 = extractvalue { i64, i1 } %23, 1
+  %24 = call i1 @llvm.expect.i1(i1 %_46.1, i1 false)
+  br i1 %24, label %panic5, label %bb14
 
-panic1:                                           ; preds = %bb12
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([33 x i8]* @str.1 to [0 x i8]*), i64 33, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc106 to %"core::panic::location::Location"*)) #14
+panic4:                                           ; preds = %bb12
+; call core::panicking::panic_bounds_check
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %i, i64 8, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc101 to %"core::panic::location::Location"*)) #14
   unreachable
 
 bb14:                                             ; preds = %bb13
-  %14 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 288, i64 %_33.0)
-  %_40.0 = extractvalue { i64, i1 } %14, 0
-  %_40.1 = extractvalue { i64, i1 } %14, 1
-  %15 = call i1 @llvm.expect.i1(i1 %_40.1, i1 false)
-  br i1 %15, label %panic2, label %bb15
+  %25 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17hdc597d1ff9b698dfE, i64 0, i64 %i
+  store i64 %_46.0, i64* %25, align 8
+  %26 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 3
+  %_47 = load i64, i64* %26, align 8
+  %27 = icmp eq i64 %_47, 999
+  br i1 %27, label %bb15, label %bb16
+
+panic5:                                           ; preds = %bb13
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.1 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc101 to %"core::panic::location::Location"*)) #14
+  unreachable
 
 bb15:                                             ; preds = %bb14
-; call core::ptr::mut_ptr::<impl *mut T>::sub
-  %_35 = call i8* @"_ZN4core3ptr7mut_ptr31_$LT$impl$u20$$BP$mut$u20$T$GT$3sub17hb93871a1ed7145faE"(i8* %true_ptr, i64 %_40.0)
-  br label %bb16
+  %28 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 3
+  store i64 0, i64* %28, align 8
+  br label %bb18
 
-panic2:                                           ; preds = %bb14
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc108 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb16:                                             ; preds = %bb15
-  %current = bitcast i8* %_35 to %"OOMGuardAllocator::MyPage"*
-  %16 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 1
-  %size_class = load i64, i64* %16, align 8
-; call OOMGuardAllocator::cal_tools::find_block
-  %i = call i64 @_ZN17OOMGuardAllocator9cal_tools10find_block17h27b93b27ace7baf8E(i64 %size_class)
-  br label %bb17
+bb16:                                             ; preds = %bb14
+  %29 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 3
+  %30 = load i64, i64* %29, align 8
+  %31 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %30, i64 1)
+  %_51.0 = extractvalue { i64, i1 } %31, 0
+  %_51.1 = extractvalue { i64, i1 } %31, 1
+  %32 = call i1 @llvm.expect.i1(i1 %_51.1, i1 false)
+  br i1 %32, label %panic6, label %bb17
 
 bb17:                                             ; preds = %bb16
-  %_49 = icmp ult i64 %i, 8
-  %17 = call i1 @llvm.expect.i1(i1 %_49, i1 true)
-  br i1 %17, label %bb18, label %panic3
+  %33 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 3
+  store i64 %_51.0, i64* %33, align 8
+  br label %bb18
 
-bb18:                                             ; preds = %bb17
-  %18 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17ha104d8890128a2f9E, i64 0, i64 %i
-  %_45 = load i64, i64* %18, align 8
-  %19 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %_45, i64 1)
-  %_50.0 = extractvalue { i64, i1 } %19, 0
-  %_50.1 = extractvalue { i64, i1 } %19, 1
-  %20 = call i1 @llvm.expect.i1(i1 %_50.1, i1 false)
-  br i1 %20, label %panic4, label %bb19
-
-panic3:                                           ; preds = %bb17
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %i, i64 8, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc110 to %"core::panic::location::Location"*)) #14
+panic6:                                           ; preds = %bb16
+; call core::panicking::panic
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.1 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc103 to %"core::panic::location::Location"*)) #14
   unreachable
 
-bb19:                                             ; preds = %bb18
-  %_54 = icmp ult i64 %i, 8
-  %21 = call i1 @llvm.expect.i1(i1 %_54, i1 true)
-  br i1 %21, label %bb20, label %panic5
+bb18:                                             ; preds = %bb15, %bb17
+  %_55 = icmp eq i64 %size_class, 0
+  %34 = call i1 @llvm.expect.i1(i1 %_55, i1 false)
+  br i1 %34, label %panic7, label %bb19
 
-panic4:                                           ; preds = %bb18
+bb19:                                             ; preds = %bb18
+  %_52 = udiv i64 %_35.0, %size_class
+  %35 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 3
+  %_57 = load i64, i64* %35, align 8
+  %_60 = icmp ult i64 %_57, 256
+  %36 = call i1 @llvm.expect.i1(i1 %_60, i1 true)
+  br i1 %36, label %bb20, label %panic8
+
+panic7:                                           ; preds = %bb18
 ; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc110 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([25 x i8]* @str.3 to [0 x i8]*), i64 25, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc105 to %"core::panic::location::Location"*)) #14
   unreachable
 
 bb20:                                             ; preds = %bb19
-  %22 = getelementptr inbounds [8 x i64], [8 x i64]* @_ZN17OOMGuardAllocator11MyblocksNum17ha104d8890128a2f9E, i64 0, i64 %i
-  store i64 %_50.0, i64* %22, align 8
-  %23 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 2
-  %_55 = load i64, i64* %23, align 8
-  %24 = icmp eq i64 %_55, 999
-  br i1 %24, label %bb21, label %bb22
+  %37 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 4
+  %38 = getelementptr inbounds [256 x i8], [256 x i8]* %37, i64 0, i64 %_57
+  %39 = trunc i64 %_52 to i8
+  store i8 %39, i8* %38, align 1
+  br label %bb21
 
-panic5:                                           ; preds = %bb19
+panic8:                                           ; preds = %bb19
 ; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %i, i64 8, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc112 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_57, i64 256, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc107 to %"core::panic::location::Location"*)) #14
   unreachable
-
-bb21:                                             ; preds = %bb20
-  %25 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 2
-  store i64 0, i64* %25, align 8
-  br label %bb24
-
-bb22:                                             ; preds = %bb20
-  %26 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 2
-  %27 = load i64, i64* %26, align 8
-  %28 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %27, i64 1)
-  %_59.0 = extractvalue { i64, i1 } %28, 0
-  %_59.1 = extractvalue { i64, i1 } %28, 1
-  %29 = call i1 @llvm.expect.i1(i1 %_59.1, i1 false)
-  br i1 %29, label %panic6, label %bb23
-
-bb23:                                             ; preds = %bb22
-  %30 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 2
-  store i64 %_59.0, i64* %30, align 8
-  br label %bb24
-
-panic6:                                           ; preds = %bb22
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc114 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb24:                                             ; preds = %bb21, %bb23
-  %_63 = icmp eq i64 %size_class, 0
-  %31 = call i1 @llvm.expect.i1(i1 %_63, i1 false)
-  br i1 %31, label %panic7, label %bb25
-
-bb25:                                             ; preds = %bb24
-  %_60 = udiv i64 %_33.0, %size_class
-  %32 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 2
-  %_65 = load i64, i64* %32, align 8
-  %_68 = icmp ult i64 %_65, 256
-  %33 = call i1 @llvm.expect.i1(i1 %_68, i1 true)
-  br i1 %33, label %bb26, label %panic8
-
-panic7:                                           ; preds = %bb24
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([25 x i8]* @str.3 to [0 x i8]*), i64 25, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc116 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb26:                                             ; preds = %bb25
-  %34 = getelementptr inbounds %"OOMGuardAllocator::MyPage", %"OOMGuardAllocator::MyPage"* %current, i32 0, i32 4
-  %35 = getelementptr inbounds [256 x i8], [256 x i8]* %34, i64 0, i64 %_65
-  %36 = trunc i64 %_60 to i8
-  store i8 %36, i8* %35, align 1
-; call core::alloc::layout::Layout::size
-  %_71 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb27
-
-panic8:                                           ; preds = %bb25
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_65, i64 256, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc118 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb27:                                             ; preds = %bb26
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_dealloc
-  call void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$14update_dealloc17h347f9497c315ff58E"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %_71)
-  br label %bb28
-
-bb28:                                             ; preds = %bb27
-; call core::alloc::layout::Layout::size
-  %_75 = call i64 @_ZN4core5alloc6layout6Layout4size17h6d37de34838ca823E({ i64, i64 }* align 8 dereferenceable(16) %layout)
-  br label %bb29
-
-bb29:                                             ; preds = %bb28
-; call OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::record_msg
-  call void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$10record_msg17h2b68f1ec5def827dE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %_75, i64 2)
-  br label %bb30
 }
 
 ; <core::ptr::non_null::NonNull<T> as core::convert::From<core::ptr::unique::Unique<T>>>::from
@@ -915,7 +860,7 @@ start:
   %7 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %residual, i32 0, i32 1
   %e.1 = load i64, i64* %7, align 8
 ; call <main::myError as core::convert::From<alloc::collections::TryReserveError>>::from
-  call void @"_ZN96_$LT$main..myError$u20$as$u20$core..convert..From$LT$alloc..collections..TryReserveError$GT$$GT$4from17hda4eee8c92735da6E"(%myError* noalias nocapture sret(%myError) dereferenceable(24) %_3, i64 %e.0, i64 %e.1)
+  call void @"_ZN96_$LT$main..myError$u20$as$u20$core..convert..From$LT$alloc..collections..TryReserveError$GT$$GT$4from17h2b6e672cca4dfc69E"(%myError* noalias nocapture sret(%myError) dereferenceable(24) %_3, i64 %e.0, i64 %e.1)
   br label %bb1
 
 bb1:                                              ; preds = %start
@@ -1076,129 +1021,9 @@ bb1:                                              ; preds = %start
   ret void
 }
 
-; OOMGuardAllocator::my_wrap_end
-; Function Attrs: nonlazybind uwtable
-define internal void @_ZN17OOMGuardAllocator11my_wrap_end17he1c7b92d2013443fE(%AA** align 8 dereferenceable(8) %a) unnamed_addr #0 {
-start:
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  ret void
-}
-
 ; OOMGuardAllocator::with_counter
 ; Function Attrs: nonlazybind uwtable
-define internal void @_ZN17OOMGuardAllocator12with_counter17h39045b077fadcb27E(i64* align 8 dereferenceable(8) %f) unnamed_addr #0 personality i32 (i32, i32, i64, %"unwind::libunwind::_Unwind_Exception"*, %"unwind::libunwind::_Unwind_Context"*)* @rust_eh_personality {
-start:
-  %0 = alloca { i8*, i32 }, align 8
-  %_9 = alloca i8, align 1
-  %_7 = alloca i64*, align 8
-  store i8 0, i8* %_9, align 1
-  store i8 1, i8* %_9, align 1
-  %_5 = invoke %"OOMGuardAllocator::Count"* @get_thread_local()
-          to label %bb1 unwind label %cleanup
-
-bb1:                                              ; preds = %start
-  %_4 = bitcast %"OOMGuardAllocator::Count"* %_5 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
-  store i8 0, i8* %_9, align 1
-  %1 = bitcast i64** %_7 to %"core::cell::Cell<OOMGuardAllocator::Count>"**
-  store %"core::cell::Cell<OOMGuardAllocator::Count>"* %_4, %"core::cell::Cell<OOMGuardAllocator::Count>"** %1, align 8
-  %2 = load i64*, i64** %_7, align 8, !nonnull !3
-  %3 = bitcast i64* %2 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
-; invoke OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_dealloc::{{closure}}
-  invoke void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$14update_dealloc28_$u7b$$u7b$closure$u7d$$u7d$17h443eb29da601ee0bE"(i64* align 8 dereferenceable(8) %f, %"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %3)
-          to label %bb2 unwind label %cleanup
-
-bb5:                                              ; preds = %cleanup
-  %4 = load i8, i8* %_9, align 1, !range !5
-  %5 = trunc i8 %4 to i1
-  br i1 %5, label %bb4, label %bb3
-
-cleanup:                                          ; preds = %bb1, %start
-  %6 = landingpad { i8*, i32 }
-          cleanup
-  %7 = extractvalue { i8*, i32 } %6, 0
-  %8 = extractvalue { i8*, i32 } %6, 1
-  %9 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 0
-  store i8* %7, i8** %9, align 8
-  %10 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 1
-  store i32 %8, i32* %10, align 8
-  br label %bb5
-
-bb2:                                              ; preds = %bb1
-  ret void
-
-bb3:                                              ; preds = %bb4, %bb5
-  %11 = bitcast { i8*, i32 }* %0 to i8**
-  %12 = load i8*, i8** %11, align 8
-  %13 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 1
-  %14 = load i32, i32* %13, align 8
-  %15 = insertvalue { i8*, i32 } undef, i8* %12, 0
-  %16 = insertvalue { i8*, i32 } %15, i32 %14, 1
-  resume { i8*, i32 } %16
-
-bb4:                                              ; preds = %bb5
-  br label %bb3
-}
-
-; OOMGuardAllocator::with_counter
-; Function Attrs: nonlazybind uwtable
-define internal void @_ZN17OOMGuardAllocator12with_counter17h92bb8ef3f17a3b2dE(i64* align 8 dereferenceable(8) %f.0, i64* align 8 dereferenceable(8) %f.1) unnamed_addr #0 personality i32 (i32, i32, i64, %"unwind::libunwind::_Unwind_Exception"*, %"unwind::libunwind::_Unwind_Context"*)* @rust_eh_personality {
-start:
-  %0 = alloca { i8*, i32 }, align 8
-  %_9 = alloca i8, align 1
-  %_7 = alloca i64*, align 8
-  store i8 0, i8* %_9, align 1
-  store i8 1, i8* %_9, align 1
-  %_5 = invoke %"OOMGuardAllocator::Count"* @get_thread_local()
-          to label %bb1 unwind label %cleanup
-
-bb1:                                              ; preds = %start
-  %_4 = bitcast %"OOMGuardAllocator::Count"* %_5 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
-  store i8 0, i8* %_9, align 1
-  %1 = bitcast i64** %_7 to %"core::cell::Cell<OOMGuardAllocator::Count>"**
-  store %"core::cell::Cell<OOMGuardAllocator::Count>"* %_4, %"core::cell::Cell<OOMGuardAllocator::Count>"** %1, align 8
-  %2 = load i64*, i64** %_7, align 8, !nonnull !3
-  %3 = bitcast i64* %2 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
-; invoke OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::record_msg::{{closure}}
-  invoke void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$10record_msg28_$u7b$$u7b$closure$u7d$$u7d$17h8bda33a68408d889E"(i64* align 8 dereferenceable(8) %f.0, i64* align 8 dereferenceable(8) %f.1, %"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %3)
-          to label %bb2 unwind label %cleanup
-
-bb5:                                              ; preds = %cleanup
-  %4 = load i8, i8* %_9, align 1, !range !5
-  %5 = trunc i8 %4 to i1
-  br i1 %5, label %bb4, label %bb3
-
-cleanup:                                          ; preds = %bb1, %start
-  %6 = landingpad { i8*, i32 }
-          cleanup
-  %7 = extractvalue { i8*, i32 } %6, 0
-  %8 = extractvalue { i8*, i32 } %6, 1
-  %9 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 0
-  store i8* %7, i8** %9, align 8
-  %10 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 1
-  store i32 %8, i32* %10, align 8
-  br label %bb5
-
-bb2:                                              ; preds = %bb1
-  ret void
-
-bb3:                                              ; preds = %bb4, %bb5
-  %11 = bitcast { i8*, i32 }* %0 to i8**
-  %12 = load i8*, i8** %11, align 8
-  %13 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 1
-  %14 = load i32, i32* %13, align 8
-  %15 = insertvalue { i8*, i32 } undef, i8* %12, 0
-  %16 = insertvalue { i8*, i32 } %15, i32 %14, 1
-  resume { i8*, i32 } %16
-
-bb4:                                              ; preds = %bb5
-  br label %bb3
-}
-
-; OOMGuardAllocator::with_counter
-; Function Attrs: nonlazybind uwtable
-define internal zeroext i1 @_ZN17OOMGuardAllocator12with_counter17h9d1e95f3ae6bf9c4E() unnamed_addr #0 personality i32 (i32, i32, i64, %"unwind::libunwind::_Unwind_Exception"*, %"unwind::libunwind::_Unwind_Context"*)* @rust_eh_personality {
+define internal zeroext i1 @_ZN17OOMGuardAllocator12with_counter17hd333052920bbc836E() unnamed_addr #0 personality i32 (i32, i32, i64, %"unwind::libunwind::_Unwind_Exception"*, %"unwind::libunwind::_Unwind_Context"*)* @rust_eh_personality {
 start:
   %0 = alloca { i8*, i32 }, align 8
   %_9 = alloca i8, align 1
@@ -1216,7 +1041,7 @@ bb1:                                              ; preds = %start
   %2 = load i64*, i64** %_7, align 8, !nonnull !3
   %3 = bitcast i64* %2 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
 ; invoke OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::get_flag::{{closure}}
-  %4 = invoke zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag28_$u7b$$u7b$closure$u7d$$u7d$17ha4c259d4b06e8087E"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %3)
+  %4 = invoke zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag28_$u7b$$u7b$closure$u7d$$u7d$17ha8fc928d1183ca5fE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(65600) %3)
           to label %bb2 unwind label %cleanup
 
 bb5:                                              ; preds = %cleanup
@@ -1251,250 +1076,12 @@ bb4:                                              ; preds = %bb5
   br label %bb3
 }
 
-; OOMGuardAllocator::with_counter
-; Function Attrs: nonlazybind uwtable
-define internal void @_ZN17OOMGuardAllocator12with_counter17h9d541fd6bca86c55E(i64* align 8 dereferenceable(8) %f) unnamed_addr #0 personality i32 (i32, i32, i64, %"unwind::libunwind::_Unwind_Exception"*, %"unwind::libunwind::_Unwind_Context"*)* @rust_eh_personality {
-start:
-  %0 = alloca { i8*, i32 }, align 8
-  %_9 = alloca i8, align 1
-  %_7 = alloca i64*, align 8
-  store i8 0, i8* %_9, align 1
-  store i8 1, i8* %_9, align 1
-  %_5 = invoke %"OOMGuardAllocator::Count"* @get_thread_local()
-          to label %bb1 unwind label %cleanup
-
-bb1:                                              ; preds = %start
-  %_4 = bitcast %"OOMGuardAllocator::Count"* %_5 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
-  store i8 0, i8* %_9, align 1
-  %1 = bitcast i64** %_7 to %"core::cell::Cell<OOMGuardAllocator::Count>"**
-  store %"core::cell::Cell<OOMGuardAllocator::Count>"* %_4, %"core::cell::Cell<OOMGuardAllocator::Count>"** %1, align 8
-  %2 = load i64*, i64** %_7, align 8, !nonnull !3
-  %3 = bitcast i64* %2 to %"core::cell::Cell<OOMGuardAllocator::Count>"*
-; invoke OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_alloc::{{closure}}
-  invoke void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$12update_alloc28_$u7b$$u7b$closure$u7d$$u7d$17h066346adec956e86E"(i64* align 8 dereferenceable(8) %f, %"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %3)
-          to label %bb2 unwind label %cleanup
-
-bb5:                                              ; preds = %cleanup
-  %4 = load i8, i8* %_9, align 1, !range !5
-  %5 = trunc i8 %4 to i1
-  br i1 %5, label %bb4, label %bb3
-
-cleanup:                                          ; preds = %bb1, %start
-  %6 = landingpad { i8*, i32 }
-          cleanup
-  %7 = extractvalue { i8*, i32 } %6, 0
-  %8 = extractvalue { i8*, i32 } %6, 1
-  %9 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 0
-  store i8* %7, i8** %9, align 8
-  %10 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 1
-  store i32 %8, i32* %10, align 8
-  br label %bb5
-
-bb2:                                              ; preds = %bb1
-  ret void
-
-bb3:                                              ; preds = %bb4, %bb5
-  %11 = bitcast { i8*, i32 }* %0 to i8**
-  %12 = load i8*, i8** %11, align 8
-  %13 = getelementptr inbounds { i8*, i32 }, { i8*, i32 }* %0, i32 0, i32 1
-  %14 = load i32, i32* %13, align 8
-  %15 = insertvalue { i8*, i32 } undef, i8* %12, 0
-  %16 = insertvalue { i8*, i32 } %15, i32 %14, 1
-  resume { i8*, i32 } %16
-
-bb4:                                              ; preds = %bb5
-  br label %bb3
-}
-
-; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::record_msg
-; Function Attrs: nonlazybind uwtable
-define internal void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$10record_msg17h2b68f1ec5def827dE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %0, i64 %1) unnamed_addr #0 {
-start:
-  %_5 = alloca { i64*, i64* }, align 8
-  %flag = alloca i64, align 8
-  %size = alloca i64, align 8
-  store i64 %0, i64* %size, align 8
-  store i64 %1, i64* %flag, align 8
-  %2 = bitcast { i64*, i64* }* %_5 to i64**
-  store i64* %flag, i64** %2, align 8
-  %3 = getelementptr inbounds { i64*, i64* }, { i64*, i64* }* %_5, i32 0, i32 1
-  store i64* %size, i64** %3, align 8
-  %4 = getelementptr inbounds { i64*, i64* }, { i64*, i64* }* %_5, i32 0, i32 0
-  %5 = load i64*, i64** %4, align 8, !nonnull !3
-  %6 = getelementptr inbounds { i64*, i64* }, { i64*, i64* }* %_5, i32 0, i32 1
-  %7 = load i64*, i64** %6, align 8, !nonnull !3
-; call OOMGuardAllocator::with_counter
-  call void @_ZN17OOMGuardAllocator12with_counter17h92bb8ef3f17a3b2dE(i64* align 8 dereferenceable(8) %5, i64* align 8 dereferenceable(8) %7)
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  ret void
-}
-
-; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::record_msg::{{closure}}
-; Function Attrs: inlinehint nonlazybind uwtable
-define internal void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$10record_msg28_$u7b$$u7b$closure$u7d$$u7d$17h8bda33a68408d889E"(i64* align 8 dereferenceable(8) %_1.0, i64* align 8 dereferenceable(8) %_1.1, %"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it) unnamed_addr #1 {
-start:
-; call core::cell::Cell<T>::get_mut
-  %_5 = call align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it)
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  %0 = getelementptr inbounds %"OOMGuardAllocator::Count", %"OOMGuardAllocator::Count"* %_5, i32 0, i32 7
-  %_4 = load i64, i64* %0, align 8
-  %_7 = icmp uge i64 %_4, 4096
-  br i1 %_7, label %bb8, label %bb2
-
-bb2:                                              ; preds = %bb1
-  %_9 = load i64, i64* %_1.0, align 8
-  %1 = icmp eq i64 %_9, 1
-  br i1 %1, label %bb3, label %bb8
-
-bb8:                                              ; preds = %bb7, %bb2, %bb1
-  ret void
-
-bb3:                                              ; preds = %bb2
-  %_10 = load i64, i64* %_1.1, align 8
-; call core::cell::Cell<T>::get_mut
-  %_11 = call align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it)
-  br label %bb4
-
-bb4:                                              ; preds = %bb3
-  %_15 = icmp ult i64 %_4, 4096
-  %2 = call i1 @llvm.expect.i1(i1 %_15, i1 true)
-  br i1 %2, label %bb5, label %panic
-
-bb5:                                              ; preds = %bb4
-  %3 = getelementptr inbounds %"OOMGuardAllocator::Count", %"OOMGuardAllocator::Count"* %_11, i32 0, i32 6
-  %4 = getelementptr inbounds [4096 x i64], [4096 x i64]* %3, i64 0, i64 %_4
-  store i64 %_10, i64* %4, align 8
-; call core::cell::Cell<T>::get_mut
-  %_16 = call align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it)
-  br label %bb6
-
-panic:                                            ; preds = %bb4
-; call core::panicking::panic_bounds_check
-  call void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64 %_4, i64 4096, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc137 to %"core::panic::location::Location"*)) #14
-  unreachable
-
-bb6:                                              ; preds = %bb5
-  %5 = getelementptr inbounds %"OOMGuardAllocator::Count", %"OOMGuardAllocator::Count"* %_16, i32 0, i32 7
-  %6 = load i64, i64* %5, align 8
-  %7 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %6, i64 1)
-  %_18.0 = extractvalue { i64, i1 } %7, 0
-  %_18.1 = extractvalue { i64, i1 } %7, 1
-  %8 = call i1 @llvm.expect.i1(i1 %_18.1, i1 false)
-  br i1 %8, label %panic1, label %bb7
-
-bb7:                                              ; preds = %bb6
-  %9 = getelementptr inbounds %"OOMGuardAllocator::Count", %"OOMGuardAllocator::Count"* %_16, i32 0, i32 7
-  store i64 %_18.0, i64* %9, align 8
-  br label %bb8
-
-panic1:                                           ; preds = %bb6
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc139 to %"core::panic::location::Location"*)) #14
-  unreachable
-}
-
-; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_alloc
-; Function Attrs: nonlazybind uwtable
-define internal void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$12update_alloc17hf78fd44323c8cfb8E"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %0) unnamed_addr #0 {
-start:
-  %_4 = alloca i64*, align 8
-  %size = alloca i64, align 8
-  store i64 %0, i64* %size, align 8
-  store i64* %size, i64** %_4, align 8
-  %1 = load i64*, i64** %_4, align 8, !nonnull !3
-; call OOMGuardAllocator::with_counter
-  call void @_ZN17OOMGuardAllocator12with_counter17h9d541fd6bca86c55E(i64* align 8 dereferenceable(8) %1)
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  ret void
-}
-
-; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_alloc::{{closure}}
-; Function Attrs: inlinehint nonlazybind uwtable
-define internal void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$12update_alloc28_$u7b$$u7b$closure$u7d$$u7d$17h066346adec956e86E"(i64* align 8 dereferenceable(8) %_1, %"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it) unnamed_addr #1 {
-start:
-  %_4 = load i64, i64* %_1, align 8
-; call core::cell::Cell<T>::get_mut
-  %_5 = call align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it)
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  %0 = bitcast %"OOMGuardAllocator::Count"* %_5 to i64*
-  %1 = load i64, i64* %0, align 8
-  %2 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %1, i64 %_4)
-  %_7.0 = extractvalue { i64, i1 } %2, 0
-  %_7.1 = extractvalue { i64, i1 } %2, 1
-  %3 = call i1 @llvm.expect.i1(i1 %_7.1, i1 false)
-  br i1 %3, label %panic, label %bb2
-
-bb2:                                              ; preds = %bb1
-  %4 = bitcast %"OOMGuardAllocator::Count"* %_5 to i64*
-  store i64 %_7.0, i64* %4, align 8
-  ret void
-
-panic:                                            ; preds = %bb1
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc141 to %"core::panic::location::Location"*)) #14
-  unreachable
-}
-
-; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_dealloc
-; Function Attrs: nonlazybind uwtable
-define internal void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$14update_dealloc17h347f9497c315ff58E"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self, i64 %0) unnamed_addr #0 {
-start:
-  %_4 = alloca i64*, align 8
-  %size = alloca i64, align 8
-  store i64 %0, i64* %size, align 8
-  store i64* %size, i64** %_4, align 8
-  %1 = load i64*, i64** %_4, align 8, !nonnull !3
-; call OOMGuardAllocator::with_counter
-  call void @_ZN17OOMGuardAllocator12with_counter17h39045b077fadcb27E(i64* align 8 dereferenceable(8) %1)
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  ret void
-}
-
-; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::update_dealloc::{{closure}}
-; Function Attrs: inlinehint nonlazybind uwtable
-define internal void @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$14update_dealloc28_$u7b$$u7b$closure$u7d$$u7d$17h443eb29da601ee0bE"(i64* align 8 dereferenceable(8) %_1, %"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it) unnamed_addr #1 {
-start:
-  %_4 = load i64, i64* %_1, align 8
-; call core::cell::Cell<T>::get_mut
-  %_5 = call align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it)
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  %0 = getelementptr inbounds %"OOMGuardAllocator::Count", %"OOMGuardAllocator::Count"* %_5, i32 0, i32 1
-  %1 = load i64, i64* %0, align 8
-  %2 = call { i64, i1 } @llvm.uadd.with.overflow.i64(i64 %1, i64 %_4)
-  %_7.0 = extractvalue { i64, i1 } %2, 0
-  %_7.1 = extractvalue { i64, i1 } %2, 1
-  %3 = call i1 @llvm.expect.i1(i1 %_7.1, i1 false)
-  br i1 %3, label %panic, label %bb2
-
-bb2:                                              ; preds = %bb1
-  %4 = getelementptr inbounds %"OOMGuardAllocator::Count", %"OOMGuardAllocator::Count"* %_5, i32 0, i32 1
-  store i64 %_7.0, i64* %4, align 8
-  ret void
-
-panic:                                            ; preds = %bb1
-; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([28 x i8]* @str.0 to [0 x i8]*), i64 28, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc143 to %"core::panic::location::Location"*)) #14
-  unreachable
-}
-
 ; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::get_flag
 ; Function Attrs: nonlazybind uwtable
 define internal zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag17h014aeefe6d791b7bE"(%"OOMGuardAllocator::OOMGuard_Allocator<std::alloc::System>"* align 4096 dereferenceable(4096) %self) unnamed_addr #0 {
 start:
 ; call OOMGuardAllocator::with_counter
-  %0 = call zeroext i1 @_ZN17OOMGuardAllocator12with_counter17h9d1e95f3ae6bf9c4E()
+  %0 = call zeroext i1 @_ZN17OOMGuardAllocator12with_counter17hd333052920bbc836E()
   br label %bb1
 
 bb1:                                              ; preds = %start
@@ -1503,10 +1090,10 @@ bb1:                                              ; preds = %start
 
 ; OOMGuardAllocator::OOMGuard_Allocator<DefaultAllocator>::get_flag::{{closure}}
 ; Function Attrs: inlinehint nonlazybind uwtable
-define internal zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag28_$u7b$$u7b$closure$u7d$$u7d$17ha4c259d4b06e8087E"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it) unnamed_addr #1 {
+define internal zeroext i1 @"_ZN17OOMGuardAllocator42OOMGuard_Allocator$LT$DefaultAllocator$GT$8get_flag28_$u7b$$u7b$closure$u7d$$u7d$17ha8fc928d1183ca5fE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(65600) %it) unnamed_addr #1 {
 start:
 ; call core::cell::Cell<T>::get_mut
-  %_3 = call align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %it)
+  %_3 = call align 8 dereferenceable(65600) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17h5b41b9c95db87ff7E"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(65600) %it)
   br label %bb1
 
 bb1:                                              ; preds = %start
@@ -2095,6 +1682,39 @@ bb2:                                              ; preds = %bb1
   ret { i8*, i64* } %13
 }
 
+; core::fmt::ArgumentV1::new
+; Function Attrs: nonlazybind uwtable
+define internal { i8*, i64* } @_ZN4core3fmt10ArgumentV13new17ha7354cbf4aaa89d6E(i64* align 8 dereferenceable(8) %x, i1 (i64*, %"core::fmt::Formatter"*)* nonnull %f) unnamed_addr #0 {
+start:
+  %0 = alloca %"core::fmt::Opaque"*, align 8
+  %1 = alloca i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)*, align 8
+  %2 = alloca { i8*, i64* }, align 8
+  %3 = bitcast i1 (i64*, %"core::fmt::Formatter"*)* %f to i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)*
+  store i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)* %3, i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)** %1, align 8
+  %_3 = load i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)*, i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)** %1, align 8, !nonnull !3
+  br label %bb1
+
+bb1:                                              ; preds = %start
+  %4 = bitcast i64* %x to %"core::fmt::Opaque"*
+  store %"core::fmt::Opaque"* %4, %"core::fmt::Opaque"** %0, align 8
+  %_5 = load %"core::fmt::Opaque"*, %"core::fmt::Opaque"** %0, align 8, !nonnull !3
+  br label %bb2
+
+bb2:                                              ; preds = %bb1
+  %5 = bitcast { i8*, i64* }* %2 to %"core::fmt::Opaque"**
+  store %"core::fmt::Opaque"* %_5, %"core::fmt::Opaque"** %5, align 8
+  %6 = getelementptr inbounds { i8*, i64* }, { i8*, i64* }* %2, i32 0, i32 1
+  %7 = bitcast i64** %6 to i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)**
+  store i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)* %_3, i1 (%"core::fmt::Opaque"*, %"core::fmt::Formatter"*)** %7, align 8
+  %8 = getelementptr inbounds { i8*, i64* }, { i8*, i64* }* %2, i32 0, i32 0
+  %9 = load i8*, i8** %8, align 8, !nonnull !3
+  %10 = getelementptr inbounds { i8*, i64* }, { i8*, i64* }* %2, i32 0, i32 1
+  %11 = load i64*, i64** %10, align 8, !nonnull !3
+  %12 = insertvalue { i8*, i64* } undef, i8* %9, 0
+  %13 = insertvalue { i8*, i64* } %12, i64* %11, 1
+  ret { i8*, i64* } %13
+}
+
 ; core::fmt::Arguments::new_v1
 ; Function Attrs: inlinehint nonlazybind uwtable
 define internal void @_ZN4core3fmt9Arguments6new_v117h7f23f9f3c278f407E(%"core::fmt::Arguments"* noalias nocapture sret(%"core::fmt::Arguments") dereferenceable(48) %0, [0 x { [0 x i8]*, i64 }]* nonnull align 8 %pieces.0, i64 %pieces.1, [0 x { i8*, i64* }]* nonnull align 8 %args.0, i64 %args.1) unnamed_addr #1 {
@@ -2146,7 +1766,7 @@ bb5:                                              ; preds = %bb3
 
 bb4:                                              ; preds = %bb3
 ; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast (<{ [12 x i8] }>* @alloc149 to [0 x i8]*), i64 12, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc151 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast (<{ [12 x i8] }>* @alloc130 to [0 x i8]*), i64 12, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc132 to %"core::panic::location::Location"*)) #14
   unreachable
 }
 
@@ -2736,24 +2356,6 @@ bb1:                                              ; preds = %start
   ret i1 %4
 }
 
-; core::ptr::mut_ptr::<impl *mut T>::sub
-; Function Attrs: inlinehint nonlazybind uwtable
-define internal i8* @"_ZN4core3ptr7mut_ptr31_$LT$impl$u20$$BP$mut$u20$T$GT$3sub17hb93871a1ed7145faE"(i8* %self, i64 %count) unnamed_addr #1 {
-start:
-  %0 = alloca i8*, align 8
-  %1 = sub i64 0, %count
-  br label %bb1
-
-bb1:                                              ; preds = %start
-  %2 = getelementptr inbounds i8, i8* %self, i64 %1
-  store i8* %2, i8** %0, align 8
-  %_3.i = load i8*, i8** %0, align 8
-  br label %bb2
-
-bb2:                                              ; preds = %bb1
-  ret i8* %_3.i
-}
-
 ; core::ptr::mut_ptr::<impl *mut T>::is_null
 ; Function Attrs: inlinehint nonlazybind uwtable
 define internal zeroext i1 @"_ZN4core3ptr7mut_ptr31_$LT$impl$u20$$BP$mut$u20$T$GT$7is_null17h6e6069a2b023fd12E"(i32* %self) unnamed_addr #1 {
@@ -3160,7 +2762,7 @@ bb1:                                              ; preds = %start
 
 ; core::cell::Cell<T>::get_mut
 ; Function Attrs: inlinehint nonlazybind uwtable
-define internal align 8 dereferenceable(32832) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17hbf894e9f8a8ce1faE"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(32832) %self) unnamed_addr #1 {
+define internal align 8 dereferenceable(65600) %"OOMGuardAllocator::Count"* @"_ZN4core4cell13Cell$LT$T$GT$7get_mut17h5b41b9c95db87ff7E"(%"core::cell::Cell<OOMGuardAllocator::Count>"* align 8 dereferenceable(65600) %self) unnamed_addr #1 {
 start:
   %_4 = bitcast %"core::cell::Cell<OOMGuardAllocator::Count>"* %self to %"core::cell::UnsafeCell<OOMGuardAllocator::Count>"*
   %_3.i = bitcast %"core::cell::UnsafeCell<OOMGuardAllocator::Count>"* %_4 to %"OOMGuardAllocator::Count"*
@@ -3439,7 +3041,7 @@ bb5:                                              ; preds = %bb4
 
 bb7:                                              ; preds = %bb4
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  %7 = call { i64, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h32ef10f93be18603E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc153 to %"core::panic::location::Location"*))
+  %7 = call { i64, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h32ef10f93be18603E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc134 to %"core::panic::location::Location"*))
   store { i64, i64 } %7, { i64, i64 }* %0, align 8
   br label %bb8
 
@@ -3517,7 +3119,7 @@ bb5:                                              ; preds = %bb4
 
 bb7:                                              ; preds = %bb4
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  %7 = call { i64, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h32ef10f93be18603E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc153 to %"core::panic::location::Location"*))
+  %7 = call { i64, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h32ef10f93be18603E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc134 to %"core::panic::location::Location"*))
   store { i64, i64 } %7, { i64, i64 }* %0, align 8
   br label %bb8
 
@@ -3825,7 +3427,7 @@ bb3:                                              ; preds = %start
 bb1:                                              ; preds = %start
   %_6.0 = bitcast %"core::alloc::layout::LayoutError"* %e to {}*
 ; invoke core::result::unwrap_failed
-  invoke void @_ZN4core6result13unwrap_failed17hddb26cddfa4f23d4E([0 x i8]* nonnull align 1 bitcast (<{ [43 x i8] }>* @alloc154 to [0 x i8]*), i64 43, {}* nonnull align 1 %_6.0, [3 x i64]* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8], i8*, [0 x i8] }>* @vtable.5 to [3 x i64]*), %"core::panic::location::Location"* align 8 dereferenceable(24) %2) #14
+  invoke void @_ZN4core6result13unwrap_failed17hddb26cddfa4f23d4E([0 x i8]* nonnull align 1 bitcast (<{ [43 x i8] }>* @alloc135 to [0 x i8]*), i64 43, {}* nonnull align 1 %_6.0, [3 x i64]* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8], i8*, [0 x i8] }>* @vtable.5 to [3 x i64]*), %"core::panic::location::Location"* align 8 dereferenceable(24) %2) #14
           to label %unreachable unwind label %cleanup
 
 unreachable:                                      ; preds = %bb1
@@ -4633,7 +4235,7 @@ bb14:                                             ; preds = %bb13
 
 bb16:                                             ; preds = %bb13
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  %17 = call { i8*, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h151ee79a3a4d8753E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc159 to %"core::panic::location::Location"*))
+  %17 = call { i8*, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h151ee79a3a4d8753E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc140 to %"core::panic::location::Location"*))
   store { i8*, i64 } %17, { i8*, i64 }* %2, align 8
   br label %bb17
 
@@ -4804,7 +4406,7 @@ bb17:                                             ; preds = %bb16
 
 bb19:                                             ; preds = %bb16
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  %25 = call { i8*, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h151ee79a3a4d8753E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc161 to %"core::panic::location::Location"*))
+  %25 = call { i8*, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h151ee79a3a4d8753E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc142 to %"core::panic::location::Location"*))
   store { i8*, i64 } %25, { i8*, i64 }* %5, align 8
   br label %bb20
 
@@ -4876,7 +4478,7 @@ bb28:                                             ; preds = %bb27
 
 bb30:                                             ; preds = %bb27
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  %36 = call { i8*, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h151ee79a3a4d8753E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc163 to %"core::panic::location::Location"*))
+  %36 = call { i8*, i64 } @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h151ee79a3a4d8753E"(%"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc144 to %"core::panic::location::Location"*))
   store { i8*, i64 } %36, { i8*, i64 }* %5, align 8
   br label %bb31
 
@@ -5149,7 +4751,7 @@ bb5:                                              ; preds = %bb2
   %11 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %9, i32 0, i32 1
   %residual.1 = load i64, i64* %11, align 8
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h4e02be61d6ad9010E"(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.0, i64 %residual.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc165 to %"core::panic::location::Location"*))
+  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h4e02be61d6ad9010E"(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.0, i64 %residual.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc146 to %"core::panic::location::Location"*))
   br label %bb6
 
 bb6:                                              ; preds = %bb5
@@ -5195,7 +4797,7 @@ bb12:                                             ; preds = %bb9
   %20 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %18, i32 0, i32 1
   %residual.12 = load i64, i64* %20, align 8
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17hc86798ba63cd3843E"(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.01, i64 %residual.12, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc167 to %"core::panic::location::Location"*))
+  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17hc86798ba63cd3843E"(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<core::ptr::non_null::NonNull<[u8]>, alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.01, i64 %residual.12, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc148 to %"core::panic::location::Location"*))
   br label %bb13
 
 bb13:                                             ; preds = %bb12
@@ -6157,7 +5759,7 @@ bb10:                                             ; preds = %bb7
   %21 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %19, i32 0, i32 1
   %residual.1 = load i64, i64* %21, align 8
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h1851a1c4c812dc87E"(%"core::result::Result<(), alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<(), alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.0, i64 %residual.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc169 to %"core::panic::location::Location"*))
+  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h1851a1c4c812dc87E"(%"core::result::Result<(), alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<(), alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.0, i64 %residual.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc150 to %"core::panic::location::Location"*))
   br label %bb11
 
 bb11:                                             ; preds = %bb10
@@ -6224,7 +5826,7 @@ bb20:                                             ; preds = %bb17
   %31 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %29, i32 0, i32 1
   %residual.13 = load i64, i64* %31, align 8
 ; call <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h86cef55cf43495fbE"(%"core::result::Result<(), alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<(), alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.02, i64 %residual.13, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc171 to %"core::panic::location::Location"*))
+  call void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h86cef55cf43495fbE"(%"core::result::Result<(), alloc::collections::TryReserveError>"* noalias nocapture sret(%"core::result::Result<(), alloc::collections::TryReserveError>") dereferenceable(24) %0, i64 %residual.02, i64 %residual.13, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc152 to %"core::panic::location::Location"*))
   br label %bb21
 
 bb21:                                             ; preds = %bb20
@@ -6307,7 +5909,7 @@ bb2:                                              ; preds = %bb1
 
 panic:                                            ; preds = %bb1
 ; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([25 x i8]* @str.3 to [0 x i8]*), i64 25, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc173 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([25 x i8]* @str.3 to [0 x i8]*), i64 25, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc154 to %"core::panic::location::Location"*)) #14
   unreachable
 }
 
@@ -6328,7 +5930,7 @@ bb2:                                              ; preds = %bb1
 
 panic:                                            ; preds = %bb1
 ; call core::panicking::panic
-  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([25 x i8]* @str.3 to [0 x i8]*), i64 25, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc173 to %"core::panic::location::Location"*)) #14
+  call void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1 bitcast ([25 x i8]* @str.3 to [0 x i8]*), i64 25, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc154 to %"core::panic::location::Location"*)) #14
   unreachable
 }
 
@@ -7269,11 +6871,11 @@ bb4:                                              ; preds = %bb3, %bb1
 
 ; <main::myError as core::convert::From<alloc::collections::TryReserveError>>::from
 ; Function Attrs: nonlazybind uwtable
-define internal void @"_ZN96_$LT$main..myError$u20$as$u20$core..convert..From$LT$alloc..collections..TryReserveError$GT$$GT$4from17hda4eee8c92735da6E"(%myError* noalias nocapture sret(%myError) dereferenceable(24) %0, i64 %t.0, i64 %t.1) unnamed_addr #0 {
+define internal void @"_ZN96_$LT$main..myError$u20$as$u20$core..convert..From$LT$alloc..collections..TryReserveError$GT$$GT$4from17h2b6e672cca4dfc69E"(%myError* noalias nocapture sret(%myError) dereferenceable(24) %0, i64 %t.0, i64 %t.1) unnamed_addr #0 {
 start:
   %_2 = alloca %"alloc::string::String", align 8
 ; call <alloc::string::String as core::convert::From<&str>>::from
-  call void @"_ZN76_$LT$alloc..string..String$u20$as$u20$core..convert..From$LT$$RF$str$GT$$GT$4from17hd8bf6e5f24f818a4E"(%"alloc::string::String"* noalias nocapture sret(%"alloc::string::String") dereferenceable(24) %_2, [0 x i8]* nonnull align 1 bitcast (<{ [45 x i8] }>* @alloc174 to [0 x i8]*), i64 45)
+  call void @"_ZN76_$LT$alloc..string..String$u20$as$u20$core..convert..From$LT$$RF$str$GT$$GT$4from17hd8bf6e5f24f818a4E"(%"alloc::string::String"* noalias nocapture sret(%"alloc::string::String") dereferenceable(24) %_2, [0 x i8]* nonnull align 1 bitcast (<{ [45 x i8] }>* @alloc155 to [0 x i8]*), i64 45)
   br label %bb1
 
 bb1:                                              ; preds = %start
@@ -7394,7 +6996,7 @@ bb8:                                              ; preds = %bb5
   %23 = getelementptr inbounds { i64, i64 }, { i64, i64 }* %21, i32 0, i32 1
   %residual.1 = load i64, i64* %23, align 8
 ; invoke <core::result::Result<T,F> as core::ops::try_trait::FromResidual<core::result::Result<core::convert::Infallible,E>>>::from_residual
-  invoke void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h1670b051f84546dcE"(%"core::result::Result<(), myError>"* noalias nocapture sret(%"core::result::Result<(), myError>") dereferenceable(32) %0, i64 %residual.0, i64 %residual.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc176 to %"core::panic::location::Location"*))
+  invoke void @"_ZN153_$LT$core..result..Result$LT$T$C$F$GT$$u20$as$u20$core..ops..try_trait..FromResidual$LT$core..result..Result$LT$core..convert..Infallible$C$E$GT$$GT$$GT$13from_residual17h1670b051f84546dcE"(%"core::result::Result<(), myError>"* noalias nocapture sret(%"core::result::Result<(), myError>") dereferenceable(32) %0, i64 %residual.0, i64 %residual.1, %"core::panic::location::Location"* align 8 dereferenceable(24) bitcast (<{ i8*, [16 x i8] }>* @alloc157 to %"core::panic::location::Location"*))
           to label %bb17 unwind label %cleanup2
 
 bb17:                                             ; preds = %bb8
@@ -8044,7 +7646,7 @@ start:
 
 bb1:                                              ; preds = %start
 ; call OOMGuardAllocator::my_wrap_end
-  call void @_ZN17OOMGuardAllocator11my_wrap_end17he1c7b92d2013443fE(%AA** align 8 dereferenceable(8) %ass)
+  call void @_ZN17OOMGuardAllocator11my_wrap_end17h430d0f8a3548e3beE()
   br label %bb2
 
 bb2:                                              ; preds = %bb1
@@ -8081,10 +7683,10 @@ cleanup:                                          ; preds = %bb7, %bb3
 bb5:                                              ; preds = %bb4
   %8 = load %AA*, %AA** %ass, align 8, !nonnull !3
   %9 = getelementptr inbounds %AA, %AA* %8, i32 0, i32 1
-  %_12 = load i32, i32* %9, align 8
-  %_11 = sext i32 %_12 to i64
+  %_11 = load i32, i32* %9, align 8
+  %_10 = sext i32 %_11 to i64
 ; invoke alloc::vec::Vec<T,A>::reserve
-  invoke void @"_ZN5alloc3vec16Vec$LT$T$C$A$GT$7reserve17h12292eb3f785da59E"(%"alloc::vec::Vec<i32>"* align 8 dereferenceable(24) %a, i64 %_11)
+  invoke void @"_ZN5alloc3vec16Vec$LT$T$C$A$GT$7reserve17h12292eb3f785da59E"(%"alloc::vec::Vec<i32>"* align 8 dereferenceable(24) %a, i64 %_10)
           to label %bb6 unwind label %cleanup2
 
 bb11:                                             ; preds = %bb10, %cleanup1
@@ -8149,33 +7751,43 @@ bb9:                                              ; preds = %bb8
   ret void
 }
 
-; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
-declare { i64, i1 } @llvm.uadd.with.overflow.i64(i64, i64) #4
-
-; Function Attrs: nofree nosync nounwind readnone willreturn
-declare i1 @llvm.expect.i1(i1, i1) #5
-
-; core::panicking::panic
-; Function Attrs: cold noinline noreturn nonlazybind uwtable
-declare void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1, i64, %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #6
-
 ; OOMGuardAllocator::cal_tools::find_block
 ; Function Attrs: nonlazybind uwtable
 declare i64 @_ZN17OOMGuardAllocator9cal_tools10find_block17h27b93b27ace7baf8E(i64) unnamed_addr #0
 
+; Function Attrs: nofree nosync nounwind readnone willreturn
+declare i1 @llvm.expect.i1(i1, i1) #4
+
 ; core::panicking::panic_bounds_check
 ; Function Attrs: cold noinline noreturn nonlazybind uwtable
-declare void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64, i64, %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #6
+declare void @_ZN4core9panicking18panic_bounds_check17h2aafc6203614405fE(i64, i64, %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #5
 
-; core::panicking::panic_fmt
+; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
+declare { i64, i1 } @llvm.ssub.with.overflow.i64(i64, i64) #6
+
+; core::panicking::panic
 ; Function Attrs: cold noinline noreturn nonlazybind uwtable
-declare void @_ZN4core9panicking9panic_fmt17h8bc989e1fc10c635E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48), %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #6
+declare void @_ZN4core9panicking5panic17hac91d6d33ac66361E([0 x i8]* nonnull align 1, i64, %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #5
 
 ; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
-declare { i64, i1 } @llvm.umul.with.overflow.i64(i64, i64) #4
+declare { i64, i1 } @llvm.uadd.with.overflow.i64(i64, i64) #6
+
+; core::fmt::num::imp::<impl core::fmt::Display for usize>::fmt
+; Function Attrs: nonlazybind uwtable
+declare zeroext i1 @"_ZN4core3fmt3num3imp54_$LT$impl$u20$core..fmt..Display$u20$for$u20$usize$GT$3fmt17h716e7ed010a408dfE"(i64* align 8 dereferenceable(8), %"core::fmt::Formatter"* align 8 dereferenceable(64)) unnamed_addr #0
+
+; std::io::stdio::_print
+; Function Attrs: nonlazybind uwtable
+declare void @_ZN3std2io5stdio6_print17h68c20082d25e6dc7E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48)) unnamed_addr #0
 
 ; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
-declare { i64, i1 } @llvm.usub.with.overflow.i64(i64, i64) #4
+declare { i64, i1 } @llvm.umul.with.overflow.i64(i64, i64) #6
+
+; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
+declare { i64, i1 } @llvm.usub.with.overflow.i64(i64, i64) #6
+
+; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
+declare { i64, i1 } @llvm.sadd.with.overflow.i64(i64, i64) #6
 
 ; Function Attrs: argmemonly nofree nounwind willreturn
 declare void @llvm.memcpy.p0i8.p0i8.i64(i8* noalias nocapture writeonly, i8* noalias nocapture readonly, i64, i1 immarg) #7
@@ -8203,7 +7815,7 @@ declare void @free(i8*) unnamed_addr #0
 declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1 immarg) #8
 
 ; Function Attrs: nofree nosync nounwind readnone speculatable willreturn
-declare i64 @llvm.ctpop.i64(i64) #4
+declare i64 @llvm.ctpop.i64(i64) #6
 
 ; <core::alloc::layout::LayoutError as core::fmt::Debug>::fmt
 ; Function Attrs: nonlazybind uwtable
@@ -8211,7 +7823,7 @@ declare zeroext i1 @"_ZN69_$LT$core..alloc..layout..LayoutError$u20$as$u20$core.
 
 ; core::result::unwrap_failed
 ; Function Attrs: cold noinline noreturn nonlazybind uwtable
-declare void @_ZN4core6result13unwrap_failed17hddb26cddfa4f23d4E([0 x i8]* nonnull align 1, i64, {}* nonnull align 1, [3 x i64]* align 8 dereferenceable(24), %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #6
+declare void @_ZN4core6result13unwrap_failed17hddb26cddfa4f23d4E([0 x i8]* nonnull align 1, i64, {}* nonnull align 1, [3 x i64]* align 8 dereferenceable(24), %"core::panic::location::Location"* align 8 dereferenceable(24)) unnamed_addr #5
 
 ; <str as core::fmt::Debug>::fmt
 ; Function Attrs: nonlazybind uwtable
@@ -8240,9 +7852,9 @@ declare void @_ZN5alloc5alloc18handle_alloc_error17h2740986bd2451aa0E(i64, i64) 
 ; Function Attrs: noreturn nonlazybind uwtable
 declare void @_ZN5alloc7raw_vec17capacity_overflow17ha72cd8fd7333b22dE() unnamed_addr #12
 
-; std::io::stdio::_print
+; OOMGuardAllocator::my_wrap_end
 ; Function Attrs: nonlazybind uwtable
-declare void @_ZN3std2io5stdio6_print17h68c20082d25e6dc7E(%"core::fmt::Arguments"* noalias nocapture dereferenceable(48)) unnamed_addr #0
+declare void @_ZN17OOMGuardAllocator11my_wrap_end17h430d0f8a3548e3beE() unnamed_addr #0
 
 ; Function Attrs: nonlazybind
 define i32 @main(i32 %0, i8** %1) unnamed_addr #13 {
@@ -8258,9 +7870,9 @@ attributes #0 = { nonlazybind uwtable "probe-stack"="__rust_probestack" "target-
 attributes #1 = { inlinehint nonlazybind uwtable "probe-stack"="__rust_probestack" "target-cpu"="x86-64" }
 attributes #2 = { noinline nonlazybind uwtable "probe-stack"="__rust_probestack" "target-cpu"="x86-64" }
 attributes #3 = { cold nonlazybind uwtable "probe-stack"="__rust_probestack" "target-cpu"="x86-64" }
-attributes #4 = { nofree nosync nounwind readnone speculatable willreturn }
-attributes #5 = { nofree nosync nounwind readnone willreturn }
-attributes #6 = { cold noinline noreturn nonlazybind uwtable "probe-stack"="__rust_probestack" "target-cpu"="x86-64" }
+attributes #4 = { nofree nosync nounwind readnone willreturn }
+attributes #5 = { cold noinline noreturn nonlazybind uwtable "probe-stack"="__rust_probestack" "target-cpu"="x86-64" }
+attributes #6 = { nofree nosync nounwind readnone speculatable willreturn }
 attributes #7 = { argmemonly nofree nounwind willreturn }
 attributes #8 = { argmemonly nofree nounwind willreturn writeonly }
 attributes #9 = { inaccessiblememonly nofree nosync nounwind willreturn }
@@ -8283,4 +7895,4 @@ attributes #17 = { noreturn nounwind }
 !5 = !{i8 0, i8 2}
 !6 = !{i8 -1, i8 2}
 !7 = !{i64 0, i64 2}
-!8 = !{i32 3195324}
+!8 = !{i32 3195558}

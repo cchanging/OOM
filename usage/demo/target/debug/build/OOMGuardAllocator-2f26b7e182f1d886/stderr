@@ -1,33 +1,42 @@
-src/thread_local.cpp:19:31: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
+src/thread_local.cpp:22:31: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
                               ^~~~~~~~~~
                               .allocated = 
-src/thread_local.cpp:19:43: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
+src/thread_local.cpp:22:43: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
                                           ^~~~~~~~~~~~
                                           .deallocated = 
-src/thread_local.cpp:19:57: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
+src/thread_local.cpp:22:57: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
                                                         ^~~~~
                                                         .peak = 
-src/thread_local.cpp:19:64: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
+src/thread_local.cpp:22:64: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
                                                                ^~~~~
                                                                .flag = 
-src/thread_local.cpp:19:75: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
-                                                                          ^~~~~
-                                                                          .name = 
-src/thread_local.cpp:19:83: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
-                                                                                  ^~~~~~~~~~
-                                                                                  .alloc_msg = 
-src/thread_local.cpp:19:98: warning: use of GNU old-style field designator extension [-Wgnu-designator]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
-                                                                                                 ^~~~~~~~~~~~~~~~
-                                                                                                 .alloc_msg_point = 
-src/thread_local.cpp:19:80: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
-thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,name:"",alloc_msg:{0}, alloc_msg_point:0};
-                                                                               ^
-8 warnings generated.
+src/thread_local.cpp:22:75: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
+                                                                          ^~~~~~~~~~
+                                                                          .alloc_msg = 
+src/thread_local.cpp:22:90: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
+                                                                                         ^~~~~~~~~~~~~~~~
+                                                                                         .alloc_msg_point = 
+src/thread_local.cpp:22:109: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
+                                                                                                            ^~~~~~~~~~~~~~~~~~
+                                                                                                            .alloc_begin_point = 
+src/thread_local.cpp:22:131: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
+                                                                                                                                  ^~~~~~~~~~~~
+                                                                                                                                  .reserve_msg = 
+src/thread_local.cpp:22:148: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
+                                                                                                                                                   ^~~~~~~~~~~~~~~~~~
+                                                                                                                                                   .reserve_msg_point = 
+src/thread_local.cpp:22:169: warning: use of GNU old-style field designator extension [-Wgnu-designator]
+thread_local Count COUNTER = {allocated:0,deallocated:0,peak:0,flag:false,alloc_msg:{0}, alloc_msg_point:0, alloc_begin_point: 0, reserve_msg:{0}, reserve_msg_point:0, reserve_begin_point:0};
+                                                                                                                                                                        ^~~~~~~~~~~~~~~~~~~~
+                                                                                                                                                                        .reserve_begin_point = 
+10 warnings generated.
 ar: `u' modifier ignored since `D' is the default (see `U')

@@ -659,11 +659,11 @@ std::shared_ptr<ExprVFG> parseFunctionCFG(SVFIR *pag, const SVFG *svfg, const IC
 				if(function_name.find("try_insert") != function_name.npos){
 					continue;
 				}
-				if(oom_safe_flag == false && function_name.find("my_allocator::my") != function_name.npos){
+				if(oom_safe_flag == false && function_name.find("OOMGuardAllocator::my") != function_name.npos){
 					oom_safe_function.insert(avfg->getFunction());
 					oom_safe_flag = true;
 				}
-				if(function_name.find("my_allocator::loop_wrap") != function_name.npos){
+				if(function_name.find("OOMGuardAllocator::loop_wrap") != function_name.npos){
 					auto vfg_nodes = call_node->getVFGNodes();
 					auto iter = (*vfg_nodes.begin());
 					FILOWorkList<CallSiteID> call_stack;
@@ -955,10 +955,10 @@ std::shared_ptr<ExprVFG> parseFunctionCFG_recursive(SVFIR *pag, const SVFG *svfg
 				if(function_name.find("try_insert") != function_name.npos){
 					continue;
 				}
-				if(oom_safe_flag == false && function_name.find("my_allocator::my") != function_name.npos){
+				if(oom_safe_flag == false && function_name.find("OOMGuardAllocator::my") != function_name.npos){
 					oom_safe_flag = true;
 				}
-				if(function_name.find("my_allocator::loop_wrap") != function_name.npos){
+				if(function_name.find("OOMGuardAllocator::loop_wrap") != function_name.npos){
 					auto vfg_nodes = call_node->getVFGNodes();
 					auto iter = (*vfg_nodes.begin());
 					FILOWorkList<CallSiteID> call_stack;
@@ -1364,7 +1364,7 @@ void judge_oom_guard(SVFIR *pag, const SVFG *svfg, const SVFFunction* F, ICFG *i
 				if(function_name.find("try_insert") != function_name.npos){
 					continue;
 				}
-				if(oom_safe_flag == false && function_name.find("my_allocator::my") != function_name.npos){
+				if(oom_safe_flag == false && function_name.find("OOMGuardAllocator::my") != function_name.npos){
 					oom_safe_function.insert(F);
 					oom_safe_flag = true;
 					break;
@@ -1658,10 +1658,10 @@ void handle_parameter(const SVFFunction* oom_function, PTACallGraph *callgraph, 
 			const CallBase* call_base = static_cast<const CallBase*>(temp_call_site);
 			const SVFFunction* succ_func = SVF::SVFUtil::getFunction(call_base->getCalledOperand()->getName());
 			auto function_name = llvm::demangle(succ_func->getValue());
-			if(function_name.find("my_allocator::my_wrap_end") != function_name.npos){
+			if(function_name.find("OOMGuardAllocator::my_wrap_end") != function_name.npos){
 				break;
 			}
-			else if(function_name.find("my_allocator::my_wrap") != function_name.npos){
+			else if(function_name.find("OOMGuardAllocator::my_wrap") != function_name.npos){
 				auto vfg_nodes = call_node->getVFGNodes();
 				for(auto iter : vfg_nodes){
 					if(SVF::ActualParmVFGNode::classof(iter)){
