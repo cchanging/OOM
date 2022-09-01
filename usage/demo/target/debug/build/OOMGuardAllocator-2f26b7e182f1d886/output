@@ -1,3 +1,0 @@
-cargo:rustc-link-search=native=out
-cargo:rustc-link-lib=static=thread_local
-cargo:rerun-if-changed=src/thread_local.c
